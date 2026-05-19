@@ -1,0 +1,30 @@
+@import "tailwindcss";
+
+:root {
+  /* Paleta base de la app */
+  --app-primary: #9333ea;       /* Base morado */
+  --app-primary-hover: #7e22ce; /* Morado más oscuro */
+  --app-secondary: #4f46e5;     /* Base índigo */
+  --app-surface: #f9fafb;       /* Gris muy claro para fondos */
+  --app-text: #111827;          /* Gris oscuro para textos principales */
+  --app-text-muted: #4b5563;    /* Gris medio para textos secundarios */
+}
+
+@theme {
+  /* Exponemos las variables a Tailwind */
+  --color-primary: var(--app-primary);
+  --color-primary-hover: var(--app-primary-hover);
+  --color-secondary: var(--app-secondary);
+  --color-surface: var(--app-surface);
+  --color-text-main: var(--app-text);
+  --color-text-muted: var(--app-text-muted);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-color: var(--app-surface);
+  color: var(--app-text);
+}
