@@ -6,7 +6,7 @@ services:
     container_name: okarea
     restart: unless-stopped
     ports:
-      - "80:80"
+      - "3001"
     networks:
       - proxy
 
