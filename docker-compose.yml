@@ -1,0 +1,15 @@
+services:
+  okarea:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: okarea
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - proxy
+
+networks:
+  proxy:
+    external: true

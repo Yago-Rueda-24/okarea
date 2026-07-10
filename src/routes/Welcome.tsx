@@ -1,14 +1,26 @@
 import img1 from '../assets/img1.png';
 import img2 from '../assets/img2.png';
 import img3 from '../assets/img3.png';
-import fondoPantalla from '../assets/fondo_pantalla.jpg';
+import fondoPantalla from '../assets/fondo3.jpeg';
+import fondo2 from '../assets/fondo2.jpeg';
+import fondoPantallaOld from '../assets/fondo_pantalla.jpg';
+import SlideshowCard from '../components/SlideshowCard';
+
+const galleryItems = [
+  { images: [img1, img2, img3], title: "Luminous Spaces", description: "Luminous Spaces" },
+  { images: [img2, img3, img1], title: "Modern Architecture", description: "Modern Architecture" },
+  { images: [img3, img1, img2], title: "Minimalist Setup", description: "Minimalist Setup" },
+  { images: [fondo2, fondoPantallaOld, img1], title: "Creative Area", description: "Creative Area" },
+  { images: [fondoPantallaOld, img1, fondo2], title: "Focus Zone", description: "Focus Zone" },
+  { images: [img1, fondo2, fondoPantallaOld], title: "Collaborative Space", description: "Collaborative Space" },
+];
 
 export default function Welcome() {
   return (
     <div className="min-h-screen bg-surface font-sans text-text-main">
       {/* Hero Section */}
       <section className="w-full h-screen relative">
-        <div className="w-full h-full overflow-hidden shadow-2xl">
+        <div className="w-full h-full overflow-hidden">
           <img
             src={fondoPantalla}
             alt="Fondo de pantalla"
@@ -23,36 +35,18 @@ export default function Welcome() {
       </section>
 
       {/* Image Gallery Section */}
-      <section className="py-20 bg-[#6b8ba4]">
+      <section className="py-20 bg-[#aba49e]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <img src={img1} alt="Modern Workspace 1" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <h3 className="text-white font-semibold text-xl">Luminous Spaces</h3>
-                </div>
-              </div>
-            </div>
-
-            <div className="group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <img src={img2} alt="Modern Workspace 2" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <h3 className="text-white font-semibold text-xl">Modern Architecture</h3>
-                </div>
-              </div>
-            </div>
-
-            <div className="group overflow-hidden rounded-2xl shadow-lg cursor-pointer">
-              <div className="relative h-64 overflow-hidden">
-                <img src={img3} alt="Modern Workspace 3" className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
-                  <h3 className="text-white font-semibold text-xl">Minimalist Setup</h3>
-                </div>
-              </div>
-            </div>
+            {galleryItems.map((item, index) => (
+              <SlideshowCard
+                key={index}
+                images={item.images}
+                title={item.title}
+                description={item.description}
+              />
+            ))}
           </div>
         </div>
       </section>
