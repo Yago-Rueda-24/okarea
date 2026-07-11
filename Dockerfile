@@ -10,7 +10,5 @@ RUN npm run build
 FROM nginx:alpine
 # Copiar los archivos compilados a la ruta por defecto de Nginx
 COPY --from=builder /app/dist /usr/share/nginx/html
-# Crear enlace simbólico para que resuelva peticiones bajo el subpath /okarea/
-RUN ln -s . /usr/share/nginx/html/okarea
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]
