@@ -1,18 +1,15 @@
-import img1 from '../assets/img1.png';
-import img2 from '../assets/img2.png';
-import img3 from '../assets/img3.png';
-import fondoPantalla from '../assets/fondo3.jpeg';
-import fondo2 from '../assets/fondo2.jpeg';
-import fondoPantallaOld from '../assets/fondo_pantalla.jpg';
-import SlideshowCard from '../components/SlideshowCard';
+import { Link } from 'react-router-dom';
+import secBolsos from '../assets/sections/bolsos.png';
+import secCalzado from '../assets/sections/calzado.png';
+import secRopa from '../assets/sections/ropa.png';
+import secAccesorios from '../assets/sections/accesorios.png';
+import fondoPantalla from '../assets/fondo5.jpeg';
 
 const galleryItems = [
-  { images: [img1, img2, img3], title: "Luminous Spaces", description: "Luminous Spaces" },
-  { images: [img2, img3, img1], title: "Modern Architecture", description: "Modern Architecture" },
-  { images: [img3, img1, img2], title: "Minimalist Setup", description: "Minimalist Setup" },
-  { images: [fondo2, fondoPantallaOld, img1], title: "Creative Area", description: "Creative Area" },
-  { images: [fondoPantallaOld, img1, fondo2], title: "Focus Zone", description: "Focus Zone" },
-  { images: [img1, fondo2, fondoPantallaOld], title: "Collaborative Space", description: "Collaborative Space" },
+  { images: [secBolsos], title: "Bolsos", description: "Bolsos", path: "/bolsos" },
+  { images: [secCalzado], title: "Calzado", description: "Calzado", path: "/calzado" },
+  { images: [secRopa], title: "Ropa", description: "Ropa", path: "/ropa" },
+  { images: [secAccesorios], title: "Accesorios", description: "Accesorios", path: "/accesorios" }
 ];
 
 export default function Welcome() {
@@ -27,27 +24,37 @@ export default function Welcome() {
             className="w-full h-full object-cover"
           />
         </div>
-        <div className="absolute bottom-4 right-6 md:bottom-8 md:right-12">
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-[#6b8ba4] drop-shadow-md">
-            Okarea
+        <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 bg-black/10">
+          <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase tracking-[0.25em] text-[#FFDFCA] drop-shadow-2xl leading-none -mt-100">
+            OK
+            <br />
+            AREA
           </h1>
         </div>
       </section>
 
+      <div className="w-full py-16 px-6 text-center bg-[#FAA18F]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
+        Life is to short to wear boring clothes
+      </div>
       {/* Image Gallery Section */}
-      <section className="py-20 bg-[#aba49e]">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {galleryItems.map((item, index) => (
-              <SlideshowCard
-                key={index}
-                images={item.images}
-                title={item.title}
-                description={item.description}
+      <section className="w-full">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
+          {galleryItems.map((item, index) => (
+            <Link 
+              key={index} 
+              to={item.path}
+              className="relative h-64 sm:h-80 md:h-[30rem] lg:h-[35rem] overflow-hidden cursor-pointer group block"
+            >
+              <img
+                src={item.images[0]}
+                alt={item.title}
+                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
               />
-            ))}
-          </div>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+                <h3 className="text-white font-semibold text-xl tracking-wider uppercase">{item.description}</h3>
+              </div>
+            </Link>
+          ))}
         </div>
       </section>
     </div>

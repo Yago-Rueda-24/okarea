@@ -1,85 +1,270 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
-export default function Navbar() {
-  const [isOpen, setIsOpen] = useState(false);
+interface NavbarProps {
+  transparent?: boolean;
+}
 
-  return (
-    <>
-      <nav className="fixed w-full z-50 bg-white/70 backdrop-blur-md border-b border-gray-200/50 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center">
-              <Link to="/" className="text-2xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent hover:scale-105 transition-transform">
-                Okarea
-              </Link>
-            </div>
-            
-            {/* Desktop Menu */}
-            <div className="hidden md:flex items-center space-x-8">
-              <Link to="/" className="text-text-muted hover:text-primary font-medium transition-colors">Home</Link>
-              <Link to="/about" className="text-text-muted hover:text-primary font-medium transition-colors">About</Link>
-              <Link to="/services" className="text-text-muted hover:text-primary font-medium transition-colors">Services</Link>
-            </div>
-            
-            <div className="flex items-center space-x-4">
-              <div className="hidden sm:block">
-                <button className="bg-primary hover:bg-primary-hover text-white px-6 py-2 rounded-full font-medium transition-all shadow-lg shadow-primary/30 hover:shadow-primary/50 hover:-translate-y-0.5">
-                  Get Started
-                </button>
-              </div>
+export default function Navbar({ transparent = true }: NavbarProps) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-              {/* Hamburger button for mobile */}
-              <button 
-                className="md:hidden p-2 rounded-md text-text-muted hover:text-text-main hover:bg-surface transition-colors focus:outline-none"
-                onClick={() => setIsOpen(true)}
-                aria-label="Open menu"
-              >
-                <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                </svg>
-              </button>
-            </div>
+  if (transparent) {
+    return (
+      <nav className="absolute top-0 left-0 w-full z-50 transition-all duration-300 bg-transparent text-[#FEEBE7]">
+        <div className="max-w-7xl mx-auto px-6 h-20 flex justify-between items-center">
+          
+          {/* Left Side: Navigation Links */}
+          <div className="flex items-center space-x-6 sm:space-x-8 md:space-x-12 font-bold">
+            <Link 
+              to="/bolsos" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Bolsos
+            </Link>
+            <Link 
+              to="/calzado" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Calzado
+            </Link>
+            <Link 
+              to="/ropa" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Ropa
+            </Link>
+            <Link 
+              to="/accesorios" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Accesorios
+            </Link>
           </div>
+
+          {/* Right Side: Social Icon Links */}
+          <div className="flex justify-end items-center space-x-3 md:space-x-4">
+            <a 
+              href="https://www.instagram.com/inspo_area/" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="p-2 transition-transform duration-300 hover:scale-110 text-current hover:opacity-80"
+              aria-label="Instagram"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="22" 
+                height="22" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="w-5 h-5 md:w-6 md:h-6"
+              >
+                <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+                <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+                <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+              </svg>
+            </a>
+            <a 
+              href="https://vinted.es" 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="p-2 transition-transform duration-300 hover:scale-110 text-current hover:opacity-80"
+              aria-label="Vinted"
+            >
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                width="22" 
+                height="22" 
+                viewBox="0 0 24 24" 
+                fill="none" 
+                stroke="currentColor" 
+                strokeWidth="2" 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                className="w-5 h-5 md:w-6 md:h-6"
+              >
+                <path d="M11.028 6c0 7.695 -.292 11.728 0 12c2.046 -5 4.246 -12.642 5.252 -14.099c.343 -.497 .768 -.93 1.257 -1.277c.603 -.39 1.292 -.76 1.463 -.575c-.07 2.319 -4.023 15.822 -4.209 16.314a6.135 6.135 0 0 1 -3.465 3.386c-3.213 .78 -3.429 -.446 -3.836 -1.134c-.95 -2.103 -1.682 -14.26 -1.445 -15.615c.05 -.523 .143 -1.851 2.491 -2c2.359 -.354 2.547 1.404 2.492 3z" />
+              </svg>
+            </a>
+          </div>
+
         </div>
       </nav>
+    );
+  }
 
-      {/* Mobile Sidebar Overlay */}
-      <div 
-        className={`fixed inset-0 bg-black/30 backdrop-blur-sm z-[60] transition-opacity duration-300 md:hidden ${isOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'}`}
-        onClick={() => setIsOpen(false)}
-      />
-
-      {/* Mobile Sidebar Panel */}
-      <div 
-        className={`fixed inset-y-0 right-0 w-64 bg-white shadow-2xl z-[70] transform transition-transform duration-300 ease-in-out md:hidden flex flex-col ${isOpen ? 'translate-x-0' : 'translate-x-full'}`}
-      >
-        <div className="flex items-center justify-between p-4 border-b border-gray-100">
-          <span className="text-xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
-            Menu
-          </span>
-          <button 
-            className="p-2 text-text-muted hover:text-text-main hover:bg-surface rounded-full transition-colors"
-            onClick={() => setIsOpen(false)}
-          >
-            <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-            </svg>
-          </button>
-        </div>
+  // Non-transparent (transparent === false)
+  return (
+    <nav className="absolute top-0 left-0 w-full z-50 transition-all duration-300 bg-[#FEEBE7] text-[#faa18f]">
+      <div className="max-w-7xl mx-auto px-6 h-20 grid grid-cols-3 items-center">
         
-        <div className="flex flex-col p-4 space-y-4">
-          <Link to="/" onClick={() => setIsOpen(false)} className="text-text-muted hover:text-primary font-medium transition-colors p-2 hover:bg-primary/10 rounded-lg">Home</Link>
-          <Link to="/about" onClick={() => setIsOpen(false)} className="text-text-muted hover:text-primary font-medium transition-colors p-2 hover:bg-primary/10 rounded-lg">About</Link>
-          <Link to="/services" onClick={() => setIsOpen(false)} className="text-text-muted hover:text-primary font-medium transition-colors p-2 hover:bg-primary/10 rounded-lg">Services</Link>
-        </div>
+        {/* Left Column: Hamburger Button on Mobile, OKAREA Logo on Desktop */}
+        <div className="flex justify-start items-center">
+          {/* Desktop Logo */}
+          <Link 
+            to="/" 
+            className="hidden md:flex items-center text-2xl md:text-3xl font-extrabold tracking-widest text-[#faa18f] uppercase transition-opacity duration-300 hover:opacity-80 leading-none"
+          >
+            <div className="flex flex-col justify-center items-center text-center">
+              <span>OK</span>
+              <span className="-mt-1">AREA</span>
+            </div>
+          </Link>
 
-        <div className="mt-auto p-4 border-t border-gray-100">
-          <button className="w-full bg-primary hover:bg-primary-hover text-white px-6 py-3 rounded-full font-medium transition-all shadow-md">
-            Get Started
+          {/* Mobile Hamburger Button */}
+          <button
+            onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+            className="md:hidden p-2 -ml-2 text-[#faa18f] transition-transform active:scale-95 cursor-pointer focus:outline-none"
+            aria-label="Toggle Menu"
+          >
+            {isMobileMenuOpen ? (
+              // X (close) icon
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+            ) : (
+              // Hamburger menu icon
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="w-6 h-6">
+                <line x1="3" y1="12" x2="21" y2="12"></line>
+                <line x1="3" y1="6" x2="21" y2="6"></line>
+                <line x1="3" y1="18" x2="21" y2="18"></line>
+              </svg>
+            )}
           </button>
         </div>
+
+        {/* Center Column: Mobile OKAREA Logo, Desktop Centered Links */}
+        <div className="flex justify-center items-center">
+          {/* Mobile Logo */}
+          <Link 
+            to="/" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="md:hidden flex items-center text-xl font-extrabold tracking-widest text-[#faa18f] uppercase transition-opacity duration-300 hover:opacity-80 leading-none"
+          >
+            <div className="flex flex-col justify-center items-center text-center">
+              <span>OK</span>
+              <span className="-mt-0.5">AREA</span>
+            </div>
+          </Link>
+
+          {/* Desktop Links */}
+          <div className="hidden md:flex justify-center space-x-6 sm:space-x-8 md:space-x-12 font-black">
+            <Link 
+              to="/bolsos" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Bolsos
+            </Link>
+            <Link 
+              to="/calzado" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Calzado
+            </Link>
+            <Link 
+              to="/ropa" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Ropa
+            </Link>
+            <Link 
+              to="/accesorios" 
+              className="relative py-2 text-lg md:text-xl uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Accesorios
+            </Link>
+          </div>
+        </div>
+
+        {/* Right Column: Social Icon Links */}
+        <div className="flex justify-end items-center space-x-3 md:space-x-4">
+          <a 
+            href="https://www.instagram.com/inspo_area/" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="p-2 transition-transform duration-300 hover:scale-110 text-current hover:opacity-80"
+            aria-label="Instagram"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="22" 
+              height="22" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              className="w-5 h-5 md:w-6 md:h-6"
+            >
+              <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+              <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+              <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+            </svg>
+          </a>
+          <a 
+            href="https://vinted.es" 
+            target="_blank" 
+            rel="noopener noreferrer" 
+            className="p-2 transition-transform duration-300 hover:scale-110 text-current hover:opacity-80"
+            aria-label="Vinted"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="22" 
+              height="22" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round" 
+              className="w-5 h-5 md:w-6 md:h-6"
+            >
+              <path d="M11.028 6c0 7.695 -.292 11.728 0 12c2.046 -5 4.246 -12.642 5.252 -14.099c.343 -.497 .768 -.93 1.257 -1.277c.603 -.39 1.292 -.76 1.463 -.575c-.07 2.319 -4.023 15.822 -4.209 16.314a6.135 6.135 0 0 1 -3.465 3.386c-3.213 .78 -3.429 -.446 -3.836 -1.134c-.95 -2.103 -1.682 -14.26 -1.445 -15.615c.05 -.523 .143 -1.851 2.491 -2c2.359 -.354 2.547 1.404 2.492 3z" />
+            </svg>
+          </a>
+        </div>
+
       </div>
-    </>
+
+      {/* Mobile Dropdown Menu Drawer */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden absolute top-20 left-0 w-full bg-[#FEEBE7] border-t border-[#feebe7]/10 py-6 px-8 flex flex-col space-y-5 font-bold shadow-lg transition-all duration-300 animate-slideDown">
+          <Link 
+            to="/bolsos" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-xl uppercase tracking-widest text-[#faa18f] hover:opacity-80 py-1 transition-all"
+          >
+            Bolsos
+          </Link>
+          <Link 
+            to="/calzado" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-xl uppercase tracking-widest text-[#faa18f] hover:opacity-80 py-1 transition-all"
+          >
+            Calzado
+          </Link>
+          <Link 
+            to="/ropa" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-xl uppercase tracking-widest text-[#faa18f] hover:opacity-80 py-1 transition-all"
+          >
+            Ropa
+          </Link>
+          <Link 
+            to="/accesorios" 
+            onClick={() => setIsMobileMenuOpen(false)}
+            className="text-xl uppercase tracking-widest text-[#faa18f] hover:opacity-80 py-1 transition-all"
+          >
+            Accesorios
+          </Link>
+        </div>
+      )}
+    </nav>
   );
 }
