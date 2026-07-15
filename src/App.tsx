@@ -2,6 +2,7 @@ import { Routes, Route, useLocation } from 'react-router-dom'
 import Welcome from './routes/Welcome'
 import Trabajando from './routes/Trabajando'
 import Navbar from './components/Navbar'
+import Articulos from './routes/Articulos';
 
 function App() {
   const location = useLocation();
@@ -12,7 +13,7 @@ function App() {
       <Navbar transparent={isTransparent} />
       <Routes>
         <Route path="/" element={<Welcome />} />
-        <Route path="/bolsos" element={<Trabajando />} />
+        <Route path="/bolsos" element={<Articulos />} />
         <Route path="/calzado" element={<Trabajando />} />
         <Route path="/ropa" element={<Trabajando />} />
         <Route path="/accesorios" element={<Trabajando />} />

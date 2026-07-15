@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom';
-import secBolsos from '../assets/sections/bolsos.png';
-import secCalzado from '../assets/sections/calzado.png';
-import secRopa from '../assets/sections/ropa.png';
-import secAccesorios from '../assets/sections/accesorios.png';
-import fondoPantalla from '../assets/fondo5.jpeg';
+import secBolsos from '../assets/welcome/sections/bolsos.png';
+import secCalzado from '../assets/welcome/sections/calzado.png';
+import secRopa from '../assets/welcome/sections/ropa.png';
+import secAccesorios from '../assets/welcome/sections/accesorios.png';
+import fondoWeb from '../assets/welcome/fondoweb.png';
+import fondoPantalla from '../assets/welcome/fondomovil.jpeg';
 
 const galleryItems = [
   { images: [secBolsos], title: "Bolsos", description: "Bolsos", path: "/bolsos" },
@@ -18,11 +19,14 @@ export default function Welcome() {
       {/* Hero Section */}
       <section className="w-full h-screen relative">
         <div className="w-full h-full overflow-hidden">
-          <img
-            src={fondoPantalla}
-            alt="Fondo de pantalla"
-            className="w-full h-full object-cover"
-          />
+          <picture>
+            <source media="(min-width: 768px)" srcSet={fondoWeb} />
+            <img
+              src={fondoPantalla}
+              alt="Fondo de pantalla"
+              className="w-full h-full object-cover"
+            />
+          </picture>
         </div>
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-6 bg-black/10">
           <h1 className="text-6xl sm:text-7xl md:text-9xl font-black uppercase tracking-[0.25em] text-[#FFDFCA] drop-shadow-2xl leading-none -mt-100">
