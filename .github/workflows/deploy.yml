@@ -57,7 +57,7 @@ jobs:
           envs: GITHUB_TOKEN,GITHUB_ACTOR
           script: |
             cd /home/yago/prod/okarea
-            git pull origin main
+            
             docker compose pull
             docker compose up -d
             
