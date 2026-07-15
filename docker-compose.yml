@@ -1,6 +1,6 @@
 services:
   okarea:
-    build: .
+    image: ghcr.io/yago-rueda-24/okarea:latest
     container_name: okarea
     restart: unless-stopped
     networks:
