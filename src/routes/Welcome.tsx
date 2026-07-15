@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
-import secBolsos from '../assets/welcome/sections/bolsos.png';
-import secCalzado from '../assets/welcome/sections/calzado.png';
+import secBolsos from '../assets/welcome/sections/bolsos2.png';
+import secCalzado from '../assets/welcome/sections/calzado2.png';
 import secRopa from '../assets/welcome/sections/ropa.png';
 import secAccesorios from '../assets/welcome/sections/accesorios.png';
 import fondoWeb from '../assets/welcome/fondoweb.png';
