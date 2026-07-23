@@ -3,6 +3,7 @@ import Welcome from './routes/Welcome'
 import Trabajando from './routes/Trabajando'
 import Navbar from './components/Navbar'
 import Articulos from './routes/Articulos';
+import ProductInfo from './routes/ProductInfo';
 
 function App() {
   const location = useLocation();
@@ -14,6 +15,8 @@ function App() {
       <Routes>
         <Route path="/" element={<Welcome />} />
         <Route path="/bolsos" element={<Articulos />} />
+        <Route path="/producto" element={<ProductInfo />} />
+        <Route path="/product-info" element={<ProductInfo />} />
         <Route path="/calzado" element={<Trabajando />} />
         <Route path="/ropa" element={<Trabajando />} />
         <Route path="/accesorios" element={<Trabajando />} />

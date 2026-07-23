@@ -5,10 +5,10 @@ import ropa3 from '../assets/ropa/ropa3.png';
 import ropa4 from '../assets/ropa/ropa4.png';
 
 const clothingItems: GridItem[] = [
-  { src: ropa1, title: 'Camisa Lino Premium', price: '49,90 €' },
-  { src: ropa2, title: 'Jersey Lana Ivory', price: '69,90 €' },
-  { src: ropa3, title: 'Gabardina Clásica', price: '129,00 €' },
-  { src: ropa4, title: 'Pantalón Lino Oliva', price: '59,90 €' },
+  { src: ropa1, title: 'Camisa Lino Premium', price: '49,90 €', fabricante: 'OKAREA Studio' },
+  { src: ropa2, title: 'Jersey Lana Ivory', price: '69,90 €', fabricante: 'Massimo Dutti' },
+  { src: ropa3, title: 'Gabardina Clásica', price: '129,00 €', fabricante: 'Zara' },
+  { src: ropa4, title: 'Pantalón Lino Oliva', price: '59,90 €', fabricante: 'Mango' },
 ];
 
 export default function Articulos() {

@@ -207,7 +207,7 @@ export default function Navbar({ transparent = true }: NavbarProps) {
   // Non-transparent (transparent === false)
   return (
     <nav className="fixed top-0 left-0 w-full z-50 transition-all duration-300 bg-[#FEEBE7] text-[#faa18f]">
-      <div className="max-w-7xl mx-auto px-6 h-20 grid grid-cols-3 items-center">
+      <div className="w-full px-6 md:px-12 h-20 grid grid-cols-3 items-center">
         
         {/* Left Column: Hamburger Button on Mobile, OKAREA Logo on Desktop */}
         <div className="flex justify-start items-center">
