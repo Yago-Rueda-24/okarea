@@ -1,4 +1,3 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
 import ropa1 from '../assets/ropa/ropa1.png';
 
