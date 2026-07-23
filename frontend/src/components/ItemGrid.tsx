@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 
 export interface GridItem {
+  id?: string;
   src: string;
   title?: string;
   price?: string;
@@ -27,7 +28,12 @@ export default function ItemGrid({ title, items }: ItemGridProps) {
       {/* Grid of Items */}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 md:gap-10">
         {items.map((item, index) => (
-          <Link key={index} to={item.link || "/producto"} className="group cursor-pointer flex flex-col">
+          <Link 
+            key={index} 
+            to={item.link || (item.id ? `/producto/${item.id}` : "/producto")} 
+            state={{ product: item, item }}
+            className="group cursor-pointer flex flex-col"
+          >
             {/* Image Container with Hover Overlay */}
             <div className="relative overflow-hidden aspect-[3/4] bg-neutral-100 rounded-lg shadow-sm">
               <img

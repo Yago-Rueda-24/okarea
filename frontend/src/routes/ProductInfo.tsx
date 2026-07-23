@@ -1,32 +1,35 @@
-import { Link } from 'react-router-dom';
-import ropa1 from '../assets/ropa/ropa1.png';
-
-export interface ProductDetails {
-  id?: string;
-  nombre: string;
-  descripcion: string;
-  tienda: string;
-  temporada: string;
-  precio: string;
-  enlaceSitio: string;
-  imagen: string;
-}
-
-const defaultProduct: ProductDetails = {
-  nombre: 'Camisa Lino Premium',
-  descripcion: 'Confeccionada en 100% lino orgánico de alta calidad, esta camisa ofrece una frescura excepcional y una caída fluida. Ideal para días cálidos con un estilo elegante, relajado y atemporal. Presenta cuello italiano, botones de nácar y un diseño versátil.',
-  tienda: 'OKAREA Studio',
-  temporada: 'Primavera / Verano 2026',
-  precio: '49,90 €',
-  enlaceSitio: 'https://example.com/producto/camisa-lino',
-  imagen: ropa1,
-};
+import { useEffect } from 'react';
+import { Link, useParams, useLocation } from 'react-router-dom';
+import { getProductById, type Product } from '../data/products';
 
 interface ProductInfoProps {
-  product?: ProductDetails;
+  product?: Product;
 }
 
-export default function ProductInfo({ product = defaultProduct }: ProductInfoProps) {
+export default function ProductInfo({ product: customProduct }: ProductInfoProps) {
+  const { id } = useParams<{ id: string }>();
+  const location = useLocation();
+  
+  // Retrieve passed item state if available
+  const stateProduct = location.state?.product || location.state?.item;
+  const catalogProduct = getProductById(id);
+
+  // Merge custom props, state data, and catalog data
+  const product: Product = {
+    id: customProduct?.id || stateProduct?.id || catalogProduct.id,
+    nombre: customProduct?.nombre || stateProduct?.title || stateProduct?.nombre || catalogProduct.nombre,
+    fabricante: customProduct?.fabricante || stateProduct?.fabricante || catalogProduct.fabricante,
+    tienda: customProduct?.tienda || stateProduct?.tienda || stateProduct?.fabricante || catalogProduct.tienda,
+    descripcion: customProduct?.descripcion || stateProduct?.descripcion || catalogProduct.descripcion,
+    temporada: customProduct?.temporada || stateProduct?.temporada || catalogProduct.temporada,
+    precio: customProduct?.precio || stateProduct?.price || stateProduct?.precio || catalogProduct.precio,
+    enlaceSitio: customProduct?.enlaceSitio || stateProduct?.enlaceSitio || catalogProduct.enlaceSitio,
+    imagen: customProduct?.imagen || stateProduct?.src || stateProduct?.imagen || catalogProduct.imagen,
+  };
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [id, location.state]);
   return (
     <div className="min-h-screen bg-[#FEEBE7] font-sans text-[#654321] pt-28 pb-16 px-4 md:px-8 flex items-center justify-center">
       <div className="max-w-6xl w-full mx-auto">

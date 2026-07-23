@@ -1,6 +1,11 @@
-# React + TypeScript + Vite
+# Okarea Workspace
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This repository is structured into separate services:
+
+- `frontend/`: React + TypeScript + Vite web application.
+- `server/`: Backend server services.
+
+## Frontend (React + TypeScript + Vite)
 
 Currently, two official plugins are available:
 
