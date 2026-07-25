@@ -2,16 +2,9 @@ import { Link } from 'react-router-dom';
 import secBolsos from '../assets/welcome/sections/bolsos2.png';
 import secCalzado from '../assets/welcome/sections/calzado2.png';
 import secRopa from '../assets/welcome/sections/ropa.png';
-import secAccesorios from '../assets/welcome/sections/accesorios.png';
+import secAccesorios from '../assets/welcome/sections/gafas.png';
 import fondoWeb from '../assets/welcome/fondoweb.png';
 import fondoPantalla from '../assets/welcome/fondomovil.jpeg';
-
-const galleryItems = [
-  { images: [secBolsos], title: "Bolsos", description: "Bolsos", path: "/bolsos" },
-  { images: [secCalzado], title: "Calzado", description: "Calzado", path: "/calzado" },
-  { images: [secRopa], title: "Ropa", description: "Ropa", path: "/ropa" },
-  { images: [secAccesorios], title: "Accesorios", description: "Accesorios", path: "/accesorios" }
-];
 
 export default function Welcome() {
   return (
@@ -43,22 +36,65 @@ export default function Welcome() {
       {/* Image Gallery Section */}
       <section className="w-full">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0 w-full">
-          {galleryItems.map((item, index) => (
-            <Link 
-              key={index} 
-              to={item.path}
-              className="relative h-64 sm:h-80 md:h-[30rem] lg:h-[35rem] overflow-hidden cursor-pointer group block"
-            >
-              <img
-                src={item.images[0]}
-                alt={item.title}
-                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
-                <h3 className="text-white font-semibold text-xl tracking-wider uppercase">{item.description}</h3>
-              </div>
-            </Link>
-          ))}
+          {/* Bolsos */}
+          <Link
+            to="/bolsos"
+            className="relative h-64 sm:h-80 md:h-[30rem] lg:h-[35rem] overflow-hidden cursor-pointer group block"
+          >
+            <img
+              src={secBolsos}
+              alt="Bolsos"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+              <h3 className="text-white font-semibold text-xl tracking-wider uppercase">Bolsos</h3>
+            </div>
+          </Link>
+
+          {/* Calzado */}
+          <Link
+            to="/calzado"
+            className="relative h-64 sm:h-80 md:h-[30rem] lg:h-[35rem] overflow-hidden cursor-pointer group block"
+          >
+            <img
+              src={secCalzado}
+              alt="Calzado"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+              <h3 className="text-white font-semibold text-xl tracking-wider uppercase">Calzado</h3>
+            </div>
+          </Link>
+
+          {/* Ropa */}
+          <Link
+            to="/ropa"
+            className="relative h-64 sm:h-80 md:h-[30rem] lg:h-[35rem] overflow-hidden cursor-pointer group block"
+          >
+            <img
+              src={secRopa}
+              alt="Ropa"
+              className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+              <h3 className="text-white font-semibold text-xl tracking-wider uppercase">Ropa</h3>
+            </div>
+          </Link>
+
+          {/* Accesorios */}
+          <Link
+            to="/accesorios"
+            className="relative h-64 sm:h-80 md:h-[30rem] lg:h-[35rem] overflow-hidden cursor-pointer group block"
+          >
+            <img
+              src={secAccesorios}
+              alt="Accesorios"
+              className="w-full h-full object-cover object-[40%_50%] transition-transform duration-700 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
+              <h3 className="text-white font-semibold text-xl tracking-wider uppercase">Accesorios</h3>
+            </div>
+          </Link>
         </div>
       </section>
     </div>
