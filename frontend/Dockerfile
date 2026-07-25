@@ -1,6 +1,11 @@
 # Etapa 1: Construcción
 FROM node:20-alpine AS builder
 WORKDIR /app
+
+# Recibir la variable VITE_API_URL en tiempo de compilación
+ARG VITE_API_URL=https://okarea.es/api/v1
+ENV VITE_API_URL=$VITE_API_URL
+
 COPY package*.json ./
 RUN npm ci
 COPY . .

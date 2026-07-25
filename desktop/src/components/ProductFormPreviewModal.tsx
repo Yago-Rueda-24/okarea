@@ -120,8 +120,14 @@ export default function ProductFormPreviewModal({
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    console.log('[ProductFormModal] 🚀 Submit button clicked!');
+    console.log('[ProductFormModal] Current Form Data:', formData);
+    console.log('[ProductFormModal] Config:', { API_BASE_URL, ADMIN_API_KEY_PRESENT: Boolean(ADMIN_API_KEY) });
+
     if (!formData.nombre?.trim()) {
-      setErrorMsg('El nombre del artículo es obligatorio.');
+      const msg = 'El nombre del artículo es obligatorio.';
+      console.warn('[ProductFormModal] ⚠️ Validation failed:', msg);
+      setErrorMsg(msg);
       return;
     }
 
@@ -135,33 +141,49 @@ export default function ProductFormPreviewModal({
 
       const method = isEditing ? 'PUT' : 'POST';
 
+      const payload = {
+        nombre: formData.nombre,
+        categoria: formData.categoria,
+        fabricante: formData.fabricante,
+        tienda: formData.tienda,
+        descripcion: formData.descripcion,
+        temporada: formData.temporada,
+        precio: formData.precio,
+        enlaceSitio: formData.enlaceSitio,
+        imagenUrl: formData.imagenUrl,
+      };
+
+      console.log(`[ProductFormModal] 📡 Sending ${method} request to: ${url}`);
+      console.log('[ProductFormModal] Headers:', {
+        'Content-Type': 'application/json',
+        'x-api-key': ADMIN_API_KEY ? '***' : 'MISSING',
+      });
+      console.log('[ProductFormModal] Payload:', payload);
+
       const response = await fetch(url, {
         method,
         headers: {
           'Content-Type': 'application/json',
           'x-api-key': ADMIN_API_KEY,
         },
-        body: JSON.stringify({
-          nombre: formData.nombre,
-          categoria: formData.categoria,
-          fabricante: formData.fabricante,
-          tienda: formData.tienda,
-          descripcion: formData.descripcion,
-          temporada: formData.temporada,
-          precio: formData.precio,
-          enlaceSitio: formData.enlaceSitio,
-          imagenUrl: formData.imagenUrl,
-        }),
+        body: JSON.stringify(payload),
       });
+
+      console.log(`[ProductFormModal] 📥 Response Status: ${response.status} ${response.statusText}`);
 
       if (!response.ok) {
         const errData = await response.json().catch(() => ({}));
-        throw new Error(errData.message || 'Fallo al guardar en el servidor');
+        console.error('[ProductFormModal] ❌ Server returned error response:', errData);
+        throw new Error(errData.message || `Error del servidor (${response.status}: ${response.statusText})`);
       }
+
+      const responseData = await response.json().catch(() => ({}));
+      console.log('[ProductFormModal] ✅ Success! Created/Updated Product:', responseData);
 
       onSuccess();
       onClose();
     } catch (err: any) {
+      console.error('[ProductFormModal] 💥 Exception caught during submission:', err);
       setErrorMsg(err.message || 'Error al conectar con la API');
     } finally {
       setIsSubmitting(false);
@@ -497,8 +519,11 @@ export default function ProductFormPreviewModal({
               Cancelar
             </button>
             <button
-              type="submit"
-              form="admin-product-form"
+              type="button"
+              onClick={(e) => {
+                console.log('[ProductFormModal] 🖱️ Submit button clicked directly by user');
+                handleSubmit(e);
+              }}
               disabled={isSubmitting}
               className="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
             >

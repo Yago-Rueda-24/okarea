@@ -37,6 +37,8 @@ jobs:
           context: ./frontend
           file: ./frontend/Dockerfile
           push: true
+          build-args: |
+            VITE_API_URL=https://okarea.es/api/v1
           tags: |
             ghcr.io/${{ env.REPO_LOWER }}/frontend:latest
             ghcr.io/${{ env.REPO_LOWER }}/frontend:${{ github.sha }}

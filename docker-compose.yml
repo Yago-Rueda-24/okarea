@@ -3,6 +3,8 @@ services:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+      args:
+        VITE_API_URL: ${VITE_API_URL:-https://okarea.es/api/v1}
     image: ghcr.io/yago-rueda-24/okarea/frontend:latest
     container_name: okarea-frontend-prod
     restart: unless-stopped
