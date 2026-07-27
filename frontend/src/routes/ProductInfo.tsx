@@ -36,8 +36,8 @@ export default function ProductInfo({ product: customProduct }: ProductInfoProps
         const data = await response.json();
 
         if (isMounted && data) {
-          const mainImage = data.photos && data.photos.length > 0 
-            ? (data.photos.find((p: any) => p.isMain)?.url || data.photos[0].url) 
+          const mainImage = data.photos && data.photos.length > 0
+            ? (data.photos.find((p: any) => p.isMain)?.url || data.photos[0].url)
             : (data.imagenUrl || data.imagen);
 
           setApiProduct({
@@ -136,7 +136,7 @@ export default function ProductInfo({ product: customProduct }: ProductInfoProps
               {/* Precio & Temporada */}
               <div className="flex items-center gap-4 mb-4">
                 {product.precio && (
-                  <span className="text-2xl font-bold text-[#FFDFCA]">{product.precio}</span>
+                  <span className="text-2xl font-bold text-[#FFDFCA]">{product.precio}€</span>
                 )}
                 {product.temporada && (
                   <span className="text-sm opacity-80 border-l border-[#FFDFCA]/40 pl-4">{product.temporada}</span>
