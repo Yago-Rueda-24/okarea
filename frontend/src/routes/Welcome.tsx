@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom';
 import secBolsos from '../assets/welcome/sections/bolsos2.png';
 import secCalzado from '../assets/welcome/sections/calzado2.png';
 import secRopa from '../assets/welcome/sections/ropa.png';
-import secAccesorios from '../assets/welcome/sections/gafas.png';
+import secAccesorios from '../assets/welcome/sections/accesorios2.png';
 import fondoWeb from '../assets/welcome/fondoweb.png';
 import fondoPantalla from '../assets/welcome/fondomovil.jpeg';
 
@@ -89,7 +89,7 @@ export default function Welcome() {
             <img
               src={secAccesorios}
               alt="Accesorios"
-              className="w-full h-full object-cover object-[40%_50%] transition-transform duration-700 group-hover:scale-105"
+              className="w-full h-full object-cover object-[30%_20%] transition-transform duration-700 group-hover:scale-105"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6">
               <h3 className="text-white font-semibold text-xl tracking-wider uppercase">Accesorios</h3>
