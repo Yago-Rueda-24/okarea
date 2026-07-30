@@ -25,7 +25,7 @@ export default function Eventos() {
       try {
         const response = await fetch(`${API_BASE_URL}/events`);
         if (!response.ok) throw new Error('Error al conectar con el servidor');
-        
+
         const data = await response.json();
         if (isMounted && Array.isArray(data)) {
           setEvents(data);
@@ -48,18 +48,12 @@ export default function Eventos() {
 
   return (
     <div className="min-h-screen bg-[#FEEBE7] font-fraunces text-[#654321] pt-28 pb-20 px-6 sm:px-10">
-      
+
       {/* Header Banner */}
       <div className="max-w-6xl mx-auto text-center mb-16">
-        <span className="text-xs sm:text-sm font-bold uppercase tracking-[0.3em] text-[#faa18f] block mb-3">
-          Experiencias Exclusivas
-        </span>
         <h1 className="text-4xl sm:text-6xl lg:text-7xl font-light italic uppercase tracking-wider text-[#faa18f] mb-6 leading-tight">
-          Próximos Eventos
+          Eventos
         </h1>
-        <p className="text-sm sm:text-base max-w-xl mx-auto text-[#654321]/80 leading-relaxed font-sans font-medium">
-          Vive momentos únicos rodeado de moda, tendencia e inspiración. Descubre nuestras fechas y experiencias especiales en OkArea.
-        </p>
       </div>
 
       {/* Content Section */}
@@ -100,8 +94,8 @@ export default function Eventos() {
                       <div className="absolute top-4 left-4">
                         <span className="bg-black/60 backdrop-blur-md text-[#FFDFCA] text-[11px] font-sans font-semibold uppercase tracking-wider px-3 py-1 rounded-full border border-white/20 flex items-center gap-1.5 shadow-md">
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#faa18f]">
-                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                            <circle cx="12" cy="10" r="3"/>
+                            <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                            <circle cx="12" cy="10" r="3" />
                           </svg>
                           {evt.lugar}
                         </span>
@@ -130,8 +124,8 @@ export default function Eventos() {
                       >
                         Detalles
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M5 12h14"/>
-                          <path d="m12 5 7 7-7 7"/>
+                          <path d="M5 12h14" />
+                          <path d="m12 5 7 7-7 7" />
                         </svg>
                       </button>
 
@@ -143,9 +137,9 @@ export default function Eventos() {
                           className="px-4 py-2 rounded-xl bg-[#faa18f] hover:bg-[#e8907e] text-[#FEEBE7] font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5"
                         >
                           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <path d="M15 3h6v6"/>
-                            <path d="M10 14 21 3"/>
-                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                            <path d="M15 3h6v6" />
+                            <path d="M10 14 21 3" />
+                            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                           </svg>
                           Entradas / Más
                         </a>
@@ -163,7 +157,7 @@ export default function Eventos() {
       {selectedEvent && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn">
           <div className="bg-[#FEEBE7] border border-[#faa18f]/30 rounded-3xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-            
+
             {/* Modal Image Header */}
             <div className="relative aspect-[16/9] overflow-hidden bg-black">
               <img
@@ -176,8 +170,8 @@ export default function Eventos() {
                 className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 text-white hover:bg-black/80 transition-all cursor-pointer backdrop-blur-sm"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 6 6 18"/>
-                  <path d="m6 6 12 12"/>
+                  <path d="M18 6 6 18" />
+                  <path d="m6 6 12 12" />
                 </svg>
               </button>
             </div>
@@ -187,8 +181,8 @@ export default function Eventos() {
               {selectedEvent.lugar && (
                 <div className="inline-flex items-center gap-2 bg-[#faa18f]/15 text-[#faa18f] text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-[#faa18f]/30">
                   <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
-                    <circle cx="12" cy="10" r="3"/>
+                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
+                    <circle cx="12" cy="10" r="3" />
                   </svg>
                   {selectedEvent.lugar}
                 </div>
@@ -213,9 +207,9 @@ export default function Eventos() {
                     className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#faa18f] hover:bg-[#e8907e] text-[#FEEBE7] font-bold text-xs uppercase tracking-widest transition-all shadow-lg hover:shadow-xl"
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 3h6v6"/>
-                      <path d="M10 14 21 3"/>
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                      <path d="M15 3h6v6" />
+                      <path d="M10 14 21 3" />
+                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                     </svg>
                     Ir al enlace del Evento
                   </a>
