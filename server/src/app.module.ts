@@ -10,6 +10,10 @@ import { Photo } from './photos/entities/photo.entity';
 import { PhotosModule } from './photos/photos.module';
 import { Product } from './products/entities/product.entity';
 import { ProductsModule } from './products/products.module';
+import { Event } from './events/entities/event.entity';
+import { EventsModule } from './events/events.module';
+import { Place } from './places/entities/place.entity';
+import { PlacesModule } from './places/places.module';
 
 @Module({
   imports: [
@@ -37,13 +41,15 @@ import { ProductsModule } from './products/products.module';
         username: configService.get<string>('DB_USER', 'okarea_dev'),
         password: configService.get<string>('DB_PASSWORD', 'okarea_dev_pass'),
         database: configService.get<string>('DB_NAME', 'okarea_dev_db'),
-        entities: [Category, Product, Photo],
+        entities: [Category, Product, Photo, Event, Place],
         synchronize: true, // Sincroniza esquema automáticamente en desarrollo
       }),
     }),
     CategoriesModule,
     ProductsModule,
     PhotosModule,
+    EventsModule,
+    PlacesModule,
     HealthModule,
   ],
   providers: [
