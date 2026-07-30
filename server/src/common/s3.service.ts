@@ -89,10 +89,13 @@ export class S3Service implements OnModuleInit {
     );
 
     const endpoint = this.configService.get<string>('S3_ENDPOINT', 'localhost');
+    const publicHost =
+      this.configService.get<string>('S3_PUBLIC_ENDPOINT') ||
+      (endpoint === 'minio' ? 'localhost' : endpoint);
     const port = this.configService.get<number>('S3_PORT', 9000);
     const useSSL = this.configService.get<string>('S3_USE_SSL', 'false') === 'true';
     const protocol = useSSL ? 'https' : 'http';
-    const url = `${protocol}://${endpoint}:${port}/${this.bucketName}/${uniqueName}`;
+    const url = `${protocol}://${publicHost}:${port}/${this.bucketName}/${uniqueName}`;
 
     return { s3Key: uniqueName, url };
   }

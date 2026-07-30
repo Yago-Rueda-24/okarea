@@ -12,6 +12,17 @@ export interface EventItem {
   createdAt?: string;
 }
 
+const formatImageUrl = (url?: string): string => {
+  if (!url) return imgEventoFallback;
+  if (url.includes('minio:9000')) {
+    return url.replace('minio:9000', 'localhost:9000');
+  }
+  if (url.includes('://minio/')) {
+    return url.replace('://minio/', '://localhost:9000/');
+  }
+  return url;
+};
+
 export default function Eventos() {
   const [events, setEvents] = useState<EventItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -73,7 +84,7 @@ export default function Eventos() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((evt) => {
-              const displayImage = evt.foto || imgEventoFallback;
+              const displayImage = formatImageUrl(evt.foto);
 
               return (
                 <div
@@ -161,7 +172,7 @@ export default function Eventos() {
             {/* Modal Image Header */}
             <div className="relative aspect-[16/9] overflow-hidden bg-black">
               <img
-                src={selectedEvent.foto || imgEventoFallback}
+                src={formatImageUrl(selectedEvent.foto)}
                 alt={selectedEvent.titulo}
                 className="w-full h-full object-cover"
               />

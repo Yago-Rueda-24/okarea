@@ -357,7 +357,7 @@ export default function App() {
                     >
                       <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
                         <img
-                          src={evt.foto || 'https://via.placeholder.com/600x400?text=Evento+OkArea'}
+                          src={evt.foto ? (evt.foto.includes('minio:9000') ? evt.foto.replace('minio:9000', 'localhost:9000') : evt.foto) : 'https://via.placeholder.com/600x400?text=Evento+OkArea'}
                           alt={evt.titulo}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {
