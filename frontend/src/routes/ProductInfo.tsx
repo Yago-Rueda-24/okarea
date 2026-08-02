@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../config/api';
+import { formatImageUrl } from '../utils/image';
 
 interface ProductInfoProps {
   product?: any;
@@ -76,7 +77,7 @@ export default function ProductInfo({ product: customProduct }: ProductInfoProps
     temporada: customProduct?.temporada || apiProduct?.temporada || stateProduct?.temporada,
     precio: customProduct?.precio || apiProduct?.precio || stateProduct?.price || stateProduct?.precio,
     enlaceSitio: customProduct?.enlaceSitio || apiProduct?.enlaceSitio || stateProduct?.enlaceSitio,
-    imagen: customProduct?.imagen || apiProduct?.imagen || stateProduct?.src || stateProduct?.imagen,
+    imagen: formatImageUrl(customProduct?.imagen || apiProduct?.imagen || stateProduct?.src || stateProduct?.imagen),
   };
 
   return (

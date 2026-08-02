@@ -88,6 +88,12 @@ export class S3Service implements OnModuleInit {
       }),
     );
 
+    const publicUrl = this.configService.get<string>('S3_PUBLIC_URL');
+    if (publicUrl) {
+      const cleanPublicUrl = publicUrl.replace(/\/$/, '');
+      return { s3Key: uniqueName, url: `${cleanPublicUrl}/${this.bucketName}/${uniqueName}` };
+    }
+
     const endpoint = this.configService.get<string>('S3_ENDPOINT', 'localhost');
     const publicHost =
       this.configService.get<string>('S3_PUBLIC_ENDPOINT') ||

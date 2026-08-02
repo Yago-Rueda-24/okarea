@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Product, CategoryType } from '../types/product';
 import { API_BASE_URL, ADMIN_API_KEY } from '../config/api';
+import { formatImageUrl } from '../utils/image';
 import { X, Eye, Edit3, Upload, Check, AlertCircle, ArrowLeft, ExternalLink, Image } from 'lucide-react';
 
 interface ProductFormPreviewModalProps {
@@ -190,7 +191,7 @@ export default function ProductFormPreviewModal({
     }
   };
 
-  const displayImage = formData.imagenUrl || 'https://via.placeholder.com/600x800?text=Sin+Imagen';
+  const displayImage = formatImageUrl(formData.imagenUrl) || 'https://via.placeholder.com/600x800?text=Sin+Imagen';
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn overflow-y-auto">

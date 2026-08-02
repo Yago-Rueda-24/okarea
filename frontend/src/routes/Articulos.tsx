@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import ItemGrid, { type GridItem } from '../components/ItemGrid';
 import { API_BASE_URL } from '../config/api';
+import { formatImageUrl } from '../utils/image';
 
 interface ArticulosProps {
   categoria?: string;
@@ -27,7 +28,7 @@ export default function Articulos({ categoria = 'bolsos', title }: ArticulosProp
         if (isMounted && Array.isArray(data)) {
           const gridItems: GridItem[] = data.map((p: any) => ({
             id: p.id,
-            src: p.photos && p.photos.length > 0 ? p.photos[0].url : (p.imagenUrl || p.imagen || 'https://via.placeholder.com/400x500?text=Sin+Imagen'),
+            src: formatImageUrl(p.photos && p.photos.length > 0 ? p.photos[0].url : (p.imagenUrl || p.imagen)) || 'https://via.placeholder.com/400x500?text=Sin+Imagen',
             title: p.nombre,
             price: p.precio,
             fabricante: p.fabricante,

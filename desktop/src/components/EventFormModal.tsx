@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { EventItem } from '../types/event';
 import { API_BASE_URL, ADMIN_API_KEY } from '../config/api';
+import { formatImageUrl } from '../utils/image';
 import { X, Calendar, MapPin, AlignLeft, Image as ImageIcon, Link as LinkIcon, Save, Upload, Check } from 'lucide-react';
 
 interface EventFormModalProps {
@@ -258,7 +259,7 @@ export default function EventFormModal({
                 {(filePreview || foto) && (
                   <div className="relative aspect-video rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
                     <img
-                      src={filePreview || foto}
+                      src={filePreview || formatImageUrl(foto)}
                       alt="Vista previa"
                       className="w-full h-full object-cover"
                     />

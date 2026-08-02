@@ -3,6 +3,7 @@ import { Product } from './types/product';
 import { EventItem } from './types/event';
 import { PlaceItem } from './types/place';
 import { API_BASE_URL, ADMIN_API_KEY } from './config/api';
+import { formatImageUrl } from './utils/image';
 import AdminHeader, { MainTab } from './components/AdminHeader';
 import ProductFormPreviewModal from './components/ProductFormPreviewModal';
 import EventFormModal from './components/EventFormModal';
@@ -248,10 +249,11 @@ export default function App() {
               ) : (
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                   {products.map((product) => {
-                    const displayImage =
+                    const rawImage =
                       product.photos && product.photos.length > 0
                         ? product.photos[0].url
-                        : product.imagenUrl || 'https://via.placeholder.com/400x500?text=Sin+Imagen';
+                        : product.imagenUrl;
+                    const displayImage = formatImageUrl(rawImage) || 'https://via.placeholder.com/400x500?text=Sin+Imagen';
 
                     return (
                       <div
@@ -357,7 +359,7 @@ export default function App() {
                     >
                       <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
                         <img
-                          src={evt.foto ? (evt.foto.includes('minio:9000') ? evt.foto.replace('minio:9000', 'localhost:9000') : evt.foto) : 'https://via.placeholder.com/600x400?text=Evento+OkArea'}
+                          src={formatImageUrl(evt.foto) || 'https://via.placeholder.com/600x400?text=Evento+OkArea'}
                           alt={evt.titulo}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {
@@ -443,7 +445,7 @@ export default function App() {
                     >
                       <div className="relative aspect-[16/10] bg-slate-950 overflow-hidden">
                         <img
-                          src={plc.foto || 'https://via.placeholder.com/600x400?text=Lugar+OkArea'}
+                          src={formatImageUrl(plc.foto) || 'https://via.placeholder.com/600x400?text=Lugar+OkArea'}
                           alt={plc.nombre}
                           className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                           onError={(e) => {

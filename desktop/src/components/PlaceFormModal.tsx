@@ -1,6 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { PlaceItem } from '../types/place';
 import { API_BASE_URL, ADMIN_API_KEY } from '../config/api';
+import { formatImageUrl } from '../utils/image';
 import { X, MapPin, AlignLeft, Image as ImageIcon, Link as LinkIcon, Save, Compass, Upload, Check } from 'lucide-react';
 
 interface PlaceFormModalProps {
@@ -257,7 +258,7 @@ export default function PlaceFormModal({
                 {(filePreview || foto) && (
                   <div className="relative aspect-video rounded-xl overflow-hidden bg-slate-950 border border-slate-800">
                     <img
-                      src={filePreview || foto}
+                      src={filePreview || formatImageUrl(foto)}
                       alt="Vista previa"
                       className="w-full h-full object-cover"
                     />

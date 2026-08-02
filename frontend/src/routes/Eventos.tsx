@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../config/api';
+import { formatImageUrl } from '../utils/image';
 import imgEventoFallback from '../assets/welcome/evento.png';
 
 export interface EventItem {
@@ -12,15 +13,9 @@ export interface EventItem {
   createdAt?: string;
 }
 
-const formatImageUrl = (url?: string): string => {
-  if (!url) return imgEventoFallback;
-  if (url.includes('minio:9000')) {
-    return url.replace('minio:9000', 'localhost:9000');
-  }
-  if (url.includes('://minio/')) {
-    return url.replace('://minio/', '://localhost:9000/');
-  }
-  return url;
+const getEventImage = (foto?: string): string => {
+  const formatted = formatImageUrl(foto);
+  return formatted || imgEventoFallback;
 };
 
 export default function Eventos() {
@@ -84,7 +79,7 @@ export default function Eventos() {
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {events.map((evt) => {
-              const displayImage = formatImageUrl(evt.foto);
+              const displayImage = getEventImage(evt.foto);
 
               return (
                 <div
@@ -172,7 +167,7 @@ export default function Eventos() {
             {/* Modal Image Header */}
             <div className="relative aspect-[16/9] overflow-hidden bg-black">
               <img
-                src={formatImageUrl(selectedEvent.foto)}
+                src={getEventImage(selectedEvent.foto)}
                 alt={selectedEvent.titulo}
                 className="w-full h-full object-cover"
               />
