@@ -103,15 +103,13 @@ export default function Welcome() {
         {/* Left Side Drawer Menu & Backdrop */}
         <div
           onClick={() => setIsNavOpen(false)}
-          className={`fixed inset-0 bg-black/50 backdrop-blur-xs z-50 transition-opacity duration-300 ${
-            isNavOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-          }`}
+          className={`fixed inset-0 bg-black/50 backdrop-blur-xs z-50 transition-opacity duration-300 ${isNavOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
+            }`}
         />
 
         <div
-          className={`fixed top-0 left-0 h-full w-72 sm:w-80 md:w-96 bg-[#faa18f] text-[#FEEBE7] z-50 shadow-2xl p-8 flex flex-col space-y-8 font-fraunces border-r border-[#FEEBE7]/20 transition-transform duration-300 ease-in-out ${
-            isNavOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}
+          className={`fixed top-0 left-0 h-full w-72 sm:w-80 md:w-96 bg-[#faa18f] text-[#FEEBE7] z-50 shadow-2xl p-8 flex flex-col space-y-8 font-fraunces border-r border-[#FEEBE7]/20 transition-transform duration-300 ease-in-out ${isNavOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
         >
           {/* Header inside drawer */}
           <div className="flex justify-between items-center pb-6 border-b border-[#FEEBE7]/20">
@@ -230,7 +228,7 @@ export default function Welcome() {
           </picture>
         </div>
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4 sm:p-6 bg-black/10">
-          <h1 className="font-fraunces italic text-3xl sm:text-6xl md:text-8xl lg:text-9xl font-light uppercase tracking-wider sm:tracking-[0.2em] md:tracking-[0.25em] text-[#FFDFCA] drop-shadow-2xl leading-none -mt-40 sm:-mt-60 md:-mt-80 max-w-full">
+          <h1 className="font-fraunces italic text-3xl sm:text-6xl md:text-8xl lg:text-9xl font-light uppercase tracking-wider sm:tracking-[0.2em] md:tracking-[0.25em] text-[#FAA18F] drop-shadow-2xl leading-none -mt-40 sm:-mt-60 md:-mt-80 max-w-full">
             {new Date().toLocaleDateString("es-ES", { day: 'numeric', month: '2-digit', year: '2-digit' }).replace("/", "’").replace("/", "’")}
           </h1>
         </div>
