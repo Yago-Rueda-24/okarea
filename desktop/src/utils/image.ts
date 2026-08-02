@@ -16,20 +16,22 @@ export function formatImageUrl(url?: string | null): string {
   const s3PublicUrl = import.meta.env.VITE_S3_PUBLIC_URL;
   if (s3PublicUrl) {
     const cleanPublicUrl = s3PublicUrl.replace(/\/$/, '');
-    if (url.includes('localhost:9000') || url.includes('minio:9000') || url.includes('://minio/')) {
+    if (url.includes('localhost:9000') || url.includes('minio:9000') || url.includes('://minio/') || url.includes(':9000/')) {
       return url
-        .replace(/^https?:\/\/localhost:9000/, cleanPublicUrl)
+        .replace(/^https?:\/\/[^/]+:9000/, cleanPublicUrl)
         .replace(/^https?:\/\/minio:9000/, cleanPublicUrl)
-        .replace(/^https?:\/\/minio/, cleanPublicUrl);
+        .replace(/^https?:\/\/minio\//, `${cleanPublicUrl}/`);
     }
   }
 
   // 2. Extraer el host del servidor API desde API_BASE_URL
   let apiHost = '';
+  let protocol = 'https:';
   try {
     if (API_BASE_URL && API_BASE_URL.startsWith('http')) {
       const parsedUrl = new URL(API_BASE_URL);
       apiHost = parsedUrl.hostname;
+      protocol = parsedUrl.protocol;
     }
   } catch (e) {
     // Ignorar error de parsing
@@ -44,19 +46,15 @@ export function formatImageUrl(url?: string | null): string {
   );
 
   if (isRemoteProd) {
-    // Si la app de Electron apunta a un backend de producción (ej. okarea.es),
-    // reemplazar localhost:9000 o minio:9000 por ${apiHost}:9000
-    if (url.includes('localhost:9000')) {
-      return url.replace('localhost:9000', `${apiHost}:9000`);
-    }
-    if (url.includes('minio:9000')) {
-      return url.replace('minio:9000', `${apiHost}:9000`);
-    }
-    if (url.includes('://minio/')) {
-      return url.replace('://minio/', `://${apiHost}:9000/`);
-    }
+    // En producción remota, la app de Electron accederá a la imagen a través del proxy HTTPS del dominio (ej: https://okarea.es/okarea-catalog/...)
+    const targetBase = `${protocol}//${apiHost}`;
+
+    return url
+      .replace(/^https?:\/\/[^/]+:9000/, targetBase)
+      .replace(/^https?:\/\/minio:9000/, targetBase)
+      .replace(/^https?:\/\/minio\//, `${targetBase}/`);
   } else {
-    // En desarrollo local, mapear el nombre interno del contenedor Docker 'minio' a 'localhost'
+    // En desarrollo local, mapear el nombre interno del contenedor Docker 'minio' a 'localhost:9000'
     if (url.includes('minio:9000')) {
       return url.replace('minio:9000', 'localhost:9000');
     }
