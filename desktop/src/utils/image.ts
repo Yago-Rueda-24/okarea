@@ -2,12 +2,12 @@ import { API_BASE_URL } from '../config/api';
 
 /**
  * Formatea URLs de imágenes provenientes de S3/MinIO o del backend para garantizar
- * que sean accesibles en la aplicación de Escritorio (Electron).
+ * que sean accesibles según el entorno (Desarrollo Local vs Producción Remota).
  */
 export function formatImageUrl(url?: string | null): string {
   if (!url) return '';
 
-  // Si es un Data URL, Blob URL o URL completa externa, devolver directamente
+  // Data URLs o Blob URLs se devuelven tal cual
   if (url.startsWith('data:') || url.startsWith('blob:')) {
     return url;
   }
@@ -24,9 +24,9 @@ export function formatImageUrl(url?: string | null): string {
     }
   }
 
-  // 2. Extraer el host del servidor API desde API_BASE_URL
+  // 2. Determinar host y protocolo desde API_BASE_URL o window.location
   let apiHost = '';
-  let protocol = 'https:';
+  let protocol = 'http:';
   try {
     if (API_BASE_URL && API_BASE_URL.startsWith('http')) {
       const parsedUrl = new URL(API_BASE_URL);
@@ -34,34 +34,45 @@ export function formatImageUrl(url?: string | null): string {
       protocol = parsedUrl.protocol;
     }
   } catch (e) {
-    // Ignorar error de parsing
+    // ignorar error de parsing
   }
 
-  // Verificar si el servidor API configurado es remoto (diferente de localhost / 127.0.0.1 / minio)
-  const isRemoteProd = Boolean(
-    apiHost &&
-    apiHost !== 'localhost' &&
-    apiHost !== '127.0.0.1' &&
-    apiHost !== 'minio'
-  );
+  if (!apiHost && typeof window !== 'undefined' && window.location && window.location.hostname) {
+    apiHost = window.location.hostname;
+    protocol = window.location.protocol;
+  }
 
-  if (isRemoteProd) {
-    // En producción remota, la app de Electron accederá a la imagen a través del proxy HTTPS del dominio (ej: https://okarea.es/okarea-catalog/...)
+  const isDev = !apiHost || apiHost === 'localhost' || apiHost === '127.0.0.1' || apiHost === 'minio';
+
+  if (isDev) {
+    // EN DESARROLLO LOCAL:
+    // Si la URL provista apunta a producción (ej: https://okarea.es/okarea-catalog/...), la redirigimos a MinIO local en localhost:9000
+    let formatted = url;
+
+    if (formatted.includes('okarea.es/okarea-catalog/')) {
+      formatted = formatted.replace(/https?:\/\/okarea\.es\/okarea-catalog\//g, 'http://localhost:9000/okarea-catalog/');
+    }
+
+    if (formatted.includes('minio:9000')) {
+      formatted = formatted.replace(/minio:9000/g, 'localhost:9000');
+    }
+
+    if (formatted.includes('://minio/')) {
+      formatted = formatted.replace(/:\/\/minio\//g, '://localhost:9000/');
+    }
+
+    return formatted;
+  } else {
+    // EN PRODUCCIÓN REMOTA:
+    // Redirigir puertos locales :9000 o nombres de contenedor 'minio' al dominio HTTPS público de producción
     const targetBase = `${protocol}//${apiHost}`;
 
     return url
       .replace(/^https?:\/\/[^/]+:9000/, targetBase)
       .replace(/^https?:\/\/minio:9000/, targetBase)
       .replace(/^https?:\/\/minio\//, `${targetBase}/`);
-  } else {
-    // En desarrollo local, mapear el nombre interno del contenedor Docker 'minio' a 'localhost:9000'
-    if (url.includes('minio:9000')) {
-      return url.replace('minio:9000', 'localhost:9000');
-    }
-    if (url.includes('://minio/')) {
-      return url.replace('://minio/', '://localhost:9000/');
-    }
   }
-
-  return url;
 }
+
+export const DEFAULT_PLACEHOLDER_IMAGE =
+  "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect width='600' height='400' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='22' font-weight='bold' fill='%2364748b'%3EOKAREA%3C/text%3E%3C/svg%3E";

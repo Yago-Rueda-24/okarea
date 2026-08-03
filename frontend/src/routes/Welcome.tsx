@@ -307,12 +307,15 @@ export default function Welcome() {
 
       {/* Event Section */}
       <section id="eventos" className="w-full relative h-[60vh] sm:h-[70vh] md:h-[85vh] overflow-hidden scroll-mt-20">
-        <Link to="/eventos" className="block w-full h-full group">
+        <Link to="/eventos" className="block w-full h-full group relative">
           <img
             src={imgEvento}
             alt="Evento OkArea"
             className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6 md:p-10">
+            <h3 className="text-white font-semibold text-2xl sm:text-3xl md:text-4xl tracking-wider uppercase">Eventos</h3>
+          </div>
         </Link>
       </section>
 
@@ -322,12 +325,15 @@ export default function Welcome() {
 
       {/* Lugares Section */}
       <section id="lugares" className="w-full relative h-[60vh] sm:h-[70vh] md:h-[85vh] overflow-hidden scroll-mt-20">
-        <Link to="/lugares" className="block w-full h-full group">
+        <Link to="/lugares" className="block w-full h-full group relative">
           <img
             src={imgLugares}
             alt="Lugares OkArea"
             className="w-full h-full object-cover object-center transition-transform duration-700 group-hover:scale-105"
           />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent flex items-end p-6 md:p-10">
+            <h3 className="text-white font-semibold text-2xl sm:text-3xl md:text-4xl tracking-wider uppercase">Lugares</h3>
+          </div>
         </Link>
       </section>
 

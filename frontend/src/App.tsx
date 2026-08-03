@@ -5,6 +5,7 @@ import Articulos from './routes/Articulos';
 import ProductInfo from './routes/ProductInfo';
 import Eventos from './routes/Eventos';
 import Trabajando from './routes/Trabajando';
+import Lugares from './routes/Lugares';
 
 function App() {
   const location = useLocation();
@@ -19,7 +20,7 @@ function App() {
         <Route path="/ropa" element={<Articulos categoria="ropa" title="Colección Ropa" />} />
         <Route path="/accesorios" element={<Articulos categoria="accesorios" title="Colección Accesorios" />} />
         <Route path="/eventos" element={<Eventos />} />
-        <Route path="/lugares" element={<Trabajando />} />
+        <Route path="/lugares" element={<Lugares />} />
         <Route path="/trabajando" element={<Trabajando />} />
         <Route path="/articulos" element={<Articulos />} />
         <Route path="/producto" element={<ProductInfo />} />

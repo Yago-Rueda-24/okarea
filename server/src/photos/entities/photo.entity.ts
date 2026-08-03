@@ -6,13 +6,13 @@ export class Photo {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   filename: string;
 
-  @Column()
+  @Column({ nullable: true })
   s3Key: string;
 
-  @Column()
+  @Column({ type: 'text', nullable: true })
   url: string;
 
   @Column({ default: false })
