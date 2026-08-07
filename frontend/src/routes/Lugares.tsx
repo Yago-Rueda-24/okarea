@@ -18,14 +18,18 @@ const getPlaceImage = (foto?: string): string => {
   return formatted || imgLugaresFallback;
 };
 
+let placesCache: PlaceItem[] | null = null;
+
 export default function Lugares() {
-  const [places, setPlaces] = useState<PlaceItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [places, setPlaces] = useState<PlaceItem[]>(() => placesCache || []);
+  const [loading, setLoading] = useState(!placesCache);
   const [selectedPlace, setSelectedPlace] = useState<PlaceItem | null>(null);
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
+    if (!placesCache) {
+      setLoading(true);
+    }
 
     async function fetchPlaces() {
       try {
@@ -34,6 +38,7 @@ export default function Lugares() {
 
         const data = await response.json();
         if (isMounted && Array.isArray(data)) {
+          placesCache = data;
           setPlaces(data);
         }
       } catch (err) {

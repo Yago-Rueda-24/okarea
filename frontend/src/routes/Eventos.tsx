@@ -18,14 +18,18 @@ const getEventImage = (foto?: string): string => {
   return formatted || imgEventoFallback;
 };
 
+let eventsCache: EventItem[] | null = null;
+
 export default function Eventos() {
-  const [events, setEvents] = useState<EventItem[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [events, setEvents] = useState<EventItem[]>(() => eventsCache || []);
+  const [loading, setLoading] = useState(!eventsCache);
   const [selectedEvent, setSelectedEvent] = useState<EventItem | null>(null);
 
   useEffect(() => {
     let isMounted = true;
-    setLoading(true);
+    if (!eventsCache) {
+      setLoading(true);
+    }
 
     async function fetchEvents() {
       try {
@@ -34,6 +38,7 @@ export default function Eventos() {
 
         const data = await response.json();
         if (isMounted && Array.isArray(data)) {
+          eventsCache = data;
           setEvents(data);
         }
       } catch (err) {
