@@ -1,4 +1,5 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Routes, Route, useLocation, useNavigationType } from 'react-router-dom';
 import Welcome from './routes/Welcome';
 import Navbar from './components/Navbar';
 import Articulos from './routes/Articulos';
@@ -7,11 +8,59 @@ import Eventos from './routes/Eventos';
 import Trabajando from './routes/Trabajando';
 import Lugares from './routes/Lugares';
 
+const setPathScroll = (path: string, scrollY: number) => {
+  try {
+    sessionStorage.setItem(`scroll_pos_${path}`, scrollY.toString());
+  } catch (e) {}
+};
+
+const getPathScroll = (path: string): number => {
+  try {
+    const val = sessionStorage.getItem(`scroll_pos_${path}`);
+    return val ? parseInt(val, 10) : 0;
+  } catch (e) {
+    return 0;
+  }
+};
+
+function ScrollRestorationManager() {
+  const location = useLocation();
+  const navType = useNavigationType();
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setPathScroll(location.pathname, window.scrollY);
+    };
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (navType === 'POP') {
+      const savedScroll = getPathScroll(location.pathname);
+      const restore = () => {
+        window.scrollTo(0, savedScroll);
+      };
+      restore();
+      requestAnimationFrame(restore);
+      const timer = setTimeout(restore, 50);
+      return () => clearTimeout(timer);
+    } else if (navType === 'PUSH') {
+      window.scrollTo(0, 0);
+    }
+  }, [location.pathname, navType]);
+
+  return null;
+}
+
 function App() {
   const location = useLocation();
 
   return (
     <div className="relative">
+      <ScrollRestorationManager />
       {location.pathname !== '/' && <Navbar />}
       <Routes>
         <Route path="/" element={<Welcome />} />

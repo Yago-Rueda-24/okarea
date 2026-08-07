@@ -52,6 +52,22 @@ export default function Lugares() {
     };
   }, []);
 
+  useEffect(() => {
+    if (selectedPlace) {
+      const currentScrollY = window.scrollY;
+      document.body.style.position = 'fixed';
+      document.body.style.top = `-${currentScrollY}px`;
+      document.body.style.width = '100%';
+
+      return () => {
+        document.body.style.position = '';
+        document.body.style.top = '';
+        document.body.style.width = '';
+        window.scrollTo(0, currentScrollY);
+      };
+    }
+  }, [selectedPlace]);
+
   return (
     <div className="min-h-screen bg-[#FEEBE7] font-fraunces text-[#654321] pt-28 pb-20 px-6 sm:px-10">
 
