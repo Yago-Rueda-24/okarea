@@ -228,7 +228,7 @@ export default function Welcome() {
           </picture>
         </div>
         <div className="absolute inset-0 flex flex-col justify-center items-center text-center p-4 sm:p-6 bg-black/10">
-          <h1 className="font-fraunces italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-light uppercase tracking-wider sm:tracking-[0.2em] md:tracking-[0.25em] text-[#FAA18F] drop-shadow-2xl leading-none -mt-96 sm:-mt-60 md:-mt-80 max-w-full">
+          <h1 className="font-fraunces italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-light uppercase tracking-wider sm:tracking-[0.2em] md:tracking-[0.25em] text-[#Feebe7] drop-shadow-2xl leading-none -mt-96 sm:-mt-60 md:-mt-80 max-w-full">
             {new Date().toLocaleDateString("es-ES", { day: 'numeric', month: '2-digit', year: '2-digit' }).replace("/", "’").replace("/", "’")}
           </h1>
         </div>
