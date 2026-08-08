@@ -128,28 +128,6 @@ export default function Navbar() {
               <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
             </svg>
           </a>
-          <a
-            href="https://vinted.es"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="p-2 transition-transform duration-300 hover:scale-110 text-current hover:opacity-80"
-            aria-label="Vinted"
-          >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="w-5 h-5 md:w-6 md:h-6"
-            >
-              <path d="M11.028 6c0 7.695 -.292 11.728 0 12c2.046 -5 4.246 -12.642 5.252 -14.099c.343 -.497 .768 -.93 1.257 -1.277c.603 -.39 1.292 -.76 1.463 -.575c-.07 2.319 -4.023 15.822 -4.209 16.314a6.135 6.135 0 0 1 -3.465 3.386c-3.213 .78 -3.429 -.446 -3.836 -1.134c-.95 -2.103 -1.682 -14.26 -1.445 -15.615c.05 -.523 .143 -1.851 2.491 -2c2.359 -.354 2.547 1.404 2.492 3z" />
-            </svg>
-          </a>
         </div>
 
       </div>

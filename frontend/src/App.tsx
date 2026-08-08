@@ -7,6 +7,7 @@ import ProductInfo from './routes/ProductInfo';
 import Eventos from './routes/Eventos';
 import Trabajando from './routes/Trabajando';
 import Lugares from './routes/Lugares';
+import AboutUs from './routes/AboutUs';
 
 const setPathScroll = (path: string, scrollY: number) => {
   try {
@@ -70,6 +71,8 @@ function App() {
         <Route path="/accesorios" element={<Articulos categoria="accesorios" title="Colección Accesorios" />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/lugares" element={<Lugares />} />
+        <Route path="/about" element={<AboutUs />} />
+        <Route path="/sobre-nosotros" element={<AboutUs />} />
         <Route path="/trabajando" element={<Trabajando />} />
         <Route path="/articulos" element={<Articulos />} />
         <Route path="/producto" element={<ProductInfo />} />
