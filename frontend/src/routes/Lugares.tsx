@@ -23,7 +23,6 @@ let placesCache: PlaceItem[] | null = null;
 export default function Lugares() {
   const [places, setPlaces] = useState<PlaceItem[]>(() => placesCache || []);
   const [loading, setLoading] = useState(!placesCache);
-  const [selectedPlace, setSelectedPlace] = useState<PlaceItem | null>(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -57,22 +56,6 @@ export default function Lugares() {
     };
   }, []);
 
-  useEffect(() => {
-    if (selectedPlace) {
-      const currentScrollY = window.scrollY;
-      document.body.style.position = 'fixed';
-      document.body.style.top = `-${currentScrollY}px`;
-      document.body.style.width = '100%';
-
-      return () => {
-        document.body.style.position = '';
-        document.body.style.top = '';
-        document.body.style.width = '';
-        window.scrollTo(0, currentScrollY);
-      };
-    }
-  }, [selectedPlace]);
-
   return (
     <div className="min-h-screen bg-[#FEEBE7] font-fraunces text-[#654321] pt-28 pb-20 px-6 sm:px-10">
 
@@ -105,10 +88,10 @@ export default function Lugares() {
               return (
                 <div
                   key={plc.id}
-                  className="bg-white/70 backdrop-blur-md rounded-2xl overflow-hidden border border-[#faa18f]/20 shadow-xl hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 flex flex-col group"
+                  className="bg-white/80 backdrop-blur-md rounded-3xl overflow-hidden border border-[#faa18f]/30 shadow-xl hover:shadow-2xl hover:-translate-y-1.5 transition-all duration-500 flex flex-col group"
                 >
-                  {/* Place Image */}
-                  <div className="relative aspect-[16/11] overflow-hidden bg-[#faa18f]/10">
+                  {/* Place Image Header */}
+                  <div className="relative aspect-[16/9] overflow-hidden bg-black/5">
                     <img
                       src={displayImage}
                       alt={plc.nombre}
@@ -117,61 +100,49 @@ export default function Lugares() {
                         (e.target as HTMLImageElement).src = imgLugaresFallback;
                       }}
                     />
-                    {plc.lugar && (
-                      <div className="absolute top-4 left-4">
-                        <span className="bg-black/60 backdrop-blur-md text-[#FFDFCA] text-[11px] font-sans font-semibold uppercase tracking-wider px-3 py-1 rounded-full border border-white/20 flex items-center gap-1.5 shadow-md">
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-[#faa18f]">
+                  </div>
+
+                  {/* Place Info Body */}
+                  <div className="p-6 sm:p-8 flex-1 flex flex-col justify-between space-y-4">
+                    <div className="space-y-3">
+                      {plc.lugar && (
+                        <div className="inline-flex items-center gap-2 bg-[#faa18f]/15 text-[#faa18f] text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-[#faa18f]/30">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
                             <circle cx="12" cy="10" r="3" />
                           </svg>
                           {plc.lugar}
-                        </span>
-                      </div>
-                    )}
-                  </div>
+                        </div>
+                      )}
 
-                  {/* Place Info */}
-                  <div className="p-6 flex-1 flex flex-col justify-between">
-                    <div>
-                      <h3 className="text-xl font-bold uppercase tracking-wider text-[#faa18f] mb-3 leading-snug">
+                      <h2 className="text-2xl font-bold uppercase tracking-wider text-[#faa18f] leading-snug">
                         {plc.nombre}
-                      </h3>
+                      </h2>
+
                       {plc.descripcion && (
-                        <p className="text-xs sm:text-sm font-sans text-[#654321]/80 line-clamp-3 leading-relaxed mb-6 font-medium">
+                        <p className="text-sm font-sans text-[#654321]/90 leading-relaxed font-medium">
                           {plc.descripcion}
                         </p>
                       )}
                     </div>
 
-                    {/* Action Buttons */}
-                    <div className="pt-4 border-t border-[#faa18f]/15 flex items-center justify-between gap-3">
-                      <button
-                        onClick={() => setSelectedPlace(plc)}
-                        className="text-xs font-bold uppercase tracking-widest text-[#faa18f] hover:text-[#654321] transition-colors flex items-center gap-1 cursor-pointer"
-                      >
-                        Detalles
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="M5 12h14" />
-                          <path d="m12 5 7 7-7 7" />
-                        </svg>
-                      </button>
-
-                      {plc.enlace && (
+                    {plc.enlace && (
+                      <div className="pt-4 border-t border-[#faa18f]/20">
                         <a
                           href={plc.enlace}
                           target="_blank"
                           rel="noreferrer"
-                          className="px-4 py-2 rounded-xl bg-[#faa18f] hover:bg-[#e8907e] text-[#FEEBE7] font-bold text-xs uppercase tracking-wider transition-all shadow-md flex items-center gap-1.5"
+                          className="inline-flex items-center justify-center gap-2 w-full px-6 py-3 rounded-xl bg-[#faa18f] hover:bg-[#e8907e] text-[#FEEBE7] font-bold text-xs uppercase tracking-widest transition-all shadow-md hover:shadow-lg"
                         >
-                          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                             <path d="M15 3h6v6" />
                             <path d="M10 14 21 3" />
                             <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
                           </svg>
-                          Ver Sitio Web
+                          Ir al enlace
                         </a>
-                      )}
-                    </div>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -179,74 +150,6 @@ export default function Lugares() {
           </div>
         )}
       </div>
-
-      {/* Place Detail Modal */}
-      {selectedPlace && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md animate-fadeIn">
-          <div className="bg-[#FEEBE7] border border-[#faa18f]/30 rounded-3xl max-w-2xl w-full shadow-2xl overflow-hidden flex flex-col max-h-[90vh]">
-
-            {/* Modal Image Header */}
-            <div className="relative aspect-[16/9] overflow-hidden bg-black">
-              <img
-                src={getPlaceImage(selectedPlace.foto)}
-                alt={selectedPlace.nombre}
-                className="w-full h-full object-cover"
-              />
-              <button
-                onClick={() => setSelectedPlace(null)}
-                className="absolute top-4 right-4 p-2.5 rounded-full bg-black/60 text-white hover:bg-black/80 transition-all cursor-pointer backdrop-blur-sm"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M18 6 6 18" />
-                  <path d="m6 6 12 12" />
-                </svg>
-              </button>
-            </div>
-
-            {/* Modal Details Body */}
-            <div className="p-6 sm:p-8 overflow-y-auto space-y-4">
-              {selectedPlace.lugar && (
-                <div className="inline-flex items-center gap-2 bg-[#faa18f]/15 text-[#faa18f] text-xs font-bold uppercase tracking-wider px-3.5 py-1.5 rounded-full border border-[#faa18f]/30">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z" />
-                    <circle cx="12" cy="10" r="3" />
-                  </svg>
-                  {selectedPlace.lugar}
-                </div>
-              )}
-
-              <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-wider text-[#faa18f] leading-snug">
-                {selectedPlace.nombre}
-              </h2>
-
-              {selectedPlace.descripcion && (
-                <p className="text-sm font-sans text-[#654321]/90 leading-relaxed font-medium">
-                  {selectedPlace.descripcion}
-                </p>
-              )}
-
-              {selectedPlace.enlace && (
-                <div className="pt-4">
-                  <a
-                    href={selectedPlace.enlace}
-                    target="_blank"
-                    rel="noreferrer"
-                    className="inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-[#faa18f] hover:bg-[#e8907e] text-[#FEEBE7] font-bold text-xs uppercase tracking-widest transition-all shadow-lg hover:shadow-xl"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                      <path d="M15 3h6v6" />
-                      <path d="M10 14 21 3" />
-                      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
-                    </svg>
-                    Ir al sitio web del Lugar
-                  </a>
-                </div>
-              )}
-            </div>
-
-          </div>
-        </div>
-      )}
 
     </div>
   );
