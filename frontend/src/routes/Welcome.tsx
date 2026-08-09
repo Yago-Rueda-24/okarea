@@ -8,6 +8,7 @@ import fondoWeb from '../assets/welcome/fondoweb.png';
 import fondoPantalla from '../assets/welcome/fondomovil.jpeg';
 import imgEvento from '../assets/welcome/evento.png';
 import imgLugares from '../assets/welcome/lugares.png';
+import imgAbout from '../assets/welcome/About.png';
 
 export default function Welcome() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -51,13 +52,15 @@ export default function Welcome() {
 
           {/* Right Side: Sobre Nosotros Link & Social Icons */}
           <div className="flex justify-end items-center space-x-3 sm:space-x-4 md:space-x-6">
-            <Link
-              to="/sobre-nosotros"
-              className="text-xs sm:text-sm uppercase tracking-widest text-current hover:opacity-80 transition-all font-medium pr-1"
+            <button
+              onClick={() => {
+                document.getElementById('sobre-nosotros')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="text-xs sm:text-sm uppercase tracking-widest text-current hover:opacity-80 transition-all font-medium pr-1 cursor-pointer focus:outline-none"
             >
               <span className="sm:hidden">About</span>
-              <span className="hidden sm:inline">Sobre Nosotros</span>
-            </Link>
+              <span className="hidden sm:inline">About</span>
+            </button>
             <a
               href="https://www.instagram.com/inspo_area/"
               target="_blank"
@@ -320,6 +323,21 @@ export default function Welcome() {
             <h3 className="text-white font-semibold text-2xl sm:text-3xl md:text-4xl tracking-wider uppercase">Lugares</h3>
           </div>
         </Link>
+      </section>
+
+      <div className="w-full py-16 px-6 text-center bg-[#FAA18F] text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
+        Get to know us
+      </div>
+
+      {/* Sobre Nosotros Section */}
+      <section id="sobre-nosotros" className="w-full relative h-[60vh] sm:h-[70vh] md:h-[85vh] overflow-hidden scroll-mt-20">
+        <div className="w-full h-full relative">
+          <img
+            src={imgAbout}
+            alt="Sobre Nosotros OkArea"
+            className="w-full h-full object-cover object-center"
+          />
+        </div>
       </section>
 
     </div>
