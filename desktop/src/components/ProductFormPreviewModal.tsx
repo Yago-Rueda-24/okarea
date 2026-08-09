@@ -291,6 +291,8 @@ export default function ProductFormPreviewModal({
                     <option value={CategoryType.CALZADO}>Calzado</option>
                     <option value={CategoryType.ROPA}>Ropa</option>
                     <option value={CategoryType.ACCESORIOS}>Accesorios</option>
+                    <option value={CategoryType.TIENDAS}>Tiendas</option>
+                    <option value={CategoryType.ARTESANOS}>Artesanos</option>
                   </select>
                 </div>
 

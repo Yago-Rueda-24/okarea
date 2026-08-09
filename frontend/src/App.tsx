@@ -68,6 +68,8 @@ function App() {
         <Route path="/calzado" element={<Articulos categoria="calzado" title="Colección Calzado" />} />
         <Route path="/ropa" element={<Articulos categoria="ropa" title="Colección Ropa" />} />
         <Route path="/accesorios" element={<Articulos categoria="accesorios" title="Colección Accesorios" />} />
+        <Route path="/tiendas" element={<Articulos categoria="tiendas" title="Colección Tiendas" />} />
+        <Route path="/artesanos" element={<Articulos categoria="artesanos" title="Colección Artesanos" />} />
         <Route path="/eventos" element={<Eventos />} />
         <Route path="/lugares" element={<Lugares />} />
         <Route path="/trabajando" element={<Trabajando />} />

@@ -38,6 +38,8 @@ export default function AdminHeader({
     { id: CategoryType.CALZADO, label: 'Calzado' },
     { id: CategoryType.ROPA, label: 'Ropa' },
     { id: CategoryType.ACCESORIOS, label: 'Accesorios' },
+    { id: CategoryType.TIENDAS, label: 'Tiendas' },
+    { id: CategoryType.ARTESANOS, label: 'Artesanos' },
   ];
 
   const getCreateButtonText = () => {

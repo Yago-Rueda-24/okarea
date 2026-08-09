@@ -3,6 +3,8 @@ export enum CategoryType {
   CALZADO = 'calzado',
   ROPA = 'ropa',
   ACCESORIOS = 'accesorios',
+  TIENDAS = 'tiendas',
+  ARTESANOS = 'artesanos',
 }
 
 export interface Photo {
