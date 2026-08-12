@@ -40,6 +40,7 @@ export default function AdminHeader({
     { id: CategoryType.ACCESORIOS, label: 'Accesorios' },
     { id: CategoryType.TIENDAS, label: 'Tiendas' },
     { id: CategoryType.ARTESANOS, label: 'Artesanos' },
+    { id: CategoryType.HOMBRE, label: 'Hombre' },
   ];
 
   const getCreateButtonText = () => {

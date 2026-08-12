@@ -5,6 +5,7 @@ export enum CategoryType {
   ACCESORIOS = 'accesorios',
   TIENDAS = 'tiendas',
   ARTESANOS = 'artesanos',
+  HOMBRE = 'hombre',
 }
 
 export interface Photo {

@@ -293,6 +293,7 @@ export default function ProductFormPreviewModal({
                     <option value={CategoryType.ACCESORIOS}>Accesorios</option>
                     <option value={CategoryType.TIENDAS}>Tiendas</option>
                     <option value={CategoryType.ARTESANOS}>Artesanos</option>
+                    <option value={CategoryType.HOMBRE}>Hombre</option>
                   </select>
                 </div>
 

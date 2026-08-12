@@ -7,7 +7,7 @@ export default function Navbar() {
   const location = useLocation();
 
   // Show category quick links on desktop when on fashion-related pages
-  const fashionPaths = ['/bolsos', '/calzado', '/ropa', '/accesorios', '/tiendas', '/artesanos', '/articulos', '/producto', '/product-info'];
+  const fashionPaths = ['/bolsos', '/calzado', '/ropa', '/accesorios', '/hombre', '/tiendas', '/artesanos', '/articulos', '/producto', '/product-info'];
   const isFashionPage = fashionPaths.some(path => location.pathname.startsWith(path));
 
   return (
@@ -71,6 +71,12 @@ export default function Navbar() {
               className="relative py-2 text-sm md:text-base lg:text-lg uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
             >
               Accesorios
+            </Link>
+            <Link
+              to="/hombre"
+              className="relative py-2 text-sm md:text-base lg:text-lg uppercase tracking-widest transition-all duration-300 hover:opacity-80 after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-[2px] after:bg-current hover:after:w-full after:transition-all after:duration-300"
+            >
+              Hombre
             </Link>
             <Link
               to="/tiendas"
@@ -220,6 +226,13 @@ export default function Navbar() {
                   className="text-lg uppercase tracking-widest text-[#FEEBE7]/90 hover:text-[#FEEBE7] hover:translate-x-2 transition-all"
                 >
                   Accesorios
+                </Link>
+                <Link
+                  to="/hombre"
+                  onClick={() => setIsNavOpen(false)}
+                  className="text-lg uppercase tracking-widest text-[#FEEBE7]/90 hover:text-[#FEEBE7] hover:translate-x-2 transition-all"
+                >
+                  Hombre
                 </Link>
                 <Link
                   to="/tiendas"
