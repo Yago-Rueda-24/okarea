@@ -180,6 +180,13 @@ export default function Welcome() {
                     Accesorios
                   </Link>
                   <Link
+                    to="/hombre"
+                    onClick={() => setIsNavOpen(false)}
+                    className="text-lg uppercase tracking-widest text-[#FEEBE7]/90 hover:text-[#FEEBE7] hover:translate-x-2 transition-all"
+                  >
+                    Hombre
+                  </Link>
+                  <Link
                     to="/tiendas"
                     onClick={() => setIsNavOpen(false)}
                     className="text-lg uppercase tracking-widest text-[#FEEBE7]/90 hover:text-[#FEEBE7] hover:translate-x-2 transition-all"
