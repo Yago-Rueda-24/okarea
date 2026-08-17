@@ -7,6 +7,7 @@ import ProductInfo from './routes/ProductInfo';
 import Eventos from './routes/Eventos';
 import Trabajando from './routes/Trabajando';
 import Lugares from './routes/Lugares';
+import NotFound from './routes/NotFound';
 import { usePageTracking } from './hooks/usePageTracking';
 import ChatWidget from './components/ChatWidget';
 
@@ -82,6 +83,7 @@ function App() {
         <Route path="/producto/:id" element={<ProductInfo />} />
         <Route path="/product-info" element={<ProductInfo />} />
         <Route path="/product-info/:id" element={<ProductInfo />} />
+        <Route path="*" element={<NotFound />} />
       </Routes>
       <ChatWidget />
     </div>
