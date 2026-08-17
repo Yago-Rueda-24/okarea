@@ -7,6 +7,7 @@ import ProductInfo from './routes/ProductInfo';
 import Eventos from './routes/Eventos';
 import Trabajando from './routes/Trabajando';
 import Lugares from './routes/Lugares';
+import { usePageTracking } from './hooks/usePageTracking';
 
 const setPathScroll = (path: string, scrollY: number) => {
   try {
@@ -56,6 +57,7 @@ function ScrollRestorationManager() {
 }
 
 function App() {
+  usePageTracking();
   const location = useLocation();
 
   return (

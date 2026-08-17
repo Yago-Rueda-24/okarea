@@ -14,6 +14,8 @@ import { Event } from './events/entities/event.entity';
 import { EventsModule } from './events/events.module';
 import { Place } from './places/entities/place.entity';
 import { PlacesModule } from './places/places.module';
+import { Visit } from './visits/entities/visit.entity';
+import { VisitsModule } from './visits/visits.module';
 
 @Module({
   imports: [
@@ -41,7 +43,7 @@ import { PlacesModule } from './places/places.module';
         username: configService.get<string>('DB_USER', 'okarea_dev'),
         password: configService.get<string>('DB_PASSWORD', 'okarea_dev_pass'),
         database: configService.get<string>('DB_NAME', 'okarea_dev_db'),
-        entities: [Category, Product, Photo, Event, Place],
+        entities: [Category, Product, Photo, Event, Place, Visit],
         synchronize: true, // Sincroniza esquema automáticamente en desarrollo
       }),
     }),
@@ -50,6 +52,7 @@ import { PlacesModule } from './places/places.module';
     PhotosModule,
     EventsModule,
     PlacesModule,
+    VisitsModule,
     HealthModule,
   ],
   providers: [

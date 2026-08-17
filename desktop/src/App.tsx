@@ -8,6 +8,7 @@ import AdminHeader, { MainTab } from './components/AdminHeader';
 import ProductFormPreviewModal from './components/ProductFormPreviewModal';
 import EventFormModal from './components/EventFormModal';
 import PlaceFormModal from './components/PlaceFormModal';
+import VisitsStatsView from './components/VisitsStatsView';
 import { Edit3, Trash2, ShoppingBag, AlertCircle, Tag, ExternalLink, Calendar, MapPin, Compass } from 'lucide-react';
 
 export default function App() {
@@ -120,10 +121,13 @@ export default function App() {
     if (activeTab === 'moda') fetchProducts();
     else if (activeTab === 'eventos') fetchEvents();
     else if (activeTab === 'lugares') fetchPlaces();
+    else if (activeTab === 'estadisticas') setLoading(false);
   };
 
   useEffect(() => {
-    setLoading(true);
+    if (activeTab !== 'estadisticas') {
+      setLoading(true);
+    }
     handleRefresh();
   }, [activeTab, selectedCategory, searchQuery]);
 
@@ -190,39 +194,43 @@ export default function App() {
       {/* Main Content */}
       <main className="flex-1 max-w-7xl w-full mx-auto p-6 md:p-8">
         
-        {/* Error Alert */}
-        {errorMsg && (
-          <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-between text-red-400 text-sm">
-            <div className="flex items-center gap-3">
-              <AlertCircle className="w-5 h-5 shrink-0" />
-              <span>{errorMsg}</span>
-            </div>
-            <button
-              onClick={handleRefresh}
-              className="text-xs bg-red-500/20 hover:bg-red-500/30 px-3 py-1.5 rounded-lg border border-red-500/40 text-red-300 font-semibold"
-            >
-              Reintentar
-            </button>
-          </div>
-        )}
-
-        {/* Dashboard Title & Stats */}
-        <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {activeTab === 'estadisticas' ? (
+          <VisitsStatsView />
+        ) : (
           <div>
-            <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
-              {activeTab === 'moda' && <ShoppingBag className="w-6 h-6 text-purple-400" />}
-              {activeTab === 'eventos' && <Calendar className="w-6 h-6 text-purple-400" />}
-              {activeTab === 'lugares' && <Compass className="w-6 h-6 text-purple-400" />}
-              
-              {activeTab === 'moda' && `Colección Moda (${products.length} artículos)`}
-              {activeTab === 'eventos' && `Eventos Registrados (${events.length} eventos)`}
-              {activeTab === 'lugares' && `Lugares Destacados (${places.length} lugares)`}
-            </h1>
-            <p className="text-xs text-slate-400 mt-1">
-              Administración en tiempo real de {activeTab} para la plataforma OkArea.
-            </p>
-          </div>
-        </div>
+            {/* Error Alert */}
+            {errorMsg && (
+              <div className="mb-6 p-4 rounded-xl bg-red-500/10 border border-red-500/30 flex items-center justify-between text-red-400 text-sm">
+                <div className="flex items-center gap-3">
+                  <AlertCircle className="w-5 h-5 shrink-0" />
+                  <span>{errorMsg}</span>
+                </div>
+                <button
+                  onClick={handleRefresh}
+                  className="text-xs bg-red-500/20 hover:bg-red-500/30 px-3 py-1.5 rounded-lg border border-red-500/40 text-red-300 font-semibold"
+                >
+                  Reintentar
+                </button>
+              </div>
+            )}
+
+            {/* Dashboard Title & Stats */}
+            <div className="mb-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div>
+                <h1 className="text-2xl font-bold text-white tracking-tight flex items-center gap-3">
+                  {activeTab === 'moda' && <ShoppingBag className="w-6 h-6 text-purple-400" />}
+                  {activeTab === 'eventos' && <Calendar className="w-6 h-6 text-purple-400" />}
+                  {activeTab === 'lugares' && <Compass className="w-6 h-6 text-purple-400" />}
+                  
+                  {activeTab === 'moda' && `Colección Moda (${products.length} artículos)`}
+                  {activeTab === 'eventos' && `Eventos Registrados (${events.length} eventos)`}
+                  {activeTab === 'lugares' && `Lugares Destacados (${places.length} lugares)`}
+                </h1>
+                <p className="text-xs text-slate-400 mt-1">
+                  Administración en tiempo real de {activeTab} para la plataforma OkArea.
+                </p>
+              </div>
+            </div>
 
         {/* Loading Spinner */}
         {loading ? (
@@ -509,6 +517,8 @@ export default function App() {
             )}
           </>
         )}
+      </div>
+    )}
 
       </main>
 

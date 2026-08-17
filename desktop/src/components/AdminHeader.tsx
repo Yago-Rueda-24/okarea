@@ -1,7 +1,7 @@
 import { CategoryType } from '../types/product';
-import { Plus, Search, ShieldCheck, RefreshCw, ShoppingBag, Calendar, Compass } from 'lucide-react';
+import { Plus, Search, ShieldCheck, RefreshCw, ShoppingBag, Calendar, Compass, BarChart3 } from 'lucide-react';
 
-export type MainTab = 'moda' | 'eventos' | 'lugares';
+export type MainTab = 'moda' | 'eventos' | 'lugares' | 'estadisticas';
 
 interface AdminHeaderProps {
   activeTab: MainTab;
@@ -30,6 +30,7 @@ export default function AdminHeader({
     { id: 'moda', label: 'Moda', icon: ShoppingBag },
     { id: 'eventos', label: 'Eventos', icon: Calendar },
     { id: 'lugares', label: 'Lugares', icon: Compass },
+    { id: 'estadisticas', label: 'Estadísticas', icon: BarChart3 },
   ];
 
   const categories = [
@@ -80,7 +81,7 @@ export default function AdminHeader({
             </span>
           </div>
 
-          {/* Main Section Navigation (Moda, Eventos, Lugares) */}
+          {/* Main Section Navigation (Moda, Eventos, Lugares, Estadísticas) */}
           <nav className="flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
             {mainTabs.map((tab) => {
               const Icon = tab.icon;
@@ -105,17 +106,19 @@ export default function AdminHeader({
 
         {/* Search & Actions */}
         <div className="flex items-center gap-3 w-full md:w-auto">
-          {/* Search Input */}
-          <div className="relative flex-1 md:w-60">
-            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
-            <input
-              type="text"
-              placeholder={getSearchPlaceholder()}
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
-            />
-          </div>
+          {/* Search Input (Only for content tabs) */}
+          {activeTab !== 'estadisticas' && (
+            <div className="relative flex-1 md:w-60">
+              <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+              <input
+                type="text"
+                placeholder={getSearchPlaceholder()}
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="w-full bg-slate-900 border border-slate-800 rounded-xl pl-9 pr-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500"
+              />
+            </div>
+          )}
 
           {/* Refresh Button */}
           <button
@@ -126,13 +129,15 @@ export default function AdminHeader({
             <RefreshCw className={`w-4 h-4 ${isRefreshing ? 'animate-spin text-purple-400' : ''}`} />
           </button>
 
-          {/* Create Button */}
-          <button
-            onClick={onOpenCreateModal}
-            className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/20 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap"
-          >
-            <Plus className="w-4 h-4" /> {getCreateButtonText()}
-          </button>
+          {/* Create Button (Only for content tabs) */}
+          {activeTab !== 'estadisticas' && (
+            <button
+              onClick={onOpenCreateModal}
+              className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/20 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap"
+            >
+              <Plus className="w-4 h-4" /> {getCreateButtonText()}
+            </button>
+          )}
         </div>
 
       </div>
