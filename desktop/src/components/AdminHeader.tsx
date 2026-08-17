@@ -1,7 +1,7 @@
 import { CategoryType } from '../types/product';
-import { Plus, Search, ShieldCheck, RefreshCw, ShoppingBag, Calendar, Compass, BarChart3 } from 'lucide-react';
+import { Plus, Search, ShieldCheck, RefreshCw, ShoppingBag, Calendar, Compass, BarChart3, MessageSquare } from 'lucide-react';
 
-export type MainTab = 'moda' | 'eventos' | 'lugares' | 'estadisticas';
+export type MainTab = 'moda' | 'eventos' | 'lugares' | 'estadisticas' | 'chat';
 
 interface AdminHeaderProps {
   activeTab: MainTab;
@@ -31,6 +31,7 @@ export default function AdminHeader({
     { id: 'eventos', label: 'Eventos', icon: Calendar },
     { id: 'lugares', label: 'Lugares', icon: Compass },
     { id: 'estadisticas', label: 'Estadísticas', icon: BarChart3 },
+    { id: 'chat', label: 'Mensajes', icon: MessageSquare },
   ];
 
   const categories = [
@@ -68,6 +69,8 @@ export default function AdminHeader({
     }
   };
 
+  const isContentTab = activeTab === 'moda' || activeTab === 'eventos' || activeTab === 'lugares';
+
   return (
     <header className="bg-slate-950 border-b border-slate-800 sticky top-0 z-40">
       <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col md:flex-row items-center justify-between gap-4">
@@ -81,7 +84,7 @@ export default function AdminHeader({
             </span>
           </div>
 
-          {/* Main Section Navigation (Moda, Eventos, Lugares, Estadísticas) */}
+          {/* Main Section Navigation (Moda, Eventos, Lugares, Estadísticas, Mensajes) */}
           <nav className="flex items-center gap-1.5 bg-slate-900/80 p-1.5 rounded-xl border border-slate-800">
             {mainTabs.map((tab) => {
               const Icon = tab.icon;
@@ -107,7 +110,7 @@ export default function AdminHeader({
         {/* Search & Actions */}
         <div className="flex items-center gap-3 w-full md:w-auto">
           {/* Search Input (Only for content tabs) */}
-          {activeTab !== 'estadisticas' && (
+          {isContentTab && (
             <div className="relative flex-1 md:w-60">
               <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
               <input
@@ -130,7 +133,7 @@ export default function AdminHeader({
           </button>
 
           {/* Create Button (Only for content tabs) */}
-          {activeTab !== 'estadisticas' && (
+          {isContentTab && (
             <button
               onClick={onOpenCreateModal}
               className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white font-bold text-xs shadow-lg shadow-purple-600/20 flex items-center gap-2 transition-all cursor-pointer whitespace-nowrap"

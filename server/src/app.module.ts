@@ -16,6 +16,9 @@ import { Place } from './places/entities/place.entity';
 import { PlacesModule } from './places/places.module';
 import { Visit } from './visits/entities/visit.entity';
 import { VisitsModule } from './visits/visits.module';
+import { ChatSession } from './chat/entities/chat-session.entity';
+import { ChatMessage } from './chat/entities/chat-message.entity';
+import { ChatModule } from './chat/chat.module';
 
 @Module({
   imports: [
@@ -43,7 +46,7 @@ import { VisitsModule } from './visits/visits.module';
         username: configService.get<string>('DB_USER', 'okarea_dev'),
         password: configService.get<string>('DB_PASSWORD', 'okarea_dev_pass'),
         database: configService.get<string>('DB_NAME', 'okarea_dev_db'),
-        entities: [Category, Product, Photo, Event, Place, Visit],
+        entities: [Category, Product, Photo, Event, Place, Visit, ChatSession, ChatMessage],
         synchronize: true, // Sincroniza esquema automáticamente en desarrollo
       }),
     }),
@@ -53,6 +56,7 @@ import { VisitsModule } from './visits/visits.module';
     EventsModule,
     PlacesModule,
     VisitsModule,
+    ChatModule,
     HealthModule,
   ],
   providers: [

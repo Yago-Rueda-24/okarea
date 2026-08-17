@@ -8,6 +8,7 @@ import Eventos from './routes/Eventos';
 import Trabajando from './routes/Trabajando';
 import Lugares from './routes/Lugares';
 import { usePageTracking } from './hooks/usePageTracking';
+import ChatWidget from './components/ChatWidget';
 
 const setPathScroll = (path: string, scrollY: number) => {
   try {
@@ -82,6 +83,7 @@ function App() {
         <Route path="/product-info" element={<ProductInfo />} />
         <Route path="/product-info/:id" element={<ProductInfo />} />
       </Routes>
+      <ChatWidget />
     </div>
   );
 }
