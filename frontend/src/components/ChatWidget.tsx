@@ -128,12 +128,12 @@ export default function ChatWidget() {
               </div>
               <div>
                 <h3 className="text-sm font-bold text-white flex items-center gap-1.5">
-                  Soporte OkArea
+                  Atención y Consultas
                   <span className="text-[10px] bg-purple-500/20 text-purple-300 font-semibold px-2 py-0.5 rounded-full border border-purple-500/30">
                     En línea
                   </span>
                 </h3>
-                <p className="text-[11px] text-slate-400">¿En qué podemos ayudarte?</p>
+                <p className="text-[11px] text-slate-400">Consultas de catálogo, moda y eventos</p>
               </div>
             </div>
 
@@ -149,10 +149,10 @@ export default function ChatWidget() {
           <div className="flex-1 p-4 overflow-y-auto space-y-3.5 custom-scrollbar">
             {messages.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center p-6 text-slate-500">
-                <MessageSquare className="w-10 h-10 mb-2 text-slate-600 stroke-[1.5]" />
-                <p className="text-xs font-medium text-slate-400">¡Hola! Escribe tu mensaje abajo.</p>
-                <p className="text-[11px] text-slate-500 mt-1">
-                  Tu conversación se guardará de forma segura en este navegador.
+                <MessageSquare className="w-10 h-10 mb-2 text-purple-400 stroke-[1.5]" />
+                <p className="text-xs font-semibold text-slate-300">¡Hola! ¿En qué te podemos asesorar?</p>
+                <p className="text-[11px] text-slate-400 mt-1 leading-relaxed">
+                  Haznos cualquier consulta sobre prendas, tallas, calzado, eventos o tiendas de OkArea.
                 </p>
               </div>
             ) : (
@@ -196,7 +196,7 @@ export default function ChatWidget() {
           >
             <input
               type="text"
-              placeholder="Escribe un mensaje..."
+              placeholder="Haz tu consulta sobre ropa, eventos, tiendas..."
               value={inputText}
               onChange={(e) => setInputText(e.target.value)}
               className="flex-1 bg-slate-950 border border-slate-800 rounded-xl px-4 py-2 text-xs text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 transition-colors"
