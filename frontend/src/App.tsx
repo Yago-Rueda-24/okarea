@@ -9,7 +9,6 @@ import Trabajando from './routes/Trabajando';
 import Lugares from './routes/Lugares';
 import NotFound from './routes/NotFound';
 import { usePageTracking } from './hooks/usePageTracking';
-import ChatWidget from './components/ChatWidget';
 
 const setPathScroll = (path: string, scrollY: number) => {
   try {
@@ -85,7 +84,6 @@ function App() {
         <Route path="/product-info/:id" element={<ProductInfo />} />
         <Route path="*" element={<NotFound />} />
       </Routes>
-      <ChatWidget />
     </div>
   );
 }

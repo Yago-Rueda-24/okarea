@@ -4,8 +4,8 @@ import secBolsos from '../assets/welcome/sections/bolsos2.png';
 import secCalzado from '../assets/welcome/sections/calzado.png';
 import secRopa from '../assets/welcome/sections/ropa2.png';
 import secAccesorios from '../assets/welcome/sections/accesorios2.png';
-import fondoWeb from '../assets/welcome/fondoweb.png';
-import fondoPantalla from '../assets/welcome/fondomovil.jpeg';
+import fondoWeb from '../assets/welcome/fondoweb2.jpeg';
+import fondoPantalla from '../assets/welcome/fondomovil2.jpeg';
 import imgEvento from '../assets/welcome/evento.png';
 import imgLugares from '../assets/welcome/lugares.png';
 import imgAbout from '../assets/welcome/About.png';
@@ -240,10 +240,13 @@ export default function Welcome() {
           <h1 className="font-fraunces italic text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-light uppercase tracking-wider sm:tracking-[0.2em] md:tracking-[0.25em] text-[#Feebe7] drop-shadow-2xl leading-none -mt-96 sm:-mt-60 md:-mt-80 max-w-full">
             {new Date().toLocaleDateString("es-ES", { day: 'numeric', month: '2-digit', year: '2-digit' }).replace("/", "’").replace("/", "’")}
           </h1>
+          <p className="font-fraunces italic text-2xl sm:text-4xl md:text-6xl font-light uppercase tracking-widest text-[#Feebe7] drop-shadow-2xl mt-4">
+            autumn
+          </p>
         </div>
       </section>
 
-      <div className="w-full py-16 px-6 text-center bg-[#FAA18F]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
+      <div className="w-full py-16 px-6 text-center bg-[#708238]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
         Life is too short to wear boring clothes
       </div>
       {/* Image Gallery Section */}
@@ -310,7 +313,7 @@ export default function Welcome() {
           </Link>
         </div>
       </section>
-      <div className="w-full py-16 px-6 text-center bg-[#FAA18F]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
+      <div className="w-full py-16 px-6 text-center bg-[#708238]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
         Find your next experience
       </div>
 
@@ -328,7 +331,7 @@ export default function Welcome() {
         </Link>
       </section>
 
-      <div className="w-full py-16 px-6 text-center bg-[#FAA18F]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
+      <div className="w-full py-16 px-6 text-center bg-[#708238]  text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
         Go where beauty lives
       </div>
 
@@ -346,7 +349,7 @@ export default function Welcome() {
         </Link>
       </section>
 
-      <div className="w-full py-16 px-6 text-center bg-[#FAA18F] text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
+      <div className="w-full py-16 px-6 text-center bg-[#708238] text-3xl md:text-5xl font-bold tracking-wide text-[#FFDFCA]">
         Get to know us
       </div>
 
