@@ -1,7 +1,7 @@
 import { useState, useEffect, ChangeEvent } from 'react';
 import { PlaceItem } from '../types/place';
 import { API_BASE_URL, ADMIN_API_KEY } from '../config/api';
-import { formatImageUrl } from '../utils/image';
+import { formatImageUrl, compressImageFile } from '../utils/image';
 import { X, MapPin, AlignLeft, Image as ImageIcon, Link as LinkIcon, Save, Compass, Upload, Check } from 'lucide-react';
 
 interface PlaceFormModalProps {
@@ -54,15 +54,25 @@ export default function PlaceFormModal({
 
   if (!isOpen) return null;
 
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setFilePreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
+      try {
+        const compressed = await compressImageFile(file);
+        setSelectedFile(compressed);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreview(reader.result as string);
+        };
+        reader.readAsDataURL(compressed);
+      } catch (err) {
+        setSelectedFile(file);
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setFilePreview(reader.result as string);
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -95,10 +105,21 @@ export default function PlaceFormModal({
         if (uploadRes.ok) {
           const uploadData = await uploadRes.json();
           finalFotoUrl = uploadData.url || finalFotoUrl;
-        } else if (filePreview) {
-          finalFotoUrl = filePreview;
+        } else {
+          const errBody = await uploadRes.text().catch(() => '');
+          if (uploadRes.status === 413 || errBody.includes('large')) {
+            throw new Error('La imagen es demasiado grande. Intenta con una imagen más pequeña.');
+          }
+          if (filePreview) {
+            finalFotoUrl = filePreview;
+          }
         }
-      } catch (uploadErr) {
+      } catch (uploadErr: any) {
+        if (uploadErr.message?.includes('demasiado grande')) {
+          setError(uploadErr.message);
+          setIsSubmitting(false);
+          return;
+        }
         if (filePreview) {
           finalFotoUrl = filePreview;
         }

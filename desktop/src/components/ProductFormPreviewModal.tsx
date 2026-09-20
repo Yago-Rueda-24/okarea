@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Product, CategoryType } from '../types/product';
 import { API_BASE_URL, ADMIN_API_KEY } from '../config/api';
-import { formatImageUrl } from '../utils/image';
+import { formatImageUrl, compressImageFile } from '../utils/image';
 import { X, Eye, Edit3, Upload, Check, AlertCircle, ArrowLeft, ExternalLink, Image } from 'lucide-react';
 
 interface ProductFormPreviewModalProps {
@@ -36,23 +36,15 @@ export default function ProductFormPreviewModal({
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [uploadingFile, setUploadingFile] = useState(false);
+  const [pendingFile, setPendingFile] = useState<File | null>(null);
 
   useEffect(() => {
     if (initialProduct) {
       const mainImg = initialProduct.photos && initialProduct.photos.length > 0 
         ? initialProduct.photos[0].url 
         : (initialProduct.imagenUrl || '');
-
       setFormData({
-        id: initialProduct.id,
-        nombre: initialProduct.nombre || '',
-        categoria: initialProduct.categoria || CategoryType.BOLSOS,
-        fabricante: initialProduct.fabricante || '',
-        tienda: initialProduct.tienda || '',
-        descripcion: initialProduct.descripcion || '',
-        temporada: initialProduct.temporada || '',
-        precio: initialProduct.precio || '',
-        enlaceSitio: initialProduct.enlaceSitio || '',
+        ...initialProduct,
         imagenUrl: mainImg,
       });
     } else {
@@ -69,6 +61,7 @@ export default function ProductFormPreviewModal({
       });
     }
     setErrorMsg(null);
+    setPendingFile(null);
     setActiveTab('form');
   }, [initialProduct, isOpen]);
 
@@ -80,11 +73,18 @@ export default function ProductFormPreviewModal({
 
   // Image File Upload to Backend S3/MinIO
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
+    const rawFile = e.target.files?.[0];
+    if (!rawFile) return;
 
     setUploadingFile(true);
     setErrorMsg(null);
+
+    let file = rawFile;
+    try {
+      file = await compressImageFile(rawFile);
+    } catch (compressErr) {
+      console.warn('[ProductFormModal] Fallo la compresión client-side, usando archivo original', compressErr);
+    }
 
     // If editing existing product, upload directly to product photo endpoint
     if (formData.id) {
@@ -100,7 +100,13 @@ export default function ProductFormPreviewModal({
           body: bodyData,
         });
 
-        if (!res.ok) throw new Error('Error al subir imagen a MinIO S3');
+        if (!res.ok) {
+          const errText = await res.text().catch(() => '');
+          if (res.status === 413 || errText.includes('large')) {
+            throw new Error('La imagen es demasiado grande. Intenta con una imagen más pequeña.');
+          }
+          throw new Error('Error al subir imagen a MinIO S3');
+        }
         const photo = await res.json();
         setFormData((prev) => ({ ...prev, imagenUrl: photo.url }));
       } catch (err: any) {
@@ -109,7 +115,8 @@ export default function ProductFormPreviewModal({
         setUploadingFile(false);
       }
     } else {
-      // Local preview data URL for new un-saved product
+      // Local preview data URL for new un-saved product and store pending file
+      setPendingFile(file);
       const reader = new FileReader();
       reader.onload = () => {
         setFormData((prev) => ({ ...prev, imagenUrl: reader.result as string }));
@@ -151,7 +158,7 @@ export default function ProductFormPreviewModal({
         temporada: formData.temporada,
         precio: formData.precio,
         enlaceSitio: formData.enlaceSitio,
-        imagenUrl: formData.imagenUrl,
+        imagenUrl: pendingFile ? '' : formData.imagenUrl,
       };
 
       console.log(`[ProductFormModal] 📡 Sending ${method} request to: ${url}`);
@@ -180,6 +187,28 @@ export default function ProductFormPreviewModal({
 
       const responseData = await response.json().catch(() => ({}));
       console.log('[ProductFormModal] ✅ Success! Created/Updated Product:', responseData);
+
+      // If creating new product and a file was selected, upload it now
+      if (!isEditing && responseData.id && pendingFile) {
+        try {
+          const bodyData = new FormData();
+          bodyData.append('file', pendingFile);
+
+          const photoRes = await fetch(`${API_BASE_URL}/products/${responseData.id}/photos?isMain=true`, {
+            method: 'POST',
+            headers: {
+              'x-api-key': ADMIN_API_KEY,
+            },
+            body: bodyData,
+          });
+
+          if (photoRes.ok) {
+            console.log('[ProductFormModal] 📷 Photo uploaded successfully for new product');
+          }
+        } catch (photoErr) {
+          console.error('[ProductFormModal] Failed to upload pending photo:', photoErr);
+        }
+      }
 
       onSuccess();
       onClose();

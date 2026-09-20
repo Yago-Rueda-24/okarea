@@ -76,3 +76,80 @@ export function formatImageUrl(url?: string | null): string {
 
 export const DEFAULT_PLACEHOLDER_IMAGE =
   "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='400' viewBox='0 0 600 400'%3E%3Crect width='600' height='400' fill='%230f172a'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' font-family='sans-serif' font-size='22' font-weight='bold' fill='%2364748b'%3EOKAREA%3C/text%3E%3C/svg%3E";
+
+/**
+ * Comprime y redimensiona client-side una imagen dada (File) para evitar
+ * transferir archivos gigantescos (ej: 10-20MB) al servidor.
+ * Retorna un nuevo File optimizado en formato JPEG.
+ */
+export async function compressImageFile(
+  file: File,
+  maxDimension = 1920,
+  quality = 0.85,
+): Promise<File> {
+  if (!file.type.startsWith('image/') || file.type === 'image/svg+xml') {
+    return file;
+  }
+
+  if (file.size < 400 * 1024) {
+    return file;
+  }
+
+  return new Promise((resolve) => {
+    const img = new Image();
+    const objectUrl = URL.createObjectURL(file);
+
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl);
+
+      let { width, height } = img;
+
+      if (width > maxDimension || height > maxDimension) {
+        if (width > height) {
+          height = Math.round((height * maxDimension) / width);
+          width = maxDimension;
+        } else {
+          width = Math.round((width * maxDimension) / height);
+          height = maxDimension;
+        }
+      }
+
+      const canvas = document.createElement('canvas');
+      canvas.width = width;
+      canvas.height = height;
+
+      const ctx = canvas.getContext('2d');
+      if (!ctx) {
+        resolve(file);
+        return;
+      }
+
+      ctx.drawImage(img, 0, 0, width, height);
+
+      canvas.toBlob(
+        (blob) => {
+          if (!blob) {
+            resolve(file);
+            return;
+          }
+          const fileNameClean = file.name.replace(/\.[^/.]+$/, '');
+          const compressedFile = new File([blob], `${fileNameClean}.jpg`, {
+            type: 'image/jpeg',
+            lastModified: Date.now(),
+          });
+          resolve(compressedFile);
+        },
+        'image/jpeg',
+        quality,
+      );
+    };
+
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl);
+      resolve(file);
+    };
+
+    img.src = objectUrl;
+  });
+}
+
