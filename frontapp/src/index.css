@@ -1,0 +1,170 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #94452c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #b35c41;
+  --color-on-primary-container: #fffbff;
+  --color-primary-fixed: #ffdbd0;
+  --color-primary-fixed-dim: #ffb59f;
+  --color-on-primary-fixed: #3a0a00;
+  --color-on-primary-fixed-variant: #793019;
+  --color-inverse-primary: #ffb59f;
+
+  --color-secondary: #51634d;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #d3e9cc;
+  --color-on-secondary-container: #576953;
+  --color-secondary-fixed: #d3e9cc;
+  --color-secondary-fixed-dim: #b8ccb1;
+  --color-on-secondary-fixed: #0f1f0e;
+  --color-on-secondary-fixed-variant: #394b36;
+
+  --color-tertiary: #785600;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #986d00;
+  --color-on-tertiary-container: #fffbff;
+  --color-tertiary-fixed: #ffdea6;
+  --color-tertiary-fixed-dim: #f7bd48;
+  --color-on-tertiary-fixed: #271900;
+  --color-on-tertiary-fixed-variant: #5d4200;
+
+  --color-surface: #fff8f5;
+  --color-on-surface: #1e1b19;
+  --color-surface-variant: #e9e1dd;
+  --color-on-surface-variant: #55433e;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #faf2ee;
+  --color-surface-container: #f4ece8;
+  --color-surface-container-high: #eee7e3;
+  --color-surface-container-highest: #e9e1dd;
+  --color-surface-bright: #fff8f5;
+  --color-surface-dim: #e0d8d5;
+  --color-surface-tint: #97472e;
+  --color-inverse-surface: #33302d;
+  --color-inverse-on-surface: #f7efeb;
+  --color-background: #fff8f5;
+  --color-on-background: #1e1b19;
+
+  --color-outline: #88726c;
+  --color-outline-variant: #dbc1ba;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+
+  --spacing-space-xs: 0.25rem;
+  --spacing-space-sm: 0.5rem;
+  --spacing-space-md: 1rem;
+  --spacing-space-lg: 1.5rem;
+  --spacing-space-xl: 2.5rem;
+  --spacing-margin: 3rem;
+  --spacing-gutter: 1.5rem;
+
+  --font-body-lg: "Inter", sans-serif;
+  --font-body-md: "Inter", sans-serif;
+  --font-body-sm: "Inter", sans-serif;
+  --font-title-lg: "Inter", sans-serif;
+  --font-title-md: "Inter", sans-serif;
+  --font-label-md: "Inter", sans-serif;
+  --font-label-sm: "Inter", sans-serif;
+  --font-headline-xl: "Playfair Display", serif;
+  --font-headline-lg: "Playfair Display", serif;
+  --font-headline-md: "Playfair Display", serif;
+  --font-display-lg: "Playfair Display", serif;
+  --font-display-lg-mobile: "Playfair Display", serif;
+  --font-headline-xl-mobile: "Playfair Display", serif;
+}
+
+/* Custom Typography Scale Utilities matching the design specification */
+@utility text-display-lg {
+  font-size: 56px;
+  line-height: 64px;
+  letter-spacing: -0.02em;
+  font-weight: 400;
+}
+
+@utility text-headline-xl {
+  font-size: 40px;
+  line-height: 48px;
+  letter-spacing: -0.015em;
+  font-weight: 400;
+}
+
+@utility text-headline-lg {
+  font-size: 32px;
+  line-height: 40px;
+  letter-spacing: -0.01em;
+  font-weight: 500;
+}
+
+@utility text-headline-md {
+  font-size: 24px;
+  line-height: 32px;
+  letter-spacing: 0em;
+  font-weight: 500;
+}
+
+@utility text-title-lg {
+  font-size: 18px;
+  line-height: 26px;
+  letter-spacing: -0.01em;
+  font-weight: 600;
+}
+
+@utility text-title-md {
+  font-size: 16px;
+  line-height: 24px;
+  letter-spacing: -0.005em;
+  font-weight: 600;
+}
+
+@utility text-body-lg {
+  font-size: 16px;
+  line-height: 26px;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+
+@utility text-body-md {
+  font-size: 14px;
+  line-height: 22px;
+  letter-spacing: 0em;
+  font-weight: 400;
+}
+
+@utility text-body-sm {
+  font-size: 12px;
+  line-height: 18px;
+  letter-spacing: 0.01em;
+  font-weight: 400;
+}
+
+@utility text-label-md {
+  font-size: 13px;
+  line-height: 18px;
+  letter-spacing: 0.02em;
+  font-weight: 500;
+}
+
+@utility text-label-sm {
+  font-size: 11px;
+  line-height: 14px;
+  letter-spacing: 0.06em;
+  font-weight: 600;
+}
+
+/* Material Symbols fill styling */
+.material-symbols-fill {
+  font-variation-settings: 'FILL' 1;
+}
+
+/* Hide webkit scrollbars where needed */
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

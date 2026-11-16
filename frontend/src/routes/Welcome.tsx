@@ -8,7 +8,7 @@ import fondoWeb from '../assets/welcome/fondoweb2.jpeg';
 import fondoPantalla from '../assets/welcome/fondomovil2.jpeg';
 import imgEvento from '../assets/welcome/evento.png';
 import imgLugares from '../assets/welcome/lugares.png';
-import imgAbout from '../assets/welcome/About.png';
+import { Sparkles, Calendar, Compass, ArrowRight } from 'lucide-react';
 
 export default function Welcome() {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -353,14 +353,76 @@ export default function Welcome() {
         Get to know us
       </div>
 
-      {/* Sobre Nosotros Section */}
-      <section id="sobre-nosotros" className="w-full relative h-[60vh] sm:h-[70vh] md:h-[85vh] overflow-hidden scroll-mt-20">
-        <div className="w-full h-full relative">
-          <img
-            src={imgAbout}
-            alt="Sobre Nosotros OkArea"
-            className="w-full h-full object-cover object-center"
-          />
+      {/* Call to Action Section (Sustituye la imagen final de About) */}
+      <section id="sobre-nosotros" className="w-full bg-[#FEEBE7] text-[#111827] py-20 md:py-28 px-6 md:px-12 scroll-mt-20 border-t border-[#faa18f]/30">
+        <div className="max-w-4xl mx-auto text-center flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/80 border border-[#faa18f]/40 text-[#faa18f] text-xs font-semibold uppercase tracking-wider mb-5 shadow-xs">
+            <Sparkles className="w-3.5 h-3.5" />
+            <span>Universo Okarea</span>
+          </div>
+
+          <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight uppercase leading-tight text-[#111827]">
+            Moda de Autor <br className="hidden sm:block" />
+            <span className="text-[#faa18f]">y Artesanía Local</span>
+          </h2>
+
+          <p className="mt-5 text-sm sm:text-base md:text-lg text-[#4b5563] font-sans max-w-2xl leading-relaxed">
+            Descubre colecciones seleccionadas de ropa, bolsos, calzado y accesorios, creadas por diseñadores y artesanos que comparten nuestra pasión por los detalles y la autenticidad.
+          </p>
+
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 my-10 w-full max-w-3xl font-sans text-left">
+            <div className="bg-white/70 border border-[#faa18f]/30 rounded-2xl p-5 shadow-xs">
+              <div className="w-10 h-10 rounded-xl bg-[#FEEBE7] text-[#faa18f] flex items-center justify-center font-bold mb-3 border border-[#faa18f]/30">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <h4 className="font-fraunces font-bold text-base text-[#111827] mb-1">
+                Colección Seleccionada
+              </h4>
+              <p className="text-xs text-[#4b5563] leading-relaxed">
+                Prendas y complementos únicos diseñados para destacar con estilo propio y atemporal.
+              </p>
+            </div>
+
+            <div className="bg-white/70 border border-[#faa18f]/30 rounded-2xl p-5 shadow-xs">
+              <div className="w-10 h-10 rounded-xl bg-[#FEEBE7] text-[#faa18f] flex items-center justify-center font-bold mb-3 border border-[#faa18f]/30">
+                <Compass className="w-5 h-5" />
+              </div>
+              <h4 className="font-fraunces font-bold text-base text-[#111827] mb-1">
+                Artesanos de Proximidad
+              </h4>
+              <p className="text-xs text-[#4b5563] leading-relaxed">
+                Apoyamos a talleres locales y marcas que cuidan cada puntada y cada material.
+              </p>
+            </div>
+
+            <div className="bg-white/70 border border-[#faa18f]/30 rounded-2xl p-5 shadow-xs">
+              <div className="w-10 h-10 rounded-xl bg-[#FEEBE7] text-[#faa18f] flex items-center justify-center font-bold mb-3 border border-[#faa18f]/30">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <h4 className="font-fraunces font-bold text-base text-[#111827] mb-1">
+                Eventos & Encuentros
+              </h4>
+              <p className="text-xs text-[#4b5563] leading-relaxed">
+                Espacios y actividades donde descubrir tendencias, conectar y vivir la moda.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col sm:flex-row items-center gap-4">
+            <Link
+              to="/ropa"
+              className="w-full sm:w-auto px-8 py-3.5 bg-[#faa18f] hover:bg-[#e08370] text-white text-xs sm:text-sm font-bold uppercase tracking-widest rounded-xl transition-all shadow-md hover:shadow-lg flex items-center justify-center gap-2 font-fraunces"
+            >
+              <span>Explorar Colección</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/eventos"
+              className="w-full sm:w-auto px-8 py-3.5 bg-white hover:bg-gray-50 text-[#111827] border border-[#faa18f]/40 text-xs sm:text-sm font-bold uppercase tracking-widest rounded-xl transition-all shadow-xs flex items-center justify-center font-fraunces"
+            >
+              <span>Ver Eventos</span>
+            </Link>
+          </div>
         </div>
       </section>
 

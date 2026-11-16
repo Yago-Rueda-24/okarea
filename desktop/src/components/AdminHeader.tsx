@@ -1,7 +1,7 @@
 import { CategoryType } from '../types/product';
-import { Plus, Search, ShieldCheck, RefreshCw, ShoppingBag, Calendar, Compass, BarChart3, MessageSquare } from 'lucide-react';
+import { Plus, Search, ShieldCheck, RefreshCw, ShoppingBag, Calendar, Compass, BarChart3, MessageSquare, Sparkles } from 'lucide-react';
 
-export type MainTab = 'moda' | 'eventos' | 'lugares' | 'estadisticas' | 'chat';
+export type MainTab = 'moda' | 'eventos' | 'lugares' | 'estadisticas' | 'chat' | 'estilismo';
 
 interface AdminHeaderProps {
   activeTab: MainTab;
@@ -32,6 +32,7 @@ export default function AdminHeader({
     { id: 'lugares', label: 'Lugares', icon: Compass },
     { id: 'estadisticas', label: 'Estadísticas', icon: BarChart3 },
     { id: 'chat', label: 'Mensajes', icon: MessageSquare },
+    { id: 'estilismo', label: 'Estilismo App', icon: Sparkles },
   ];
 
   const categories = [

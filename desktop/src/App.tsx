@@ -10,6 +10,7 @@ import EventFormModal from './components/EventFormModal';
 import PlaceFormModal from './components/PlaceFormModal';
 import VisitsStatsView from './components/VisitsStatsView';
 import AdminChatView from './components/AdminChatView';
+import StylistView from './components/StylistView';
 import { Edit3, Trash2, ShoppingBag, AlertCircle, Tag, ExternalLink, Calendar, MapPin, Compass } from 'lucide-react';
 
 export default function App() {
@@ -122,11 +123,11 @@ export default function App() {
     if (activeTab === 'moda') fetchProducts();
     else if (activeTab === 'eventos') fetchEvents();
     else if (activeTab === 'lugares') fetchPlaces();
-    else if (activeTab === 'estadisticas' || activeTab === 'chat') setLoading(false);
+    else if (activeTab === 'estadisticas' || activeTab === 'chat' || activeTab === 'estilismo') setLoading(false);
   };
 
   useEffect(() => {
-    if (activeTab !== 'estadisticas' && activeTab !== 'chat') {
+    if (activeTab !== 'estadisticas' && activeTab !== 'chat' && activeTab !== 'estilismo') {
       setLoading(true);
     }
     handleRefresh();
@@ -199,6 +200,8 @@ export default function App() {
           <VisitsStatsView />
         ) : activeTab === 'chat' ? (
           <AdminChatView />
+        ) : activeTab === 'estilismo' ? (
+          <StylistView />
         ) : (
           <div>
             {/* Error Alert */}

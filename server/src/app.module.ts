@@ -3,22 +3,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { CategoriesModule } from './categories/categories.module';
-import { Category } from './categories/entities/category.entity';
 import { HealthModule } from './health/health.module';
-import { Photo } from './photos/entities/photo.entity';
-import { PhotosModule } from './photos/photos.module';
-import { Product } from './products/entities/product.entity';
-import { ProductsModule } from './products/products.module';
-import { Event } from './events/entities/event.entity';
-import { EventsModule } from './events/events.module';
-import { Place } from './places/entities/place.entity';
-import { PlacesModule } from './places/places.module';
-import { Visit } from './visits/entities/visit.entity';
-import { VisitsModule } from './visits/visits.module';
-import { ChatSession } from './chat/entities/chat-session.entity';
-import { ChatMessage } from './chat/entities/chat-message.entity';
-import { ChatModule } from './chat/chat.module';
+import { BlogModule, BLOG_ENTITIES } from './blog/blog.module';
+import { ArmarioModule, ARMARIO_ENTITIES } from './armario/armario.module';
 
 @Module({
   imports: [
@@ -29,10 +16,10 @@ import { ChatModule } from './chat/chat.module';
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
-      useFactory: (config: ConfigService) => [
+      useFactory: (configService: ConfigService) => [
         {
-          ttl: config.get<number>('THROTTLE_TTL', 60000),
-          limit: config.get<number>('THROTTLE_LIMIT', 100),
+          ttl: configService.get<number>('THROTTLE_TTL', 60000),
+          limit: configService.get<number>('THROTTLE_LIMIT', 100),
         },
       ],
     }),
@@ -46,18 +33,13 @@ import { ChatModule } from './chat/chat.module';
         username: configService.get<string>('DB_USER', 'okarea_dev'),
         password: configService.get<string>('DB_PASSWORD', 'okarea_dev_pass'),
         database: configService.get<string>('DB_NAME', 'okarea_dev_db'),
-        entities: [Category, Product, Photo, Event, Place, Visit, ChatSession, ChatMessage],
+        entities: [...BLOG_ENTITIES, ...ARMARIO_ENTITIES],
         synchronize: true, // Sincroniza esquema automáticamente en desarrollo
       }),
     }),
-    CategoriesModule,
-    ProductsModule,
-    PhotosModule,
-    EventsModule,
-    PlacesModule,
-    VisitsModule,
-    ChatModule,
     HealthModule,
+    BlogModule,
+    ArmarioModule,
   ],
   providers: [
     {

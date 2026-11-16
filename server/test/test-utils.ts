@@ -4,12 +4,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
 import { ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
-import { Category } from '../src/categories/entities/category.entity';
-import { Product } from '../src/products/entities/product.entity';
-import { Photo } from '../src/photos/entities/photo.entity';
-import { CategoriesModule } from '../src/categories/categories.module';
-import { ProductsModule } from '../src/products/products.module';
-import { PhotosModule } from '../src/photos/photos.module';
+import { Category } from '../src/blog/categories/entities/category.entity';
+import { Product } from '../src/blog/products/entities/product.entity';
+import { Photo } from '../src/blog/photos/entities/photo.entity';
+import { CategoriesModule } from '../src/blog/categories/categories.module';
+import { ProductsModule } from '../src/blog/products/products.module';
+import { PhotosModule } from '../src/blog/photos/photos.module';
 import { HealthModule } from '../src/health/health.module';
 import { S3Service } from '../src/common/s3.service';
 
