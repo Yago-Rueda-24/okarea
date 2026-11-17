@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-export default function PrendaDrawer({ prenda, onLogWear, onSelectPairing }) {
+export default function PrendaDrawer({ prenda, onLogWear, onSelectPairing, onDeletePrenda }) {
   const [justLogged, setJustLogged] = useState(false);
 
   if (!prenda) {
@@ -46,6 +46,20 @@ export default function PrendaDrawer({ prenda, onLogWear, onSelectPairing }) {
           >
             <span className="material-symbols-outlined text-[18px]">ios_share</span>
           </button>
+          {onDeletePrenda && (
+            <button
+              onClick={() => {
+                if (window.confirm(`¿Deseas retirar "${prenda.title}" de tu colección de atelier?`)) {
+                  onDeletePrenda(prenda.id);
+                }
+              }}
+              className="p-1.5 rounded-full text-on-surface-variant hover:bg-error-container/50 hover:text-error transition-colors cursor-pointer"
+              title="Eliminar de Archivo"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[18px]">delete</span>
+            </button>
+          )}
         </div>
       </div>
 

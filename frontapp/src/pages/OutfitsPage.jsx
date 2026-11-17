@@ -1,7 +1,9 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { OUTFITS_MOCK } from '../mocks/outfitsData';
 import OutfitCard from '../components/outfits/OutfitCard';
 import OutfitBuilderCanvas from '../components/outfits/OutfitBuilderCanvas';
+import { getOutfitsApi, createOutfitApi, deleteOutfitApi } from '../api/outfits';
+import { useAuth } from '../context/useAuth';
 
 const OCCASIONS = [
   'Todos',
@@ -12,10 +14,35 @@ const OCCASIONS = [
 ];
 
 export default function OutfitsPage() {
+  const { isAuthenticated, token } = useAuth();
   const [selectedOccasion, setSelectedOccasion] = useState('Todos');
-  const [sortBy, setSortBy] = useState('recent');
+  const [sortBy] = useState('recent');
   const [outfitsList, setOutfitsList] = useState(OUTFITS_MOCK);
   const [isBuilderModalOpen, setIsBuilderModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(() => Boolean(localStorage.getItem('okarea_token')));
+
+  useEffect(() => {
+    let ignore = false;
+    if (isAuthenticated && token) {
+      getOutfitsApi()
+        .then((serverOutfits) => {
+          if (!ignore && serverOutfits && serverOutfits.length > 0) {
+            setOutfitsList(serverOutfits);
+          }
+        })
+        .catch((err) => {
+          console.warn('No se pudieron sincronizar los outfits con el servidor:', err);
+        })
+        .finally(() => {
+          if (!ignore) {
+            setIsLoading(false);
+          }
+        });
+    }
+    return () => {
+      ignore = true;
+    };
+  }, [isAuthenticated, token]);
 
   // Filter outfits by occasion and sort
   const filteredOutfits = useMemo(() => {
@@ -28,32 +55,65 @@ export default function OutfitsPage() {
     if (sortBy === 'harmony') {
       list.sort((a, b) => b.harmonyScore - a.harmonyScore);
     } else if (sortBy === 'recent') {
-      list.sort((a, b) => b.id - a.id);
+      list.sort((a, b) => {
+        const idA = typeof a.id === 'number' ? a.id : 0;
+        const idB = typeof b.id === 'number' ? b.id : 0;
+        return idB - idA;
+      });
     }
 
     return list;
   }, [outfitsList, selectedOccasion, sortBy]);
 
-  const handleSaveOutfit = (newOutfit) => {
-    const created = {
-      id: Date.now(),
-      title: newOutfit.name,
-      subtitle: 'Composición personalizada creada desde el lienzo de atelier.',
-      occasion: 'Smart Casual',
-      weather: '18°C Suave',
-      harmonyScore: 94,
-      harmonyLabel: 'Excelente',
-      lastWorn: 'Creado hoy',
-      itemsCount: newOutfit.slots.length,
-      items: newOutfit.slots.map((s, idx) => ({
-        id: `custom-${idx}`,
-        title: s.title,
-        brand: 'Vestiaire Atelier',
-        material: s.slot,
-        image: s.image,
-      })),
+  // Save outfit with Axios
+  const handleSaveOutfit = async (newOutfit) => {
+    const payload = {
+      nombre: newOutfit.name || 'Nueva Composición Atelier',
+      descripcion: 'Composición personalizada creada desde el lienzo de atelier.',
+      ocasion: 'Smart Casual',
+      temporada: '18°C Suave',
+      items: (newOutfit.slots || [])
+        .filter((s) => s.id && !s.id.toString().startsWith('custom-'))
+        .map((s) => ({
+          prendaId: s.id,
+          posicion: s.slot,
+        })),
     };
-    setOutfitsList((prev) => [created, ...prev]);
+
+    try {
+      const created = await createOutfitApi(payload);
+      setOutfitsList((prev) => [created, ...prev]);
+    } catch (err) {
+      console.warn('Error al guardar en el servidor con Axios, guardando en local:', err);
+      const fallback = {
+        id: Date.now(),
+        title: newOutfit.name,
+        subtitle: 'Composición personalizada creada desde el lienzo de atelier.',
+        occasion: 'Smart Casual',
+        weather: '18°C Suave',
+        harmonyScore: 94,
+        harmonyLabel: 'Excelente',
+        lastWorn: 'Creado hoy',
+        itemsCount: newOutfit.slots.length,
+        items: newOutfit.slots.map((s, idx) => ({
+          id: `custom-${idx}`,
+          title: s.title,
+          brand: 'Vestiaire Atelier',
+          material: s.slot,
+          image: s.image,
+        })),
+      };
+      setOutfitsList((prev) => [fallback, ...prev]);
+    }
+  };
+
+  const handleDeleteOutfit = async (id) => {
+    try {
+      await deleteOutfitApi(id);
+    } catch (err) {
+      console.warn('Eliminación local de outfit:', err);
+    }
+    setOutfitsList((prev) => prev.filter((o) => o.id !== id));
   };
 
   const handlePlanCalendar = (outfit) => {
@@ -93,7 +153,8 @@ export default function OutfitsPage() {
               <span className="italic font-normal text-primary">&amp; Combinaciones</span>
             </h1>
             <p className="font-body-md text-body-md text-on-surface-variant max-w-xl">
-              Archivo visual de estilismos de autor. Curaduría personalizada, balances cromáticos y ensamblaje modular con piezas de tu colección personal.
+              Archivo visual de estilismos de autor. Curaduría personalizada, balances cromáticos y
+              ensamblaje modular con piezas de tu colección personal.
             </p>
           </div>
 
@@ -122,7 +183,6 @@ export default function OutfitsPage() {
 
         {/* Navigation Tabs & Occasion Pills Bar */}
         <div className="flex flex-col gap-space-md pt-space-xs">
-
           {/* Quick Category / Occasion Chips */}
           <div className="flex items-center gap-space-xs overflow-x-auto pb-space-xs scrollbar-none">
             <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline px-space-xs mr-space-xs">
@@ -134,10 +194,11 @@ export default function OutfitsPage() {
                 <button
                   key={occ}
                   onClick={() => setSelectedOccasion(occ)}
-                  className={`px-space-md py-1.5 rounded-full font-label-md text-label-md shadow-sm transition-all cursor-pointer ${isSelected
-                    ? 'bg-primary text-on-primary'
-                    : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'
-                    }`}
+                  className={`px-space-md py-1.5 rounded-full font-label-md text-label-md shadow-sm transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-primary text-on-primary'
+                      : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'
+                  }`}
                   type="button"
                 >
                   {occ === 'Todos' ? `Todos (${outfitsList.length})` : occ}
@@ -146,10 +207,11 @@ export default function OutfitsPage() {
             })}
             <button
               onClick={() => setSelectedOccasion('Clima Templado')}
-              className={`px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all flex items-center gap-1 cursor-pointer ${selectedOccasion === 'Clima Templado'
-                ? 'bg-primary text-on-primary shadow-sm'
-                : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'
-                }`}
+              className={`px-space-md py-1.5 rounded-full font-label-md text-label-md transition-all flex items-center gap-1 cursor-pointer ${
+                selectedOccasion === 'Clima Templado'
+                  ? 'bg-primary text-on-primary shadow-sm'
+                  : 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'
+              }`}
               type="button"
             >
               <span className="material-symbols-outlined text-[16px]">wb_sunny</span>
@@ -158,67 +220,34 @@ export default function OutfitsPage() {
           </div>
         </div>
 
-        {/* FULL-WIDTH EDITORIAL OUTFIT GALLERY (NO SIDEBAR CARD) */}
-        <section className="w-full flex flex-col gap-space-lg">
-          <div className="flex items-center justify-between">
-            <div className="flex items-baseline gap-space-xs">
-              <h2 className="font-headline-md text-headline-md text-on-surface">Curaduría Editorial</h2>
-              <span className="font-label-sm text-label-sm text-outline">
-                (Mostrando {filteredOutfits.length} estilismos)
-              </span>
-            </div>
-            <div className="flex items-center gap-space-xs">
-              <span className="font-label-sm text-label-sm text-on-surface-variant">Ordenar:</span>
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="bg-surface-container-low text-on-surface font-label-md text-label-md px-space-sm py-1 rounded-lg focus:outline-none focus:ring-1 focus:ring-primary cursor-pointer"
-              >
-                <option value="recent">Más recientes</option>
-                <option value="harmony">Mayor armonía (%)</option>
-              </select>
-            </div>
+        {/* Loading state banner */}
+        {isLoading && (
+          <div className="p-3 rounded-lg bg-surface-container-low text-on-surface-variant font-body-sm flex items-center gap-2">
+            <span className="material-symbols-outlined animate-spin text-[18px]">autorenew</span>
+            <span>Cargando composiciones del servidor atelier...</span>
           </div>
+        )}
 
-          {/* Outfits Stack: Displays full visual compositions */}
-          <div className="flex flex-col gap-space-lg">
-            {filteredOutfits.map((outfit) => (
-              <OutfitCard
-                key={outfit.id}
-                outfit={outfit}
-                onPlanCalendar={handlePlanCalendar}
-                onDuplicate={handleDuplicate}
-              />
-            ))}
-          </div>
-        </section>
+        {/* Main Outfits Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+          {filteredOutfits.map((outfit) => (
+            <OutfitCard
+              key={outfit.id}
+              onDuplicate={handleDuplicate}
+              onPlanCalendar={handlePlanCalendar}
+              onDelete={handleDeleteOutfit}
+              outfit={outfit}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* On-demand Outfit Builder Modal Dialog */}
-      {isBuilderModalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm animate-fade-in">
-          <div className="bg-surface-container-lowest rounded-2xl max-w-2xl w-full p-space-lg shadow-2xl max-h-[90vh] overflow-y-auto relative">
-            <button
-              onClick={() => setIsBuilderModalOpen(false)}
-              className="absolute top-4 right-4 p-2 text-on-surface-variant hover:text-on-surface hover:bg-surface-container rounded-full transition-colors cursor-pointer"
-              title="Cerrar lienzo"
-              type="button"
-            >
-              <span className="material-symbols-outlined text-[20px]">close</span>
-            </button>
-            <OutfitBuilderCanvas
-              onSaveOutfit={(outfit) => {
-                handleSaveOutfit(outfit);
-                setIsBuilderModalOpen(false);
-              }}
-              onScheduleLook={(name) => {
-                alert(`Look "${name}" agendado con éxito.`);
-                setIsBuilderModalOpen(false);
-              }}
-            />
-          </div>
-        </div>
-      )}
+      {/* Outfit Builder Modal */}
+      <OutfitBuilderCanvas
+        isOpen={isBuilderModalOpen}
+        onClose={() => setIsBuilderModalOpen(false)}
+        onSave={handleSaveOutfit}
+      />
     </div>
   );
 }

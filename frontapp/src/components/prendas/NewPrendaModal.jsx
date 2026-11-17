@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { mapCategoryToTipoPrenda } from '../../api/prendas';
 
 const SAMPLE_IMAGES = [
   'https://lh3.googleusercontent.com/aida-public/AB6AXuBgS8-8hZjsFo9jdf8gI0s6w_79-3xFfRQ7-XP3oyeNspmnV-4ktwcU1sI4OGTxPb9H6gCjnnl0S5whAlfvbq_FD2Bv6yybw-JBr08pXsEEGCuwsoebRm3BjT-P_gHYylqFUVV7JhzqB5IAIQKq7z9vk6imapKbWa1YZMditC2QYA6nd2UmIoa42hat_OGN2XvLT1eipUO1CI8nMi13K5anv_uLbf8JyACKnvJXta8',
@@ -17,45 +18,40 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
   const [size, setSize] = useState('38 FR');
   const [exterior, setExterior] = useState('100% Lana');
   const [selectedImage, setSelectedImage] = useState(SAMPLE_IMAGES[0]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   if (!isOpen) return null;
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !brand.trim()) return;
 
-    const newPrenda = {
-      id: Date.now(),
-      ref: `${brand.slice(0, 3).toUpperCase()}-${new Date().getFullYear()}-${Math.floor(
-        Math.random() * 900 + 100
-      )}`,
-      brand: brand.trim(),
-      title: title.trim(),
-      category,
-      size,
-      wearCount: 0,
-      isFavorite: false,
-      season,
-      palette: 'Tierra & Neutros',
-      status: 'Sin estrenar',
-      materialTag: `${season === 'Otoño/Invierno' ? 'O/I' : 'P/V'} • ${exterior}`,
-      image: selectedImage,
-      detailImage: selectedImage,
-      badges: [
-        { text: category.split(' ')[0], bg: 'bg-surface-container-lowest/90 text-primary font-semibold' },
-        { text: 'Sin estrenar', bg: 'bg-primary text-on-primary' },
-      ],
-      composition: {
-        exterior,
-        lining: '100% Cupro',
-        washing: 'Lavado delicado / Tintorería',
-        location: 'Armario Principal',
-      },
-      suggestedPairings: [],
-    };
+    setIsSubmitting(true);
+    try {
+      const prendaData = {
+        nombre: title.trim(),
+        tipoPrenda: mapCategoryToTipoPrenda(category),
+        color: 'Tierra & Neutros',
+        temporada: season,
+        estilo: exterior,
+        fotoUrl: selectedImage,
+        brand: brand.trim(),
+        title: title.trim(),
+        category,
+        size,
+        composition: {
+          exterior,
+          lining: '100% Cupro',
+          washing: 'Lavado delicado / Tintorería',
+          location: 'Armario Principal',
+        },
+      };
 
-    onSave(newPrenda);
-    onClose();
+      await onSave(prendaData);
+      onClose();
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -193,16 +189,23 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
           <div className="pt-space-sm flex items-center justify-end gap-space-sm">
             <button
               onClick={onClose}
+              disabled={isSubmitting}
               type="button"
-              className="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container font-label-md text-label-md transition-colors cursor-pointer"
+              className="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container font-label-md text-label-md transition-colors cursor-pointer disabled:opacity-50"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-5 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-md transition-all cursor-pointer"
+              disabled={isSubmitting}
+              className="px-5 py-2 rounded-lg bg-primary text-on-primary hover:bg-primary-container font-label-md text-label-md shadow-md transition-all cursor-pointer disabled:opacity-75 flex items-center gap-2"
             >
-              Guardar Prenda
+              {isSubmitting && (
+                <span className="material-symbols-outlined animate-spin text-[16px]">
+                  autorenew
+                </span>
+              )}
+              <span>{isSubmitting ? 'Guardando en Atelier...' : 'Guardar Prenda'}</span>
             </button>
           </div>
         </form>

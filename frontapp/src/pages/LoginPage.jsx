@@ -1,37 +1,80 @@
 import { useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
+import { useAuth } from '../context/useAuth';
 
 export default function LoginPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const mode = searchParams.get('mode') === 'register' ? 'register' : 'login';
-  const setMode = (newMode) => {
-    setSearchParams(newMode === 'register' ? { mode: 'register' } : {});
-  };
+  const { login, register, error: authError, setError: setAuthError } = useAuth();
+
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [localError, setLocalError] = useState(null);
 
   // Form states
   const [formData, setFormData] = useState({
     name: '',
-    aestheticStyle: 'quiet_luxury',
-    email: 'c.vidal@maison.com',
-    password: 'password123',
+    email: '',
+    password: '',
+    confirmPassword: '',
     remember: true,
     consent: false,
   });
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsLoading(false);
-      // Navigate to Prendas in the atelier dashboard
-      navigate('/prendas');
-    }, 800);
+  const setMode = (newMode) => {
+    setLocalError(null);
+    setAuthError(null);
+    setSearchParams(newMode === 'register' ? { mode: 'register' } : {});
   };
 
   const isLogin = mode === 'login';
+  const displayError = localError || authError;
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLocalError(null);
+    setAuthError(null);
+
+    if (!isLogin) {
+      if (!formData.name.trim()) {
+        setLocalError('Por favor ingrese su nombre completo o razón de archivo.');
+        return;
+      }
+      if (formData.password.length < 6) {
+        setLocalError('La contraseña debe tener al menos 6 caracteres.');
+        return;
+      }
+      if (formData.password !== formData.confirmPassword) {
+        setLocalError('Las contraseñas no coinciden. Por favor verifíquelas.');
+        return;
+      }
+      if (!formData.consent) {
+        setLocalError('Debe aceptar los estatutos y normativas de confidencialidad.');
+        return;
+      }
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (isLogin) {
+        await login(formData.email, formData.password);
+      } else {
+        await register({
+          nombre: formData.name,
+          email: formData.email,
+          password: formData.password,
+          confirmPassword: formData.confirmPassword,
+        });
+      }
+      navigate('/prendas');
+    } catch {
+      // Error message is set in AuthContext or thrown with response
+    } finally {
+      setIsSubmitting(false);
+    }
+  };
 
   return (
     <main className="min-h-screen w-full flex items-center justify-center p-gutter bg-surface">
@@ -193,9 +236,19 @@ export default function LoginPage() {
                 </p>
               </div>
 
+              {/* Error Alert Banner */}
+              {displayError && (
+                <div className="mb-space-md p-3.5 rounded-lg bg-error-container text-on-error-container font-body-sm flex items-start gap-2.5 border border-error/20 animate-fade-in">
+                  <span className="material-symbols-outlined text-error text-[20px] shrink-0 mt-0.5">
+                    error
+                  </span>
+                  <span className="leading-snug">{displayError}</span>
+                </div>
+              )}
+
               {/* Dynamic Form Fields */}
               <form className="space-y-space-md" id="auth-form" onSubmit={handleSubmit}>
-                {/* Registration Exclusive Fields */}
+                {/* Registration Exclusive Fields: Full Name */}
                 {!isLogin && (
                   <div className="space-y-space-md animate-fade-in" id="register-fields">
                     <div>
@@ -216,99 +269,11 @@ export default function LoginPage() {
                           required={!isLogin}
                           type="text"
                           value={formData.name}
-                          onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                          onChange={(e) => {
+                            setLocalError(null);
+                            setFormData({ ...formData, name: e.target.value });
+                          }}
                         />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-1.5 font-medium">
-                        Perfil de Estilismo Preferente
-                      </label>
-                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
-                        <label
-                          onClick={() => setFormData({ ...formData, aestheticStyle: 'quiet_luxury' })}
-                          className="cursor-pointer"
-                        >
-                          <input
-                            checked={formData.aestheticStyle === 'quiet_luxury'}
-                            onChange={() =>
-                              setFormData({ ...formData, aestheticStyle: 'quiet_luxury' })
-                            }
-                            className="sr-only"
-                            name="aesthetic_style"
-                            type="radio"
-                            value="quiet_luxury"
-                          />
-                          <div
-                            className={`p-2.5 text-center rounded-lg transition-all ${
-                              formData.aestheticStyle === 'quiet_luxury'
-                                ? 'bg-secondary-container text-on-secondary-container ring-1 ring-secondary'
-                                : 'bg-surface hover:bg-surface-container'
-                            }`}
-                          >
-                            <p className="font-label-md text-label-md font-semibold">
-                              Lujo Silencioso
-                            </p>
-                            <p className="font-body-sm text-body-sm opacity-80">Tonos neutros</p>
-                          </div>
-                        </label>
-
-                        <label
-                          onClick={() =>
-                            setFormData({ ...formData, aestheticStyle: 'contemporary_tailoring' })
-                          }
-                          className="cursor-pointer"
-                        >
-                          <input
-                            checked={formData.aestheticStyle === 'contemporary_tailoring'}
-                            onChange={() =>
-                              setFormData({ ...formData, aestheticStyle: 'contemporary_tailoring' })
-                            }
-                            className="sr-only"
-                            name="aesthetic_style"
-                            type="radio"
-                            value="contemporary_tailoring"
-                          />
-                          <div
-                            className={`p-2.5 text-center rounded-lg transition-all ${
-                              formData.aestheticStyle === 'contemporary_tailoring'
-                                ? 'bg-secondary-container text-on-secondary-container ring-1 ring-secondary'
-                                : 'bg-surface hover:bg-surface-container'
-                            }`}
-                          >
-                            <p className="font-label-md text-label-md font-semibold">Sastrería</p>
-                            <p className="font-body-sm text-body-sm opacity-80">Cortes pulcros</p>
-                          </div>
-                        </label>
-
-                        <label
-                          onClick={() =>
-                            setFormData({ ...formData, aestheticStyle: 'minimal_avantgarde' })
-                          }
-                          className="cursor-pointer"
-                        >
-                          <input
-                            checked={formData.aestheticStyle === 'minimal_avantgarde'}
-                            onChange={() =>
-                              setFormData({ ...formData, aestheticStyle: 'minimal_avantgarde' })
-                            }
-                            className="sr-only"
-                            name="aesthetic_style"
-                            type="radio"
-                            value="minimal_avantgarde"
-                          />
-                          <div
-                            className={`p-2.5 text-center rounded-lg transition-all ${
-                              formData.aestheticStyle === 'minimal_avantgarde'
-                                ? 'bg-secondary-container text-on-secondary-container ring-1 ring-secondary'
-                                : 'bg-surface hover:bg-surface-container'
-                            }`}
-                          >
-                            <p className="font-label-md text-label-md font-semibold">Vanguardia</p>
-                            <p className="font-body-sm text-body-sm opacity-80">Minimalismo</p>
-                          </div>
-                        </label>
                       </div>
                     </div>
                   </div>
@@ -333,7 +298,10 @@ export default function LoginPage() {
                       required
                       type="email"
                       value={formData.email}
-                      onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                      onChange={(e) => {
+                        setLocalError(null);
+                        setFormData({ ...formData, email: e.target.value });
+                      }}
                     />
                   </div>
                 </div>
@@ -371,7 +339,10 @@ export default function LoginPage() {
                       required
                       type={showPassword ? 'text' : 'password'}
                       value={formData.password}
-                      onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                      onChange={(e) => {
+                        setLocalError(null);
+                        setFormData({ ...formData, password: e.target.value });
+                      }}
                     />
                     <button
                       aria-label="Alternar visibilidad"
@@ -386,12 +357,67 @@ export default function LoginPage() {
                   </div>
                 </div>
 
+                {/* Confirm Password Input (Register Only) */}
+                {!isLogin && (
+                  <div className="animate-fade-in">
+                    <label
+                      className="block font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant mb-1.5 font-medium"
+                      htmlFor="confirmPassword"
+                    >
+                      Confirmar Contraseña de Seguridad
+                    </label>
+                    <div className="relative">
+                      <span className="material-symbols-outlined absolute left-3 top-3 text-outline text-lg">
+                        lock_reset
+                      </span>
+                      <input
+                        className="w-full pl-10 pr-10 py-2.5 bg-surface rounded-lg font-body-md text-on-surface placeholder:text-outline focus:bg-surface-container-lowest focus:outline-none focus:ring-1 focus:ring-primary shadow-xs transition-all"
+                        id="confirmPassword"
+                        placeholder="••••••••••••"
+                        required={!isLogin}
+                        type={showConfirmPassword ? 'text' : 'password'}
+                        value={formData.confirmPassword}
+                        onChange={(e) => {
+                          setLocalError(null);
+                          setFormData({ ...formData, confirmPassword: e.target.value });
+                        }}
+                      />
+                      <button
+                        aria-label="Alternar visibilidad de confirmación"
+                        className="absolute right-3 top-2.5 text-outline hover:text-on-surface transition-colors cursor-pointer"
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        type="button"
+                      >
+                        <span className="material-symbols-outlined text-lg">
+                          {showConfirmPassword ? 'visibility_off' : 'visibility'}
+                        </span>
+                      </button>
+                    </div>
+                    {formData.confirmPassword &&
+                      formData.password !== formData.confirmPassword && (
+                        <p className="mt-1 text-xs text-error flex items-center gap-1 font-body-sm">
+                          <span className="material-symbols-outlined text-xs">close</span>
+                          Las contraseñas no coinciden
+                        </p>
+                      )}
+                    {formData.confirmPassword &&
+                      formData.password === formData.confirmPassword && (
+                        <p className="mt-1 text-xs text-secondary flex items-center gap-1 font-body-sm">
+                          <span className="material-symbols-outlined text-xs">check</span>
+                          Las contraseñas coinciden
+                        </p>
+                      )}
+                  </div>
+                )}
+
                 {/* Checkboxes */}
                 <div className="space-y-2 pt-1">
                   <label className="flex items-center gap-2.5 cursor-pointer">
                     <input
                       checked={formData.remember}
-                      onChange={(e) => setFormData({ ...formData, remember: e.target.checked })}
+                      onChange={(e) =>
+                        setFormData({ ...formData, remember: e.target.checked })
+                      }
                       className="w-4 h-4 rounded bg-surface text-primary accent-primary cursor-pointer"
                       id="remember"
                       type="checkbox"
@@ -406,7 +432,10 @@ export default function LoginPage() {
                       <label className="flex items-start gap-2.5 cursor-pointer">
                         <input
                           checked={formData.consent}
-                          onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                          onChange={(e) => {
+                            setLocalError(null);
+                            setFormData({ ...formData, consent: e.target.checked });
+                          }}
                           className="mt-1 w-4 h-4 rounded bg-surface text-primary accent-primary cursor-pointer"
                           id="consent"
                           required={!isLogin}
@@ -423,12 +452,12 @@ export default function LoginPage() {
 
                 {/* Submit Button */}
                 <button
-                  disabled={isLoading}
+                  disabled={isSubmitting}
                   className="w-full py-3.5 px-6 rounded-lg bg-inverse-surface hover:bg-primary text-inverse-on-surface font-title-md transition-all duration-300 shadow-md flex items-center justify-center gap-2 group mt-space-sm cursor-pointer disabled:opacity-75"
                   id="submit-button"
                   type="submit"
                 >
-                  {isLoading ? (
+                  {isSubmitting ? (
                     <>
                       <span className="material-symbols-outlined animate-spin text-[20px]">
                         autorenew
@@ -463,9 +492,7 @@ export default function LoginPage() {
                   id="bottom-action-button"
                   type="button"
                 >
-                  {isLogin
-                    ? 'Solicitar registro de miembro'
-                    : 'Iniciar sesión existente'}
+                  {isLogin ? 'Solicitar registro de miembro' : 'Iniciar sesión existente'}
                 </button>
               </p>
             </div>

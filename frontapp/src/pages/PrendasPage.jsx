@@ -12,31 +12,50 @@ export default function PrendasPage() {
     setPrendas,
     selectedPrendaId,
     setSelectedPrendaId,
+    handleUpdatePrenda,
+    handleDeletePrenda,
+    isLoadingPrendas,
   } = useOutletContext() || {};
 
   const [activeCategory, setActiveCategory] = useState('all');
 
-  // Handle wear logging
-  const handleLogWear = (prendaId) => {
-    if (!setPrendas) return;
-    setPrendas((prev) =>
-      prev.map((p) => {
-        if (p.id !== prendaId) return p;
-        return {
-          ...p,
-          wearCount: p.wearCount + 1,
+  // Handle wear logging with Axios sync
+  const handleLogWear = async (prendaId) => {
+    const prenda = prendas?.find((p) => p.id === prendaId);
+    const newCount = (prenda?.wearCount || 0) + 1;
+
+    if (handleUpdatePrenda) {
+      await handleUpdatePrenda(prendaId, {
+        notasAdicionales: {
+          ...(prenda?.raw?.notasAdicionales || {}),
+          wearCount: newCount,
           status: 'Limpio',
-        };
-      })
-    );
+        },
+      });
+    } else if (setPrendas) {
+      setPrendas((prev) =>
+        prev.map((p) => (p.id === prendaId ? { ...p, wearCount: newCount, status: 'Limpio' } : p))
+      );
+    }
   };
 
-  // Toggle favorite status
-  const handleToggleFavorite = (prendaId) => {
-    if (!setPrendas) return;
-    setPrendas((prev) =>
-      prev.map((p) => (p.id === prendaId ? { ...p, isFavorite: !p.isFavorite } : p))
-    );
+  // Toggle favorite status with Axios sync
+  const handleToggleFavorite = async (prendaId) => {
+    const prenda = prendas?.find((p) => p.id === prendaId);
+    const newFav = !prenda?.isFavorite;
+
+    if (handleUpdatePrenda) {
+      await handleUpdatePrenda(prendaId, {
+        notasAdicionales: {
+          ...(prenda?.raw?.notasAdicionales || {}),
+          isFavorite: newFav,
+        },
+      });
+    } else if (setPrendas) {
+      setPrendas((prev) =>
+        prev.map((p) => (p.id === prendaId ? { ...p, isFavorite: newFav } : p))
+      );
+    }
   };
 
   // Filtered garments based on category and global search
@@ -53,9 +72,9 @@ export default function PrendasPage() {
       const q = searchTerm.toLowerCase();
       list = list.filter(
         (p) =>
-          p.title.toLowerCase().includes(q) ||
-          p.brand.toLowerCase().includes(q) ||
-          p.category.toLowerCase().includes(q) ||
+          p.title?.toLowerCase().includes(q) ||
+          p.brand?.toLowerCase().includes(q) ||
+          p.category?.toLowerCase().includes(q) ||
           p.materialTag?.toLowerCase().includes(q)
       );
     }
@@ -63,145 +82,99 @@ export default function PrendasPage() {
     return list;
   }, [prendas, activeCategory, searchTerm]);
 
-  // Selected prenda object for the drawer
-  const selectedPrenda = useMemo(() => {
-    if (!prendas || prendas.length === 0) return null;
-    const found = prendas.find((p) => p.id === selectedPrendaId);
-    return found || filteredPrendas[0] || prendas[0];
-  }, [prendas, selectedPrendaId, filteredPrendas]);
-
-  // Handle pairing selection from drawer
-  const handleSelectPairing = (pairId) => {
-    if (prendas?.some((p) => p.id === pairId) && setSelectedPrendaId) {
-      setSelectedPrendaId(pairId);
-    }
-  };
+  // Selected prenda for technical side drawer
+  const selectedPrenda = useMemo(
+    () => (prendas || []).find((p) => p.id === selectedPrendaId) || (prendas && prendas[0]) || null,
+    [prendas, selectedPrendaId]
+  );
 
   return (
-    <div className="flex flex-col w-full">
-      {/* Top Ambient Glow & Editorial Header */}
-      <div className="relative w-full px-gutter lg:px-margin pt-space-lg pb-space-xl overflow-hidden">
-        {/* Glow circles */}
-        <div className="absolute -top-32 right-12 w-96 h-96 rounded-full bg-primary/5 blur-3xl pointer-events-none"></div>
-        <div className="absolute top-24 left-1/3 w-80 h-80 rounded-full bg-secondary/5 blur-2xl pointer-events-none"></div>
-
-        <div className="relative z-10 flex flex-col gap-space-lg">
-          {/* Editorial Title & Action CTAs */}
-          <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md">
-            <div>
-              <div className="flex items-center gap-space-xs text-primary font-label-sm uppercase tracking-widest mb-space-xs">
-                <span className="inline-block w-2 h-2 rounded-full bg-primary"></span>
-                <span>Atelier Archive Privé</span>
-                <span className="text-outline-variant">•</span>
-                <span className="text-on-surface-variant font-normal">Inventario Activo</span>
-              </div>
-              <h1 className="font-headline-xl text-headline-xl text-on-surface tracking-tight">
-                Mi Armario Digital
-              </h1>
-              <p className="font-body-md text-body-md text-on-surface-variant mt-1 max-w-xl">
-                Curaduría textil y catalogación inteligente de archivo personal.
-              </p>
-            </div>
-
-            {/* Action CTAs */}
-            <div className="flex flex-wrap items-center gap-space-sm">
-              <button
-                onClick={onOpenNewPrenda}
-                className="inline-flex items-center gap-space-xs px-space-md py-space-sm bg-primary text-on-primary hover:bg-primary-container hover:text-on-primary-container rounded-lg transition-all shadow-md font-label-md text-label-md cursor-pointer"
-                type="button"
-              >
-                <span className="material-symbols-outlined text-[19px]">add</span>
-                <span>+ Nueva Prenda</span>
-              </button>
-            </div>
+    <div className="flex flex-col w-full px-gutter py-space-lg">
+      {/* 1. Header & Quick Metatags */}
+      <section className="mb-space-lg">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-space-md pb-space-sm border-b border-surface-container-highest/60">
+          <div>
+            <span className="font-label-sm text-label-sm uppercase tracking-widest text-primary font-semibold">
+              Archivado en Salón Digital
+            </span>
+            <h1 className="font-headline-lg text-headline-lg text-on-surface tracking-tight mt-1">
+              Catálogo de Prendas
+            </h1>
+          </div>
+          <div className="flex items-center gap-space-sm">
+            <span className="font-label-md text-label-md text-on-surface-variant font-medium">
+              {filteredPrendas.length} piezas archivadas
+            </span>
+            <button
+              onClick={onOpenNewPrenda}
+              className="inline-flex items-center gap-space-xs px-space-md py-space-sm bg-primary text-on-primary font-label-md text-label-md rounded-lg hover:bg-primary-container transition-all cursor-pointer shadow-sm"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[18px]">add</span>
+              <span>Añadir Pieza</span>
+            </button>
           </div>
         </div>
+      </section>
 
-        {/* Category Pill Filter Bar */}
-        <div className="mt-space-lg flex flex-col gap-space-md">
-          <CategoryFilters
-            activeCategory={activeCategory}
-            onSelectCategory={setActiveCategory}
-          />
-        </div>
+      {/* 2. Horizontal Category Filters */}
+      <CategoryFilters activeCategory={activeCategory} onSelectCategory={setActiveCategory} />
 
-        {/* Main Content Workspace (Editorial Grid + Quick Preview Drawer) */}
-        <div className="mt-space-lg grid grid-cols-1 xl:grid-cols-12 gap-space-lg items-start">
-          {/* Primary Garments Editorial Grid (XL: 8 cols) */}
-          <div className="xl:col-span-8 flex flex-col gap-space-md">
-            <div className="flex items-center justify-between">
-              <span className="font-label-sm text-outline uppercase tracking-wider">
-                Mostrando {filteredPrendas.length} piezas archivadas
-              </span>
-              <span className="font-body-sm text-body-sm text-on-surface-variant">
-                Filtro activo:{' '}
-                {activeCategory === 'all' ? 'Todas las categorías' : activeCategory}
-              </span>
+      {/* 3. Main Workspace: Grid & Detail Drawer */}
+      <div className="grid grid-cols-1 xl:grid-cols-12 gap-space-lg mt-space-md">
+        {/* Garment Grid Column */}
+        <div className="xl:col-span-8 flex flex-col gap-space-md">
+          {isLoadingPrendas && (
+            <div className="p-4 rounded-xl bg-surface-container-low text-on-surface-variant font-body-sm flex items-center gap-2">
+              <span className="material-symbols-outlined animate-spin text-[18px]">autorenew</span>
+              <span>Sincronizando armario con el servidor atelier...</span>
             </div>
+          )}
 
+          {filteredPrendas.length === 0 ? (
+            <div className="flex flex-col items-center justify-center p-space-xl bg-surface-container-lowest rounded-xl border border-dashed border-outline-variant text-center my-8">
+              <span className="material-symbols-outlined text-5xl text-outline mb-space-sm">
+                dry_cleaning
+              </span>
+              <p className="font-title-md text-title-md text-on-surface">
+                No se encontraron piezas en esta selección
+              </p>
+              <p className="font-body-sm text-body-sm text-outline mt-1 mb-space-md">
+                Prueba a restablecer los filtros de categoría o agregar una nueva prenda a tu archivo.
+              </p>
+              <button
+                onClick={() => {
+                  setActiveCategory('all');
+                }}
+                className="px-4 py-2 bg-surface-container-high rounded-lg text-on-surface font-label-md hover:bg-surface-container-highest transition-colors cursor-pointer"
+                type="button"
+              >
+                Ver Todas las Prendas
+              </button>
+            </div>
+          ) : (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-space-md">
               {filteredPrendas.map((prenda) => (
                 <PrendaCard
+                  isSelected={prenda.id === selectedPrendaId}
                   key={prenda.id}
-                  prenda={prenda}
-                  isSelected={prenda.id === selectedPrenda?.id}
-                  onSelect={(p) => setSelectedPrendaId && setSelectedPrendaId(p.id)}
+                  onLogWear={handleLogWear}
+                  onSelect={() => setSelectedPrendaId(prenda.id)}
                   onToggleFavorite={handleToggleFavorite}
+                  prenda={prenda}
                 />
               ))}
             </div>
-
-            {/* Pagination & Archive Footer Info */}
-            <div className="mt-space-md p-space-md rounded-xl bg-surface-container-lowest shadow-sm flex flex-col sm:flex-row items-center justify-between gap-space-sm">
-              <span className="font-body-sm text-body-sm text-on-surface-variant">
-                Página <strong className="text-on-surface">1</strong> de 25 • Total de{' '}
-                <strong className="text-on-surface">148 piezas</strong> en archivo
-              </span>
-
-              <div className="flex items-center gap-space-xs">
-                <button
-                  className="px-3 py-1.5 rounded-lg bg-surface-container text-outline hover:text-on-surface font-label-md text-label-md disabled:opacity-40 cursor-pointer"
-                  disabled
-                  type="button"
-                >
-                  Anterior
-                </button>
-                <button
-                  className="w-8 h-8 rounded-lg bg-primary text-on-primary font-label-md text-label-md flex items-center justify-center cursor-pointer"
-                  type="button"
-                >
-                  1
-                </button>
-                <button
-                  className="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center cursor-pointer"
-                  type="button"
-                >
-                  2
-                </button>
-                <button
-                  className="w-8 h-8 rounded-lg hover:bg-surface-container text-on-surface font-label-md text-label-md flex items-center justify-center cursor-pointer"
-                  type="button"
-                >
-                  3
-                </button>
-                <span className="text-outline px-1">...</span>
-                <button
-                  className="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest text-on-surface font-label-md text-label-md cursor-pointer"
-                  type="button"
-                >
-                  Siguiente
-                </button>
-              </div>
-            </div>
-          </div>
-
-          {/* Quick Inspection Floating Drawer Panel (XL: 4 cols) */}
-          <PrendaDrawer
-            prenda={selectedPrenda}
-            onLogWear={handleLogWear}
-            onSelectPairing={handleSelectPairing}
-          />
+          )}
         </div>
+
+        {/* Technical Side Drawer Column */}
+        <PrendaDrawer
+          onLogWear={handleLogWear}
+          onDeletePrenda={handleDeletePrenda}
+          onSelectPairing={(id) => setSelectedPrendaId(id)}
+          prenda={selectedPrenda}
+        />
       </div>
     </div>
   );

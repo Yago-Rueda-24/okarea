@@ -1,5 +1,3 @@
-import { Link } from 'react-router-dom';
-
 export default function WelcomeFooter() {
   return (
     <footer className="w-full bg-surface-container-low mt-space-xl py-space-xl">

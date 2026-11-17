@@ -1,4 +1,4 @@
-export default function OutfitCard({ outfit, onPlanCalendar, onDuplicate }) {
+export default function OutfitCard({ outfit, onPlanCalendar, onDuplicate, onDelete }) {
   return (
     <article className="bg-surface-container-lowest rounded-xl p-space-lg shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col gap-space-md relative overflow-hidden group">
       {/* Top Header Row */}
@@ -89,6 +89,20 @@ export default function OutfitCard({ outfit, onPlanCalendar, onDuplicate }) {
           >
             <span className="material-symbols-outlined text-[20px]">open_in_new</span>
           </button>
+          {onDelete && (
+            <button
+              onClick={() => {
+                if (window.confirm(`¿Deseas eliminar "${outfit.title}" del archivo de outfits?`)) {
+                  onDelete(outfit.id);
+                }
+              }}
+              className="p-space-xs hover:bg-error-container/50 text-on-surface-variant hover:text-error rounded-lg transition-colors cursor-pointer"
+              title="Eliminar Outfit"
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[20px]">delete</span>
+            </button>
+          )}
         </div>
       </div>
     </article>

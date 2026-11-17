@@ -1,10 +1,20 @@
 import { NavLink } from 'react-router-dom';
+import { useAuth } from '../../context/useAuth';
 
 export default function Sidebar() {
+  const { user } = useAuth();
+
   const getNavClass = ({ isActive }) =>
     isActive
       ? 'flex items-center gap-space-md px-space-md py-space-sm rounded-lg transition-all bg-surface-container-lowest text-primary font-title-md shadow-[0_2px_8px_rgba(28,25,23,0.04)]'
       : 'flex items-center gap-space-md px-space-md py-space-sm rounded-lg text-on-surface-variant hover:bg-surface-container hover:text-on-surface transition-all font-body-md text-body-md';
+
+  const tierName =
+    user?.role === 'admin'
+      ? 'Archive Director'
+      : user?.role === 'estilista'
+      ? 'Styling Atelier'
+      : 'Maison Privée';
 
   return (
     <aside className="fixed left-0 top-20 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-space-lg shadow-[0_1px_8px_rgba(28,25,23,0.03)]">
@@ -67,7 +77,7 @@ export default function Sidebar() {
             <div className="h-full bg-primary rounded-full w-[56%]"></div>
           </div>
           <span className="font-body-sm text-body-sm text-on-surface-variant pt-space-xs">
-            Archive tier: Maison Privée
+            Tier: {tierName}
           </span>
         </div>
       </div>
