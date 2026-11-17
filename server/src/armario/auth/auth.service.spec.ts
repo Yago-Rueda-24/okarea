@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { JwtService } from '@nestjs/jwt';
-import { UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthService } from './auth.service';
-import { UsersService } from '../users/users.service';
-import { UserRole } from '../users/entities/user.entity';
+import { UsersService } from '../users/dominio/services/users.service';
+import { UserRole } from '../users/dominio/enums/user-role.enum';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -31,7 +31,7 @@ describe('AuthService', () => {
     service = module.get<AuthService>(AuthService);
   });
 
-  it('debe registrar un nuevo usuario y devolver su token', async () => {
+  it('debe registrar un nuevo usuario y devolver su token cuando las contraseñas coinciden', async () => {
     const mockUser = {
       id: 'uuid-user-1',
       email: 'test@example.com',
@@ -43,13 +43,31 @@ describe('AuthService', () => {
     const result = await service.register({
       email: 'test@example.com',
       password: 'password123',
+      confirmPassword: 'password123',
       nombre: 'Usuario Prueba',
     });
 
-    expect(usersServiceMock.create).toHaveBeenCalled();
+    expect(usersServiceMock.create).toHaveBeenCalledWith({
+      email: 'test@example.com',
+      password: 'password123',
+      nombre: 'Usuario Prueba',
+    });
     expect(jwtServiceMock.sign).toHaveBeenCalled();
     expect(result.accessToken).toBe('mock-jwt-token');
     expect(result.user).toEqual(mockUser);
+  });
+
+  it('debe lanzar BadRequestException si las contraseñas no coinciden en el registro', async () => {
+    await expect(
+      service.register({
+        email: 'test@example.com',
+        password: 'password123',
+        confirmPassword: 'differentPassword456',
+        nombre: 'Usuario Prueba',
+      }),
+    ).rejects.toThrow(BadRequestException);
+
+    expect(usersServiceMock.create).not.toHaveBeenCalled();
   });
 
   it('debe hacer login exitoso con credenciales correctas', async () => {

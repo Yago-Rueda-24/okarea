@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { EstilismoService } from './estilismo.service';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/dominio/services/users.service';
 import { PrendasService } from '../prendas/prendas.service';
 import { OutfitsService } from '../outfits/outfits.service';
 import { NotFoundException } from '@nestjs/common';

@@ -1,11 +1,11 @@
 import { Module } from '@nestjs/common';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './users/users.module';
+import { User } from './users/dominio/entities/user.entity';
 import { PrendasModule } from './prendas/prendas.module';
 import { OutfitsModule } from './outfits/outfits.module';
 import { EstilismoModule } from './estilismo/estilismo.module';
 
-import { User } from './users/entities/user.entity';
 import { Prenda } from './prendas/entities/prenda.entity';
 import { Outfit } from './outfits/entities/outfit.entity';
 import { OutfitItem } from './outfits/entities/outfit-item.entity';

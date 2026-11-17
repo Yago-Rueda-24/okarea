@@ -1,5 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { User } from '../../users/entities/user.entity';
+import { User } from '../../users/dominio/entities/user.entity';
 
 export enum StylingRequestStatus {
   PENDING = 'pendiente',

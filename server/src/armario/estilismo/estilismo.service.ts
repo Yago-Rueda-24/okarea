@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/dominio/services/users.service';
 import { PrendasService } from '../prendas/prendas.service';
 import { OutfitsService } from '../outfits/outfits.service';
 import { RecomendarOutfitDto } from './dto/recomendar-outfit.dto';
@@ -43,7 +43,6 @@ export class EstilismoService {
       id: c.id,
       nombre: c.nombre,
       email: c.email,
-      preferenciasEstilo: c.preferenciasEstilo,
       totalPrendas: c.prendas?.length || 0,
       totalOutfits: c.outfits?.length || 0,
       createdAt: c.createdAt,

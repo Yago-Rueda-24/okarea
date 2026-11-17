@@ -4,7 +4,7 @@ import { AdminOrStylistGuard } from '../auth/guards/admin-or-stylist.guard';
 import { RecomendarOutfitDto } from './dto/recomendar-outfit.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '../users/entities/user.entity';
+import { User } from '../users/dominio/entities/user.entity';
 import { CreateStylingRequestDto } from './dto/create-styling-request.dto';
 
 @Controller('armario/estilismo')

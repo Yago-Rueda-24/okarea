@@ -1,14 +1,27 @@
 import { Module } from '@nestjs/common';
+import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { User } from './entities/user.entity';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { JwtModule } from '@nestjs/jwt';
+import { User } from './dominio/entities/user.entity';
+import { UsersController } from './controller/users.controller';
+import { UsersService } from './dominio/services/users.service';
+import { BcryptPasswordHasherService } from './infraestructura/hashers/bcrypt-password-hasher.service';
+import { TypeOrmUserRepository } from './infraestructura/persistencia/typeorm-user.repository';
+import { AdminOrStylistGuard } from '../auth/guards/admin-or-stylist.guard';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([User])],
+  imports: [
+    ConfigModule,
+    TypeOrmModule.forFeature([User]),
+    JwtModule,
+  ],
   controllers: [UsersController],
-  providers: [UsersService],
-  exports: [UsersService],
+  providers: [
+    TypeOrmUserRepository,
+    BcryptPasswordHasherService,
+    UsersService,
+    AdminOrStylistGuard,
+  ],
+  exports: [UsersService, TypeOrmUserRepository, TypeOrmModule],
 })
 export class UsersModule {}
-

@@ -1,8 +1,8 @@
 import { CanActivate, ExecutionContext, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { UsersService } from '../../users/users.service';
-import { UserRole } from '../../users/entities/user.entity';
+import { UsersService } from '../../users/dominio/services/users.service';
+import { UserRole } from '../../users/dominio/enums/user-role.enum';
 
 @Injectable()
 export class AdminOrStylistGuard implements CanActivate {

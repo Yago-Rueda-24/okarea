@@ -2,7 +2,7 @@ import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/c
 import { OutfitsService } from './outfits.service';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '../users/entities/user.entity';
+import { User } from '../users/dominio/entities/user.entity';
 import { CreateOutfitDto } from './dto/create-outfit.dto';
 
 @Controller('armario/outfits')

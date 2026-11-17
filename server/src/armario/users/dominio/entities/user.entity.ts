@@ -1,12 +1,14 @@
-import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
-import { Prenda } from '../../prendas/entities/prenda.entity';
-import { Outfit } from '../../outfits/entities/outfit.entity';
-
-export enum UserRole {
-  USER = 'user',
-  STYLIST = 'stylist',
-  ADMIN = 'admin',
-}
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { Prenda } from '../../../prendas/entities/prenda.entity';
+import { Outfit } from '../../../outfits/entities/outfit.entity';
+import { UserRole } from '../enums/user-role.enum';
 
 @Entity('armario_users')
 export class User {
@@ -25,9 +27,6 @@ export class User {
   @Column({ type: 'varchar', default: UserRole.USER })
   role: UserRole;
 
-  @Column({ type: 'jsonb', nullable: true, default: () => "'{}'" })
-  preferenciasEstilo: Record<string, any>;
-
   @OneToMany(() => Prenda, (prenda) => prenda.user)
   prendas: Prenda[];
 
@@ -40,4 +39,3 @@ export class User {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-

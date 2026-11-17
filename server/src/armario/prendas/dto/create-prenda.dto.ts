@@ -21,6 +21,10 @@ export class CreatePrendaDto {
   @IsOptional()
   estilo?: string;
 
+  @IsString()
+  @IsOptional()
+  fotoUrl?: string;
+
   @IsOptional()
   notasAdicionales?: any;
 }

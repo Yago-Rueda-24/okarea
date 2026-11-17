@@ -15,11 +15,19 @@ export class PrendasService {
   ) {}
 
   async create(userId: string, file: Express.Multer.File, dto: CreatePrendaDto): Promise<Prenda> {
-    if (!file) {
+    let fotoUrl: string;
+    let s3Key: string;
+
+    if (file) {
+      const uploadResult = await this.s3Service.uploadFile(file, `armario/${userId}`);
+      fotoUrl = uploadResult.url;
+      s3Key = uploadResult.s3Key;
+    } else if (dto.fotoUrl) {
+      fotoUrl = dto.fotoUrl;
+      s3Key = `direct-${Date.now()}`;
+    } else {
       throw new BadRequestException('Debes adjuntar una foto de la prenda.');
     }
-
-    const { s3Key, url } = await this.s3Service.uploadFile(file, `armario/${userId}`);
 
     let parsedNotas = {};
     if (typeof dto.notasAdicionales === 'string') {
@@ -39,7 +47,7 @@ export class PrendasService {
       color: dto.color,
       temporada: dto.temporada,
       estilo: dto.estilo,
-      fotoUrl: url,
+      fotoUrl,
       s3Key,
       notasAdicionales: parsedNotas,
     });

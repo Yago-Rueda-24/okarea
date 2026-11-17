@@ -1,10 +1,10 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { UsersService } from '../users/users.service';
+import { UsersService } from '../users/dominio/services/users.service';
+import { User } from '../users/dominio/entities/user.entity';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
-import { User } from '../users/entities/user.entity';
 
 @Injectable()
 export class AuthService {
@@ -14,11 +14,14 @@ export class AuthService {
   ) {}
 
   async register(dto: RegisterDto) {
+    if (dto.password !== dto.confirmPassword) {
+      throw new BadRequestException('Las contraseñas no coinciden.');
+    }
+
     const user = await this.usersService.create({
       email: dto.email,
       password: dto.password,
       nombre: dto.nombre,
-      preferenciasEstilo: dto.preferenciasEstilo,
     });
 
     const token = this.generateToken(user);
@@ -57,4 +60,3 @@ export class AuthService {
     return this.jwtService.sign(payload);
   }
 }
-
