@@ -1,5 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom';
 import AppLayout from './components/layout/AppLayout';
+import WelcomePage from './pages/WelcomePage';
+import LoginPage from './pages/LoginPage';
 import PrendasPage from './pages/PrendasPage';
 import OutfitsPage from './pages/OutfitsPage';
 import AsesoriaVipPage from './pages/AsesoriaVipPage';
@@ -8,8 +10,13 @@ import PlaceholderPage from './pages/PlaceholderPage';
 export default function App() {
   return (
     <Routes>
+      {/* Public Pages */}
+      <Route path="/" element={<WelcomePage />} />
+      <Route path="/welcome" element={<WelcomePage />} />
+      <Route path="/login" element={<LoginPage />} />
+
+      {/* Authenticated Atelier App Layout */}
       <Route element={<AppLayout />}>
-        <Route path="/" element={<Navigate to="/prendas" replace />} />
         <Route path="/prendas" element={<PrendasPage />} />
         <Route path="/outfits" element={<OutfitsPage />} />
         <Route path="/asesoria-vip" element={<AsesoriaVipPage />} />
@@ -43,8 +50,10 @@ export default function App() {
             />
           }
         />
-        <Route path="*" element={<Navigate to="/prendas" replace />} />
       </Route>
+
+      {/* Fallback */}
+      <Route path="*" element={<Navigate to="/" replace />} />
     </Routes>
   );
 }
