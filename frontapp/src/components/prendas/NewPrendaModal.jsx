@@ -199,10 +199,6 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
                     Quitar
                   </button>
                 </div>
-                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-label-sm flex items-center gap-1">
-                  <span className="material-symbols-outlined text-[14px] text-primary">check_circle</span>
-                  <span>Foto seleccionada</span>
-                </div>
               </div>
             ) : (
               <div
@@ -210,13 +206,12 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
                 onDragOver={handleDragOver}
                 onDragLeave={handleDragLeave}
                 onDrop={handleDrop}
-                className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all ${
-                  photoError
+                className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all ${photoError
                     ? 'border-error bg-error-container/20'
                     : isDragging
-                    ? 'border-primary bg-primary/10'
-                    : 'border-surface-container-highest hover:border-primary/60 hover:bg-surface-container-low'
-                }`}
+                      ? 'border-primary bg-primary/10'
+                      : 'border-surface-container-highest hover:border-primary/60 hover:bg-surface-container-low'
+                  }`}
               >
                 <span className={`material-symbols-outlined text-3xl mb-1 ${photoError ? 'text-error' : 'text-primary'}`}>
                   add_photo_alternate

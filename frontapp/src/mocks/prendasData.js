@@ -299,11 +299,11 @@ export const PRENDAS_MOCK = [
 ];
 
 export const CATEGORIES_CONFIG = [
-  { id: "all", label: "Todo", count: 148, icon: null },
-  { id: "Tops & Camisas", label: "Tops & Camisas", count: 42, icon: "apparel" },
-  { id: "Chaquetas & Blazers", label: "Chaquetas & Blazers", count: 18, icon: "dry_cleaning" },
-  { id: "Pantalones & Faldas", label: "Pantalones & Faldas", count: 35, icon: "dresser" },
-  { id: "Vestidos", label: "Vestidos", count: 16, icon: "woman" },
-  { id: "Calzado", label: "Calzado", count: 24, icon: "steps" },
-  { id: "Bolsos & Accesorios", label: "Bolsos & Accesorios", count: 13, icon: "shopping_bag" },
+  { id: "all", label: "Todo", icon: null },
+  { id: "Tops & Camisas", label: "Tops & Camisas", icon: "apparel" },
+  { id: "Chaquetas & Blazers", label: "Chaquetas & Blazers", icon: "dry_cleaning" },
+  { id: "Pantalones & Faldas", label: "Pantalones & Faldas", icon: "dresser" },
+  { id: "Vestidos", label: "Vestidos", icon: "woman" },
+  { id: "Calzado", label: "Calzado", icon: "steps" },
+  { id: "Bolsos & Accesorios", label: "Bolsos & Accesorios", icon: "shopping_bag" },
 ];

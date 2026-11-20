@@ -170,9 +170,9 @@ export default function PrendasPage() {
 
         {/* Technical Side Drawer Column */}
         <PrendaDrawer
-          onLogWear={handleLogWear}
+          key={selectedPrenda?.id}
           onDeletePrenda={handleDeletePrenda}
-          onSelectPairing={(id) => setSelectedPrendaId(id)}
+          onUpdatePrenda={handleUpdatePrenda}
           prenda={selectedPrenda}
         />
       </div>
