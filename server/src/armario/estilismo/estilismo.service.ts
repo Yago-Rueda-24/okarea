@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/dominio/services/users.service';
-import { PrendasService } from '../prendas/prendas.service';
+import { PrendasService } from '../prendas/dominio/services/prendas.service';
 import { OutfitsService } from '../outfits/outfits.service';
 import { RecomendarOutfitDto } from './dto/recomendar-outfit.dto';
 import { Outfit } from '../outfits/entities/outfit.entity';

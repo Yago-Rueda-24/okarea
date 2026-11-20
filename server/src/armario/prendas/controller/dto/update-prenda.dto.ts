@@ -1,5 +1,5 @@
 import { IsEnum, IsOptional, IsString } from 'class-validator';
-import { TipoPrenda } from '../entities/prenda.entity';
+import { TipoPrenda } from '../../dominio/enums/tipo-prenda.enum';
 
 export class UpdatePrendaDto {
   @IsString()
@@ -25,4 +25,3 @@ export class UpdatePrendaDto {
   @IsOptional()
   notasAdicionales?: any;
 }
-

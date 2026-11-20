@@ -1,14 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { mapCategoryToTipoPrenda } from '../../api/prendas';
-
-const SAMPLE_IMAGES = [
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuBgS8-8hZjsFo9jdf8gI0s6w_79-3xFfRQ7-XP3oyeNspmnV-4ktwcU1sI4OGTxPb9H6gCjnnl0S5whAlfvbq_FD2Bv6yybw-JBr08pXsEEGCuwsoebRm3BjT-P_gHYylqFUVV7JhzqB5IAIQKq7z9vk6imapKbWa1YZMditC2QYA6nd2UmIoa42hat_OGN2XvLT1eipUO1CI8nMi13K5anv_uLbf8JyACKnvJXta8',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuAjWfRR-dLBY-RvHn3CAbSbmImj8pb1cPB2K9TEY2-zIa15XwKS4x7b43fcNmWM6xV_oMamGthsRYtD-zUfvJ7faikG_ar-wgV5wJUkNGlShfLoICm2S4ABqMLJNkKTO_o7eMT2uJ8cjkLtRKa6krzM4De4ynNdz_z4t0fBcgEMT62B4pZ9wFpd13wV8DMZvrokH4kiHCnOny5rQTofikEU50qu2keN8ECLS53vnQ0',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDHi6vSINe9Hv6smfP2lRHWp40VBPei8wyXKu3aprysMV1SKblUdBXitSyyLbrAZavhh2JtxVb6_SwgHQZAdsCK2joYGdol-lkLgPIlrE-qzx__hQWhvHuMpFz226nYal8TZZ1Hr2kDOK0MCOtsOoesNNyvBAZPcHDpIfCxJmenHHZyowBn7S2yT0IORylza4JP0cG7cozf9sV33pCwNpbqVCobmRIbvfUiSGoq62E',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuDxX4PuIo8A5VnTBTchJ46Y69K-YVbcpRW3G2CL0e_jYiZZPGC0DfNlGFuIfp6feF6AO9fLcgTGsXTEgOTQ_NN9N4dfcuScff18HmHJSr4n1c_wzFQu4kNv61eIh0jskiBL3yB8tBN1Gi8GmQyznF6pwUK2JdQIGyGbGIJcDTFcX_Yltv9nODv_DgexytZ0uxPpikZcGcrSgzg4_LvlsxpbSN-S-1S49kwehMLCuuY',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuCNQII1bB-28zoHJsJAir24FBDSieXl0JDrz0J3sbwbU0cXtmh5Bv9OWhoHUsMOuNnsA_zvLQJ4THuBnRxXOe81sr61TcE4g7uUxrUJq68RqRyLVl07SPowqW6o0IrTjTlP4jsu_qThCK7WT4k3dX5pdzkVd42jegyxHAR5uK2c36II8LgN_jhBjepeBk5E5T66Ur0LJ5Fij7bEF2hd6SedNoDpWM1tVqUjOUkEDFQ',
-  'https://lh3.googleusercontent.com/aida-public/AB6AXuAuT1qW4BS-IPjJYklqz_r415L7roFth90sGesC2lUrkD3Wozkk6XppkYzCyPfsaA5_mb6W2JRFh2UxNagdIYlaxsYL9z6vsPHnIaEiuvsYK1Vp2Q5O-qE0ZslrZZZSBwrSgzARnFR50CbtqiKHhJQwTLATrkphhL94srBuQetib7O-5LeDd74l6-u8MsM0A_zWZGfFvnsZJB5MZ-33I8DXjAy6HbTW7ZP4WnGB-BU',
-];
 
 export default function NewPrendaModal({ isOpen, onClose, onSave }) {
   const [title, setTitle] = useState('');
@@ -16,38 +7,132 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
   const [category, setCategory] = useState('Chaquetas & Blazers');
   const [season, setSeason] = useState('Otoño/Invierno');
   const [size, setSize] = useState('38 FR');
-  const [exterior, setExterior] = useState('100% Lana');
-  const [selectedImage, setSelectedImage] = useState(SAMPLE_IMAGES[0]);
+  const [color, setColor] = useState('Tierra & Neutros');
+
+  // Photo state
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [previewUrl, setPreviewUrl] = useState('');
+  const [isDragging, setIsDragging] = useState(false);
+  const [photoError, setPhotoError] = useState(false);
+  const fileInputRef = useRef(null);
+
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // Clean up object URL on unmount or when previewUrl changes
+  useEffect(() => {
+    return () => {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+  // Form & photo state reset helper
+  const resetForm = () => {
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setSelectedFile(null);
+    setPreviewUrl('');
+    setPhotoError(false);
+    setTitle('');
+    setBrand('');
+    setCategory('Chaquetas & Blazers');
+    setSeason('Otoño/Invierno');
+    setSize('38 FR');
+    setColor('Tierra & Neutros');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
+  const handleClose = () => {
+    resetForm();
+    onClose();
+  };
+
   if (!isOpen) return null;
+
+  const handleFileChange = (e) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setPhotoError(false);
+    }
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleDrop = (e) => {
+    e.preventDefault();
+    setIsDragging(false);
+    const file = e.dataTransfer.files?.[0];
+    if (file && file.type.startsWith('image/')) {
+      if (previewUrl && previewUrl.startsWith('blob:')) {
+        URL.revokeObjectURL(previewUrl);
+      }
+      setSelectedFile(file);
+      setPreviewUrl(URL.createObjectURL(file));
+      setPhotoError(false);
+    }
+  };
+
+  const handleClearFile = (e) => {
+    if (e) e.stopPropagation();
+    if (previewUrl && previewUrl.startsWith('blob:')) {
+      URL.revokeObjectURL(previewUrl);
+    }
+    setSelectedFile(null);
+    setPreviewUrl('');
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!title.trim() || !brand.trim()) return;
+
+    if (!selectedFile) {
+      setPhotoError(true);
+      return;
+    }
 
     setIsSubmitting(true);
     try {
       const prendaData = {
         nombre: title.trim(),
         tipoPrenda: mapCategoryToTipoPrenda(category),
-        color: 'Tierra & Neutros',
+        color: color.trim() || 'Tierra & Neutros',
         temporada: season,
-        estilo: exterior,
-        fotoUrl: selectedImage,
         brand: brand.trim(),
         title: title.trim(),
         category,
         size,
-        composition: {
-          exterior,
-          lining: '100% Cupro',
-          washing: 'Lavado delicado / Tintorería',
-          location: 'Armario Principal',
+        notasAdicionales: {
+          brand: brand.trim(),
+          category,
+          size,
+          wearCount: 0,
+          isFavorite: false,
+          status: 'Sin estrenar',
         },
       };
 
-      await onSave(prendaData);
+      await onSave(prendaData, selectedFile);
+      resetForm();
       onClose();
     } finally {
       setIsSubmitting(false);
@@ -56,9 +141,9 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-xs">
-      <div className="relative w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden border border-surface-container-highest/60">
+      <div className="relative w-full max-w-lg bg-surface-container-lowest rounded-2xl shadow-2xl overflow-hidden border border-surface-container-highest/60 max-h-[92vh] flex flex-col">
         {/* Modal Header */}
-        <div className="px-space-lg pt-space-lg pb-space-sm flex items-center justify-between border-b border-surface-container-highest/50">
+        <div className="px-space-lg pt-space-lg pb-space-sm flex items-center justify-between border-b border-surface-container-highest/50 shrink-0">
           <div>
             <span className="font-label-sm text-primary uppercase tracking-wider font-semibold">
               Atelier Archive
@@ -66,7 +151,7 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
             <h2 className="font-headline-md text-headline-md text-on-surface">Nueva Prenda</h2>
           </div>
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="p-1 rounded-full text-outline hover:text-on-surface hover:bg-surface-container transition-colors cursor-pointer"
             type="button"
           >
@@ -75,7 +160,82 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
         </div>
 
         {/* Modal Form */}
-        <form onSubmit={handleSubmit} className="p-space-lg flex flex-col gap-space-md">
+        <form onSubmit={handleSubmit} className="p-space-lg flex flex-col gap-space-md overflow-y-auto">
+          {/* Custom Photo Upload */}
+          <div>
+            <label className="block text-label-sm text-outline uppercase font-semibold mb-1">
+              Fotografía de la Prenda <span className="text-primary">*</span>
+            </label>
+            <input
+              type="file"
+              ref={fileInputRef}
+              accept="image/*"
+              onChange={handleFileChange}
+              className="hidden"
+            />
+
+            {previewUrl ? (
+              <div className="relative w-full h-48 rounded-xl overflow-hidden border-2 border-primary/40 bg-surface-container-low group">
+                <img
+                  src={previewUrl}
+                  alt="Vista previa"
+                  className="w-full h-full object-cover object-center"
+                />
+                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
+                  <button
+                    type="button"
+                    onClick={() => fileInputRef.current?.click()}
+                    className="px-3 py-1.5 rounded-lg bg-surface-container-lowest/90 text-on-surface text-label-sm font-medium hover:bg-surface-container transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">photo_camera</span>
+                    Cambiar
+                  </button>
+                  <button
+                    type="button"
+                    onClick={handleClearFile}
+                    className="px-3 py-1.5 rounded-lg bg-error-container text-on-error-container text-label-sm font-medium hover:bg-error-container/80 transition-colors cursor-pointer flex items-center gap-1"
+                  >
+                    <span className="material-symbols-outlined text-[16px]">delete</span>
+                    Quitar
+                  </button>
+                </div>
+                <div className="absolute bottom-2 left-2 px-2 py-0.5 rounded bg-black/60 text-white text-label-sm flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[14px] text-primary">check_circle</span>
+                  <span>Foto seleccionada</span>
+                </div>
+              </div>
+            ) : (
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                onDragOver={handleDragOver}
+                onDragLeave={handleDragLeave}
+                onDrop={handleDrop}
+                className={`w-full h-40 rounded-xl border-2 border-dashed flex flex-col items-center justify-center p-4 text-center cursor-pointer transition-all ${
+                  photoError
+                    ? 'border-error bg-error-container/20'
+                    : isDragging
+                    ? 'border-primary bg-primary/10'
+                    : 'border-surface-container-highest hover:border-primary/60 hover:bg-surface-container-low'
+                }`}
+              >
+                <span className={`material-symbols-outlined text-3xl mb-1 ${photoError ? 'text-error' : 'text-primary'}`}>
+                  add_photo_alternate
+                </span>
+                <p className="text-body-sm font-medium text-on-surface">
+                  Haz clic o arrastra tu foto aquí
+                </p>
+                <p className="text-label-sm text-outline mt-0.5">
+                  Formatos compatibles: JPG, PNG, WEBP
+                </p>
+                {photoError && (
+                  <p className="text-label-sm text-error font-medium mt-1">
+                    Es obligatorio adjuntar una fotografía de la prenda
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
           <div className="grid grid-cols-2 gap-space-sm">
             <div>
               <label className="block text-label-sm text-outline uppercase font-semibold mb-1">
@@ -154,41 +314,20 @@ export default function NewPrendaModal({ isOpen, onClose, onSave }) {
 
           <div>
             <label className="block text-label-sm text-outline uppercase font-semibold mb-1">
-              Composición &amp; Material
+              Gama Cromática / Color
             </label>
             <input
               type="text"
-              value={exterior}
-              onChange={(e) => setExterior(e.target.value)}
-              placeholder="100% Lana, Seda, Algodón..."
-              className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-sm text-on-surface border border-transparent focus:border-primary focus:bg-surface-container-lowest outline-none"
+              value={color}
+              onChange={(e) => setColor(e.target.value)}
+              placeholder="Ej. Negro Carbón, Camel, Blanco Marfil..."
+              className="w-full px-3 py-2 bg-surface-container-low rounded-lg text-body-sm text-on-surface placeholder:text-outline border border-transparent focus:border-primary focus:bg-surface-container-lowest outline-none"
             />
           </div>
 
-          <div>
-            <label className="block text-label-sm text-outline uppercase font-semibold mb-1">
-              Seleccionar Fotografía Editorial
-            </label>
-            <div className="grid grid-cols-6 gap-2">
-              {SAMPLE_IMAGES.map((img, i) => (
-                <div
-                  key={i}
-                  onClick={() => setSelectedImage(img)}
-                  className={`aspect-square rounded-lg overflow-hidden border-2 cursor-pointer transition-all ${
-                    selectedImage === img
-                      ? 'border-primary ring-2 ring-primary/40'
-                      : 'border-transparent opacity-70 hover:opacity-100'
-                  }`}
-                >
-                  <img alt="" src={img} className="w-full h-full object-cover" />
-                </div>
-              ))}
-            </div>
-          </div>
-
-          <div className="pt-space-sm flex items-center justify-end gap-space-sm">
+          <div className="pt-space-sm flex items-center justify-end gap-space-sm shrink-0">
             <button
-              onClick={onClose}
+              onClick={handleClose}
               disabled={isSubmitting}
               type="button"
               className="px-4 py-2 rounded-lg text-on-surface-variant hover:bg-surface-container font-label-md text-label-md transition-colors cursor-pointer disabled:opacity-50"

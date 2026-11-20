@@ -6,7 +6,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Prenda } from '../../../prendas/entities/prenda.entity';
+import { Prenda } from '../../../prendas/dominio/entities/prenda.entity';
 import { Outfit } from '../../../outfits/entities/outfit.entity';
 import { UserRole } from '../enums/user-role.enum';
 

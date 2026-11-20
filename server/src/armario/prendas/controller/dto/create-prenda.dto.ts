@@ -1,12 +1,14 @@
 import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { TipoPrenda } from '../entities/prenda.entity';
+import { TipoPrenda } from '../../dominio/enums/tipo-prenda.enum';
 
 export class CreatePrendaDto {
   @IsString()
   @IsNotEmpty({ message: 'El nombre de la prenda es requerido.' })
   nombre: string;
 
-  @IsEnum(TipoPrenda, { message: 'El tipo de prenda debe ser superior, inferior, calzado, abrigo, accesorio u otro.' })
+  @IsEnum(TipoPrenda, {
+    message: 'El tipo de prenda debe ser superior, inferior, calzado, abrigo, accesorio u otro.',
+  })
   tipoPrenda: TipoPrenda;
 
   @IsString()
@@ -28,4 +30,3 @@ export class CreatePrendaDto {
   @IsOptional()
   notasAdicionales?: any;
 }
-

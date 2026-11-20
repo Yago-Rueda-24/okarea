@@ -1,16 +1,16 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { FindOptionsWhere, Repository } from 'typeorm';
-import { Prenda, TipoPrenda } from './entities/prenda.entity';
-import { CreatePrendaDto } from './dto/create-prenda.dto';
-import { UpdatePrendaDto } from './dto/update-prenda.dto';
-import { S3Service } from '../../common/s3.service';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Prenda } from '../entities/prenda.entity';
+import { TipoPrenda } from '../enums/tipo-prenda.enum';
+import { PrendaNotFoundException } from '../exceptions/prenda-not-found.exception';
+import { CreatePrendaDto } from '../../controller/dto/create-prenda.dto';
+import { UpdatePrendaDto } from '../../controller/dto/update-prenda.dto';
+import { TypeOrmPrendaRepository } from '../../infraestructura/persistencia/typeorm-prenda.repository';
+import { S3Service } from '../../../../common/s3.service';
 
 @Injectable()
 export class PrendasService {
   constructor(
-    @InjectRepository(Prenda)
-    private readonly prendaRepository: Repository<Prenda>,
+    private readonly prendaRepository: TypeOrmPrendaRepository,
     private readonly s3Service: S3Service,
   ) {}
 
@@ -40,7 +40,7 @@ export class PrendasService {
       parsedNotas = dto.notasAdicionales;
     }
 
-    const prenda = this.prendaRepository.create({
+    return this.prendaRepository.createAndSave({
       user: { id: userId } as any,
       nombre: dto.nombre,
       tipoPrenda: dto.tipoPrenda,
@@ -51,43 +51,19 @@ export class PrendasService {
       s3Key,
       notasAdicionales: parsedNotas,
     });
-
-    return this.prendaRepository.save(prenda);
   }
 
   async findAllByUser(
     userId: string,
     filters?: { tipoPrenda?: TipoPrenda; temporada?: string; estilo?: string },
   ): Promise<Prenda[]> {
-    const where: FindOptionsWhere<Prenda> = {
-      user: { id: userId },
-    };
-
-    if (filters?.tipoPrenda) {
-      where.tipoPrenda = filters.tipoPrenda;
-    }
-    if (filters?.temporada) {
-      where.temporada = filters.temporada;
-    }
-    if (filters?.estilo) {
-      where.estilo = filters.estilo;
-    }
-
-    return this.prendaRepository.find({
-      where,
-      order: { createdAt: 'DESC' },
-    });
+    return this.prendaRepository.findAllByUser(userId, filters);
   }
 
   async findOne(id: string, userId?: string): Promise<Prenda> {
-    const where: FindOptionsWhere<Prenda> = { id };
-    if (userId) {
-      where.user = { id: userId };
-    }
-
-    const prenda = await this.prendaRepository.findOne({ where });
+    const prenda = await this.prendaRepository.findById(id, userId);
     if (!prenda) {
-      throw new NotFoundException(`Prenda con ID '${id}' no encontrada.`);
+      throw new PrendaNotFoundException(id);
     }
     return prenda;
   }
@@ -119,7 +95,7 @@ export class PrendasService {
   async remove(id: string, userId: string): Promise<void> {
     const prenda = await this.findOne(id, userId);
 
-    if (prenda.s3Key) {
+    if (prenda.s3Key && !prenda.s3Key.startsWith('direct-')) {
       try {
         await this.s3Service.deleteFile(prenda.s3Key);
       } catch (err) {
@@ -130,4 +106,3 @@ export class PrendasService {
     await this.prendaRepository.remove(prenda);
   }
 }
-

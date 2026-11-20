@@ -64,17 +64,21 @@ export default function AppLayout() {
         payload.append('tipoPrenda', prendaData.tipoPrenda || 'superior');
         if (prendaData.color) payload.append('color', prendaData.color);
         if (prendaData.temporada) payload.append('temporada', prendaData.temporada);
-        if (prendaData.estilo) payload.append('estilo', prendaData.estilo);
-        if (prendaData.notasAdicionales) {
-          payload.append('notasAdicionales', JSON.stringify(prendaData.notasAdicionales));
-        }
+        const notas = prendaData.notasAdicionales || {
+          brand: prendaData.brand,
+          category: prendaData.category,
+          size: prendaData.size,
+          wearCount: 0,
+          isFavorite: false,
+          status: 'Sin estrenar',
+        };
+        payload.append('notasAdicionales', JSON.stringify(notas));
       } else {
         payload = {
           nombre: prendaData.nombre || prendaData.title,
           tipoPrenda: prendaData.tipoPrenda || 'superior',
           color: prendaData.color || prendaData.palette || 'Tierra & Neutros',
           temporada: prendaData.temporada || prendaData.season || 'Otoño/Invierno',
-          estilo: prendaData.estilo || prendaData.composition?.exterior || '100% Lana',
           fotoUrl: prendaData.fotoUrl || prendaData.image,
           notasAdicionales: prendaData.notasAdicionales || {
             brand: prendaData.brand,
@@ -83,7 +87,6 @@ export default function AppLayout() {
             wearCount: 0,
             isFavorite: false,
             status: 'Sin estrenar',
-            composition: prendaData.composition,
           },
         };
       }
@@ -162,11 +165,13 @@ export default function AppLayout() {
         </main>
       </div>
 
-      <NewPrendaModal
-        isOpen={isNewPrendaModalOpen}
-        onClose={() => setIsNewPrendaModalOpen(false)}
-        onSave={handleAddNewPrenda}
-      />
+      {isNewPrendaModalOpen && (
+        <NewPrendaModal
+          isOpen={isNewPrendaModalOpen}
+          onClose={() => setIsNewPrendaModalOpen(false)}
+          onSave={handleAddNewPrenda}
+        />
+      )}
     </div>
   );
 }

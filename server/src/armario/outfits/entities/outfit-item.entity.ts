@@ -1,6 +1,6 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { Outfit } from './outfit.entity';
-import { Prenda } from '../../prendas/entities/prenda.entity';
+import { Prenda } from '../../prendas/dominio/entities/prenda.entity';
 
 @Entity('armario_outfit_items')
 export class OutfitItem {

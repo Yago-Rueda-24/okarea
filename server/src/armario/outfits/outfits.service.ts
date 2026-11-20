@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Outfit } from './entities/outfit.entity';
 import { OutfitItem } from './entities/outfit-item.entity';
 import { OutfitRecommendedProduct } from './entities/outfit-recommended-product.entity';
-import { Prenda } from '../prendas/entities/prenda.entity';
+import { Prenda } from '../prendas/dominio/entities/prenda.entity';
 import { Product } from '../../blog/products/entities/product.entity';
 import { CreateOutfitDto } from './dto/create-outfit.dto';
 

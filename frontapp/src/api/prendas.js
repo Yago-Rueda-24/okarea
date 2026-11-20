@@ -64,9 +64,6 @@ export function formatPrendaFromApi(apiPrenda) {
     season: apiPrenda.temporada || 'Todo Año',
     palette: apiPrenda.color || 'Tierra & Neutros',
     status: notas.status || 'Limpio',
-    materialTag:
-      notas.materialTag ||
-      `${apiPrenda.temporada || 'Todo Año'} • ${apiPrenda.estilo || 'Sartorial'}`,
     image: apiPrenda.fotoUrl,
     detailImage: apiPrenda.fotoUrl,
     badges: notas.badges || [
@@ -75,12 +72,6 @@ export function formatPrendaFromApi(apiPrenda) {
         bg: 'bg-surface-container-lowest/90 text-primary font-semibold',
       },
     ],
-    composition: notas.composition || {
-      exterior: apiPrenda.estilo || '100% Lana Virgen',
-      lining: '100% Cupro Satinado',
-      washing: 'Tintorería ecológica',
-      location: 'Armario Principal',
-    },
     suggestedPairings: notas.suggestedPairings || [],
     raw: apiPrenda,
   };

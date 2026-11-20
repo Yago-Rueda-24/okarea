@@ -11,7 +11,7 @@ export default function PrendaDrawer({ prenda, onLogWear, onSelectPairing, onDel
         </span>
         <p className="font-title-md text-on-surface">Selecciona una prenda</p>
         <p className="text-body-sm text-outline mt-1 max-w-xs">
-          Haz clic en cualquier pieza de tu archivo para visualizar su ficha técnica y composición.
+          Haz clic en cualquier pieza de tu archivo para visualizar su ficha técnica y detalles.
         </p>
       </aside>
     );
@@ -111,35 +111,34 @@ export default function PrendaDrawer({ prenda, onLogWear, onSelectPairing, onDel
         </div>
       </div>
 
-      {/* Material, Fabric & Care Dossier */}
+      {/* Información & Detalles de la Prenda */}
       <div className="flex flex-col gap-space-xs">
         <span className="font-label-sm uppercase tracking-wider text-outline">
-          Composición &amp; Cuidados
+          Detalles de la Prenda
         </span>
         <div className="grid grid-cols-2 gap-space-xs text-body-sm">
           <div className="p-space-sm rounded-lg bg-surface-container-high/40 flex flex-col">
-            <span className="text-outline text-label-sm">Composición exterior</span>
+            <span className="text-outline text-label-sm">Categoría</span>
             <span className="font-medium text-on-surface">
-              {prenda.composition?.exterior || '100% Textil de calidad'}
+              {prenda.category || 'Atelier'}
             </span>
           </div>
           <div className="p-space-sm rounded-lg bg-surface-container-high/40 flex flex-col">
-            <span className="text-outline text-label-sm">Forro interior</span>
+            <span className="text-outline text-label-sm">Talla</span>
             <span className="font-medium text-on-surface">
-              {prenda.composition?.lining || 'Acabado premium'}
+              {prenda.size || 'Única'}
             </span>
           </div>
           <div className="p-space-sm rounded-lg bg-surface-container-high/40 flex flex-col">
-            <span className="text-outline text-label-sm">Método de lavado</span>
-            <span className="font-medium text-on-surface flex items-center gap-1">
-              <span className="material-symbols-outlined text-[14px]">local_laundry_service</span>
-              <span>{prenda.composition?.washing || 'Limpieza recomendada'}</span>
+            <span className="text-outline text-label-sm">Temporada</span>
+            <span className="font-medium text-on-surface">
+              {prenda.season || 'Todo Año'}
             </span>
           </div>
           <div className="p-space-sm rounded-lg bg-surface-container-high/40 flex flex-col">
-            <span className="text-outline text-label-sm">Ubicación física</span>
+            <span className="text-outline text-label-sm">Gama cromática</span>
             <span className="font-medium text-on-surface">
-              {prenda.composition?.location || 'Armario Principal'}
+              {prenda.palette || 'Neutros'}
             </span>
           </div>
         </div>

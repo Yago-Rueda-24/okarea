@@ -12,13 +12,13 @@ import {
   UseInterceptors,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { PrendasService } from './prendas.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '../users/dominio/entities/user.entity';
+import { PrendasService } from '../dominio/services/prendas.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { User } from '../../users/dominio/entities/user.entity';
 import { CreatePrendaDto } from './dto/create-prenda.dto';
 import { UpdatePrendaDto } from './dto/update-prenda.dto';
-import { TipoPrenda } from './entities/prenda.entity';
+import { TipoPrenda } from '../dominio/enums/tipo-prenda.enum';
 
 @Controller('armario/prendas')
 @UseGuards(JwtAuthGuard)
@@ -64,4 +64,3 @@ export class PrendasController {
     return this.prendasService.remove(id, user.id);
   }
 }
-

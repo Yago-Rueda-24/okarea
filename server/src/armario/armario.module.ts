@@ -6,7 +6,7 @@ import { PrendasModule } from './prendas/prendas.module';
 import { OutfitsModule } from './outfits/outfits.module';
 import { EstilismoModule } from './estilismo/estilismo.module';
 
-import { Prenda } from './prendas/entities/prenda.entity';
+import { Prenda } from './prendas/dominio/entities/prenda.entity';
 import { Outfit } from './outfits/entities/outfit.entity';
 import { OutfitItem } from './outfits/entities/outfit-item.entity';
 import { OutfitRecommendedProduct } from './outfits/entities/outfit-recommended-product.entity';

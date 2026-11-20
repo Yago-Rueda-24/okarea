@@ -93,7 +93,7 @@ export default function PrendaCard({ prenda, isSelected, onSelect, onToggleFavor
             {prenda.category}
           </span>
           <span className="px-2 py-0.5 rounded-full bg-surface-container-high text-on-surface text-label-sm">
-            {prenda.materialTag}
+            {prenda.season || 'Todo Año'}
           </span>
         </div>
       </div>

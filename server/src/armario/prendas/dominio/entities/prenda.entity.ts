@@ -6,16 +6,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/dominio/entities/user.entity';
-
-export enum TipoPrenda {
-  SUPERIOR = 'superior',
-  INFERIOR = 'inferior',
-  CALZADO = 'calzado',
-  ABRIGO = 'abrigo',
-  ACCESORIO = 'accesorio',
-  OTRO = 'otro',
-}
+import { User } from '../../../users/dominio/entities/user.entity';
+import { TipoPrenda } from '../enums/tipo-prenda.enum';
 
 @Entity('armario_prendas')
 export class Prenda {
@@ -55,4 +47,3 @@ export class Prenda {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-
