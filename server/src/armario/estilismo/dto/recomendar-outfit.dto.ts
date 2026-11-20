@@ -1,5 +1,5 @@
 import { IsArray, IsNotEmpty, IsOptional, IsString } from 'class-validator';
-import { CreateOutfitItemDto, CreateOutfitRecommendedProductDto } from '../../outfits/dto/create-outfit.dto';
+import { CreateOutfitItemDto, CreateOutfitRecommendedProductDto } from '../../outfits/controller/dto/create-outfit.dto';
 
 export class RecomendarOutfitDto {
   @IsString()

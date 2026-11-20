@@ -7,7 +7,7 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { User } from '../../users/dominio/entities/user.entity';
+import { User } from '../../../users/dominio/entities/user.entity';
 import { OutfitItem } from './outfit-item.entity';
 import { OutfitRecommendedProduct } from './outfit-recommended-product.entity';
 
@@ -52,4 +52,3 @@ export class Outfit {
   @UpdateDateColumn()
   updatedAt: Date;
 }
-

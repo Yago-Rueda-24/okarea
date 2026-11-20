@@ -1,36 +1,32 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Outfit } from './entities/outfit.entity';
-import { OutfitItem } from './entities/outfit-item.entity';
-import { OutfitRecommendedProduct } from './entities/outfit-recommended-product.entity';
-import { Prenda } from '../prendas/dominio/entities/prenda.entity';
-import { Product } from '../../blog/products/entities/product.entity';
-import { CreateOutfitDto } from './dto/create-outfit.dto';
+import { Outfit } from '../../dominio/entities/outfit.entity';
+import { OutfitItem } from '../../dominio/entities/outfit-item.entity';
+import { OutfitRecommendedProduct } from '../../dominio/entities/outfit-recommended-product.entity';
+import { Prenda } from '../../../prendas/dominio/entities/prenda.entity';
+import { Product } from '../../../../blog/products/entities/product.entity';
+import { CreateOutfitDto } from '../../controller/dto/create-outfit.dto';
 
 @Injectable()
-export class OutfitsService {
+export class TypeOrmOutfitRepository {
   constructor(
     @InjectRepository(Outfit)
-    private readonly outfitRepository: Repository<Outfit>,
+    private readonly outfitRepo: Repository<Outfit>,
     @InjectRepository(OutfitItem)
-    private readonly outfitItemRepository: Repository<OutfitItem>,
+    private readonly outfitItemRepo: Repository<OutfitItem>,
     @InjectRepository(OutfitRecommendedProduct)
-    private readonly outfitRecRepository: Repository<OutfitRecommendedProduct>,
-    @InjectRepository(Prenda)
-    private readonly prendaRepository: Repository<Prenda>,
-    @InjectRepository(Product)
-    private readonly productRepository: Repository<Product>,
+    private readonly outfitRecRepo: Repository<OutfitRecommendedProduct>,
   ) {}
 
-  async create(
+  async createAndSave(
     userId: string,
     dto: CreateOutfitDto,
     creadorId?: string,
     esPropuestaEstilista = false,
     notaEstilista?: string,
   ): Promise<Outfit> {
-    const outfit = this.outfitRepository.create({
+    const outfit = this.outfitRepo.create({
       user: { id: userId } as any,
       creador: creadorId ? ({ id: creadorId } as any) : ({ id: userId } as any),
       nombre: dto.nombre,
@@ -41,37 +37,35 @@ export class OutfitsService {
       notaEstilista,
     });
 
-    const savedOutfit = await this.outfitRepository.save(outfit);
+    const savedOutfit = await this.outfitRepo.save(outfit);
 
-    // Guardar items de prendas
     if (dto.items && dto.items.length > 0) {
       const itemsToSave = dto.items.map((item) =>
-        this.outfitItemRepository.create({
+        this.outfitItemRepo.create({
           outfit: savedOutfit,
           prenda: { id: item.prendaId } as Prenda,
           posicion: item.posicion || undefined,
         }),
       );
-      await this.outfitItemRepository.save(itemsToSave);
+      await this.outfitItemRepo.save(itemsToSave);
     }
 
-    // Guardar productos recomendados del catálogo Okarea
     if (dto.productosRecomendados && dto.productosRecomendados.length > 0) {
       const recsToSave = dto.productosRecomendados.map((rec) =>
-        this.outfitRecRepository.create({
+        this.outfitRecRepo.create({
           outfit: savedOutfit,
           product: { id: rec.productId } as Product,
           comentario: rec.comentario || undefined,
         }),
       );
-      await this.outfitRecRepository.save(recsToSave);
+      await this.outfitRecRepo.save(recsToSave);
     }
 
-    return this.findOne(savedOutfit.id);
+    return (await this.findById(savedOutfit.id)) as Outfit;
   }
 
   async findAllByUser(userId: string): Promise<Outfit[]> {
-    return this.outfitRepository.find({
+    return this.outfitRepo.find({
       where: { user: { id: userId } },
       relations: {
         items: { prenda: true },
@@ -82,8 +76,8 @@ export class OutfitsService {
     });
   }
 
-  async findOne(id: string, userId?: string): Promise<Outfit> {
-    const query = this.outfitRepository
+  async findById(id: string, userId?: string): Promise<Outfit | null> {
+    const query = this.outfitRepo
       .createQueryBuilder('outfit')
       .leftJoinAndSelect('outfit.user', 'user')
       .leftJoinAndSelect('outfit.creador', 'creador')
@@ -98,16 +92,10 @@ export class OutfitsService {
       query.andWhere('outfit.user.id = :userId', { userId });
     }
 
-    const outfit = await query.getOne();
-    if (!outfit) {
-      throw new NotFoundException(`Outfit con ID '${id}' no encontrado.`);
-    }
-
-    return outfit;
+    return query.getOne();
   }
 
-  async remove(id: string, userId: string): Promise<void> {
-    const outfit = await this.findOne(id, userId);
-    await this.outfitRepository.remove(outfit);
+  async remove(outfit: Outfit): Promise<void> {
+    await this.outfitRepo.remove(outfit);
   }
 }

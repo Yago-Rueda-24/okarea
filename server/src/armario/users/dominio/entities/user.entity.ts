@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { Prenda } from '../../../prendas/dominio/entities/prenda.entity';
-import { Outfit } from '../../../outfits/entities/outfit.entity';
+import { Outfit } from '../../../outfits/dominio/entities/outfit.entity';
 import { UserRole } from '../enums/user-role.enum';
 
 @Entity('armario_users')

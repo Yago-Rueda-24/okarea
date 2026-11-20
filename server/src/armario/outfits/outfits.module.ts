@@ -1,12 +1,11 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Outfit } from './entities/outfit.entity';
-import { OutfitItem } from './entities/outfit-item.entity';
-import { OutfitRecommendedProduct } from './entities/outfit-recommended-product.entity';
-import { Prenda } from '../prendas/dominio/entities/prenda.entity';
-import { Product } from '../../blog/products/entities/product.entity';
-import { OutfitsService } from './outfits.service';
-import { OutfitsController } from './outfits.controller';
+import { Outfit } from './dominio/entities/outfit.entity';
+import { OutfitItem } from './dominio/entities/outfit-item.entity';
+import { OutfitRecommendedProduct } from './dominio/entities/outfit-recommended-product.entity';
+import { OutfitsService } from './dominio/services/outfits.service';
+import { OutfitsController } from './controller/outfits.controller';
+import { TypeOrmOutfitRepository } from './infraestructura/persistencia/typeorm-outfit.repository';
 
 @Module({
   imports: [
@@ -14,13 +13,10 @@ import { OutfitsController } from './outfits.controller';
       Outfit,
       OutfitItem,
       OutfitRecommendedProduct,
-      Prenda,
-      Product,
     ]),
   ],
   controllers: [OutfitsController],
-  providers: [OutfitsService],
-  exports: [OutfitsService],
+  providers: [TypeOrmOutfitRepository, OutfitsService],
+  exports: [OutfitsService, TypeOrmOutfitRepository, TypeOrmModule],
 })
 export class OutfitsModule {}
-

@@ -45,4 +45,3 @@ export class CreateOutfitDto {
   @IsOptional()
   productosRecomendados?: CreateOutfitRecommendedProductDto[];
 }
-

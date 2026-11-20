@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { EstilismoService } from './estilismo.service';
 import { UsersService } from '../users/dominio/services/users.service';
 import { PrendasService } from '../prendas/dominio/services/prendas.service';
-import { OutfitsService } from '../outfits/outfits.service';
+import { OutfitsService } from '../outfits/dominio/services/outfits.service';
 import { NotFoundException } from '@nestjs/common';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { StylingRequest } from './entities/styling-request.entity';

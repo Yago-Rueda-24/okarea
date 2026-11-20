@@ -1,9 +1,9 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { UsersService } from '../users/dominio/services/users.service';
 import { PrendasService } from '../prendas/dominio/services/prendas.service';
-import { OutfitsService } from '../outfits/outfits.service';
+import { OutfitsService } from '../outfits/dominio/services/outfits.service';
 import { RecomendarOutfitDto } from './dto/recomendar-outfit.dto';
-import { Outfit } from '../outfits/entities/outfit.entity';
+import { Outfit } from '../outfits/dominio/entities/outfit.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { StylingRequest } from './entities/styling-request.entity';

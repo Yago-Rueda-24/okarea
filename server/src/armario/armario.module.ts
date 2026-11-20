@@ -7,9 +7,9 @@ import { OutfitsModule } from './outfits/outfits.module';
 import { EstilismoModule } from './estilismo/estilismo.module';
 
 import { Prenda } from './prendas/dominio/entities/prenda.entity';
-import { Outfit } from './outfits/entities/outfit.entity';
-import { OutfitItem } from './outfits/entities/outfit-item.entity';
-import { OutfitRecommendedProduct } from './outfits/entities/outfit-recommended-product.entity';
+import { Outfit } from './outfits/dominio/entities/outfit.entity';
+import { OutfitItem } from './outfits/dominio/entities/outfit-item.entity';
+import { OutfitRecommendedProduct } from './outfits/dominio/entities/outfit-recommended-product.entity';
 import { StylingRequest } from './estilismo/entities/styling-request.entity';
 
 export const ARMARIO_ENTITIES = [

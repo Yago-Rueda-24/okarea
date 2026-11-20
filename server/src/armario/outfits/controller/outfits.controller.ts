@@ -1,8 +1,8 @@
 import { Body, Controller, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
-import { OutfitsService } from './outfits.service';
-import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
-import { CurrentUser } from '../auth/decorators/current-user.decorator';
-import { User } from '../users/dominio/entities/user.entity';
+import { OutfitsService } from '../dominio/services/outfits.service';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { User } from '../../users/dominio/entities/user.entity';
 import { CreateOutfitDto } from './dto/create-outfit.dto';
 
 @Controller('armario/outfits')
@@ -30,4 +30,3 @@ export class OutfitsController {
     return this.outfitsService.remove(id, user.id);
   }
 }
-
