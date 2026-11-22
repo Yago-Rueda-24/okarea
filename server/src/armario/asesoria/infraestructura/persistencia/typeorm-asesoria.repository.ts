@@ -43,6 +43,13 @@ export class TypeOrmAsesoriaRepository {
     });
   }
 
+  async findAll(): Promise<Asesoria[]> {
+    return this.asesoriaRepo.find({
+      relations: { user: true },
+      order: { fecha: 'DESC', horaInicio: 'ASC' },
+    });
+  }
+
   async createAndSave(
     userId: string,
     data: { fecha: string; horaInicio: string; horaFin: string; motivo: string },

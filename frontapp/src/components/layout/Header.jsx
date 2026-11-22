@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/useAuth';
 
-export default function Header({ onOpenNewPrenda, searchTerm, setSearchTerm }) {
+export default function Header({ onOpenNewPrenda }) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);

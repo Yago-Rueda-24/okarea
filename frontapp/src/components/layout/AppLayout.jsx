@@ -140,8 +140,6 @@ export default function AppLayout() {
     <div className="bg-surface font-body-md text-body-md text-on-surface antialiased min-h-screen">
       <Header
         onOpenNewPrenda={() => setIsNewPrendaModalOpen(true)}
-        searchTerm={searchTerm}
-        setSearchTerm={setSearchTerm}
       />
       <Sidebar />
       <div className="pl-64">

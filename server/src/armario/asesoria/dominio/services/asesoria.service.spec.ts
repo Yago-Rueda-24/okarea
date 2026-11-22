@@ -5,10 +5,13 @@ import { TypeOrmAsesoriaRepository } from '../../infraestructura/persistencia/ty
 import { EstadoAsesoria } from '../enums/estado-asesoria.enum';
 import { Asesoria } from '../entities/asesoria.entity';
 import { User } from '../../../users/dominio/entities/user.entity';
+import { PrendasService } from '../../../prendas/dominio/services/prendas.service';
+import { Prenda } from '../../../prendas/dominio/entities/prenda.entity';
 
 describe('AsesoriaService', () => {
   let service: AsesoriaService;
   let repository: jest.Mocked<TypeOrmAsesoriaRepository>;
+  let prendasService: jest.Mocked<PrendasService>;
 
   const mockUser: User = {
     id: 'user-uuid-1',
@@ -28,14 +31,28 @@ describe('AsesoriaService', () => {
     updatedAt: new Date(),
   };
 
+  const mockPrendas: Prenda[] = [
+    {
+      id: 'prenda-1',
+      nombre: 'Abrigo de lana',
+      tipoPrenda: 'abrigo',
+      fotoUrl: 'https://example.com/abrigo.jpg',
+    } as any,
+  ];
+
   beforeEach(async () => {
     const mockRepo = {
       findByFechaYHora: jest.fn(),
       findByFecha: jest.fn(),
       findByUser: jest.fn(),
       findById: jest.fn(),
+      findAll: jest.fn(),
       createAndSave: jest.fn(),
       save: jest.fn(),
+    };
+
+    const mockPrendasSvc = {
+      findAllByUser: jest.fn(),
     };
 
     const module: TestingModule = await Test.createTestingModule({
@@ -45,11 +62,16 @@ describe('AsesoriaService', () => {
           provide: TypeOrmAsesoriaRepository,
           useValue: mockRepo,
         },
+        {
+          provide: PrendasService,
+          useValue: mockPrendasSvc,
+        },
       ],
     }).compile();
 
     service = module.get<AsesoriaService>(AsesoriaService);
     repository = module.get(TypeOrmAsesoriaRepository);
+    prendasService = module.get(PrendasService);
   });
 
   describe('calcularHoraFin', () => {
@@ -188,6 +210,56 @@ describe('AsesoriaService', () => {
       await expect(
         service.cancelarAsesoria('inexistente', mockUser.id),
       ).rejects.toThrow(NotFoundException);
+    });
+  });
+
+  describe('admin methods', () => {
+    it('obtenerTodasLasAsesorias debe listar todas las solicitudes', async () => {
+      repository.findAll.mockResolvedValue([mockAsesoria]);
+
+      const result = await service.obtenerTodasLasAsesorias();
+
+      expect(repository.findAll).toHaveBeenCalled();
+      expect(result).toEqual([mockAsesoria]);
+    });
+
+    it('obtenerAsesoriaPorId debe devolver la asesoría solicitada', async () => {
+      repository.findById.mockResolvedValue(mockAsesoria);
+
+      const result = await service.obtenerAsesoriaPorId(mockAsesoria.id);
+
+      expect(repository.findById).toHaveBeenCalledWith(mockAsesoria.id);
+      expect(result).toEqual(mockAsesoria);
+    });
+
+    it('obtenerAsesoriaPorId debe lanzar NotFoundException si no existe', async () => {
+      repository.findById.mockResolvedValue(null);
+
+      await expect(
+        service.obtenerAsesoriaPorId('no-existe'),
+      ).rejects.toThrow(NotFoundException);
+    });
+
+    it('obtenerArmarioDeUsuario debe devolver las prendas del usuario solicitante', async () => {
+      prendasService.findAllByUser.mockResolvedValue(mockPrendas);
+
+      const result = await service.obtenerArmarioDeUsuario(mockUser.id);
+
+      expect(prendasService.findAllByUser).toHaveBeenCalledWith(mockUser.id);
+      expect(result).toEqual(mockPrendas);
+    });
+
+    it('actualizarEstadoAdmin debe modificar el estado y persistir', async () => {
+      repository.findById.mockResolvedValue({ ...mockAsesoria });
+      repository.save.mockImplementation(async (entity) => entity);
+
+      const result = await service.actualizarEstadoAdmin(
+        mockAsesoria.id,
+        EstadoAsesoria.CANCELADA,
+      );
+
+      expect(result.estado).toBe(EstadoAsesoria.CANCELADA);
+      expect(repository.save).toHaveBeenCalled();
     });
   });
 });

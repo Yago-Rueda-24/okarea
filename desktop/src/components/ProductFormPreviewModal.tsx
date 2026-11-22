@@ -223,20 +223,20 @@ export default function ProductFormPreviewModal({
   const displayImage = formatImageUrl(formData.imagenUrl) || 'https://via.placeholder.com/600x800?text=Sin+Imagen';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-sm animate-fadeIn overflow-y-auto">
-      <div className="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col my-8 max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-fadeIn overflow-y-auto">
+      <div className="bg-white border border-[#eee7e3] rounded-2xl w-full max-w-5xl shadow-2xl overflow-hidden flex flex-col my-8 max-h-[90vh]">
 
         {/* Modal Header */}
-        <div className="bg-slate-950 px-6 py-4 border-b border-slate-800 flex items-center justify-between">
+        <div className="bg-[#faf2ee] px-6 py-4 border-b border-[#eee7e3] flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="p-2 rounded-lg bg-purple-500/10 text-purple-400">
+            <div className="p-2 rounded-lg bg-primary/10 text-primary">
               {isEditing ? <Edit3 className="w-5 h-5" /> : <Upload className="w-5 h-5" />}
             </div>
             <div>
-              <h2 className="text-lg font-bold text-white">
+              <h2 className="font-serif text-lg font-bold text-[#1e1b19]">
                 {isEditing ? `Modificar Artículo: ${formData.nombre}` : 'Insertar Nuevo Artículo'}
               </h2>
-              <p className="text-xs text-slate-400">
+              <p className="text-xs text-[#88726c]">
                 Formulario de administración con previsualización de imagen y vista previa web
               </p>
             </div>
@@ -244,21 +244,21 @@ export default function ProductFormPreviewModal({
 
           <button
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-[#88726c] hover:text-[#1e1b19] p-2 rounded-lg hover:bg-[#eee7e3] transition-colors cursor-pointer"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab Navigation (Form vs Live Web Preview) */}
-        <div className="bg-slate-900 border-b border-slate-800 px-6 pt-3 flex items-center gap-4">
+        <div className="bg-[#faf2ee]/60 border-b border-[#eee7e3] px-6 pt-3 flex items-center gap-4">
           <button
             type="button"
             onClick={() => setActiveTab('form')}
-            className={`pb-3 px-4 text-sm font-semibold border-b-2 flex items-center gap-2 transition-colors ${
+            className={`pb-3 px-4 text-sm font-semibold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
               activeTab === 'form'
-                ? 'border-purple-500 text-purple-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-primary text-primary font-bold'
+                : 'border-transparent text-[#88726c] hover:text-[#1e1b19]'
             }`}
           >
             <Edit3 className="w-4 h-4" /> 1. Formulario de Datos
@@ -266,10 +266,10 @@ export default function ProductFormPreviewModal({
           <button
             type="button"
             onClick={() => setActiveTab('preview')}
-            className={`pb-3 px-4 text-sm font-semibold border-b-2 flex items-center gap-2 transition-colors ${
+            className={`pb-3 px-4 text-sm font-semibold border-b-2 flex items-center gap-2 transition-colors cursor-pointer ${
               activeTab === 'preview'
-                ? 'border-purple-500 text-purple-400'
-                : 'border-transparent text-slate-400 hover:text-slate-200'
+                ? 'border-primary text-primary font-bold'
+                : 'border-transparent text-[#88726c] hover:text-[#1e1b19]'
             }`}
           >
             <Eye className="w-4 h-4" /> 2. Previsualización Web (`ProductInfo`)
@@ -293,7 +293,7 @@ export default function ProductFormPreviewModal({
                 
                 {/* Nombre */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                     Nombre del Artículo *
                   </label>
                   <input
@@ -302,19 +302,19 @@ export default function ProductFormPreviewModal({
                     placeholder="Ej. Kenza Small Cow"
                     value={formData.nombre}
                     onChange={(e) => handleInputChange('nombre', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm"
+                    className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm"
                   />
                 </div>
 
                 {/* Categoría */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                     Categoría (Enum) *
                   </label>
                   <select
                     value={formData.categoria}
                     onChange={(e) => handleInputChange('categoria', e.target.value as CategoryType)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 text-sm"
+                    className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-white focus:outline-none focus:border-purple-500 text-sm"
                   >
                     <option value={CategoryType.BOLSOS}>Bolsos</option>
                     <option value={CategoryType.CALZADO}>Calzado</option>
@@ -328,7 +328,7 @@ export default function ProductFormPreviewModal({
 
                 {/* Precio */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                     Precio
                   </label>
                   <input
@@ -340,13 +340,13 @@ export default function ProductFormPreviewModal({
                       const onlyNumbers = e.target.value.replace(/[^0-9.,]/g, '');
                       handleInputChange('precio', onlyNumbers);
                     }}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm"
+                    className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm"
                   />
                 </div>
 
                 {/* Fabricante */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                     Fabricante / Marca
                   </label>
                   <input
@@ -354,13 +354,13 @@ export default function ProductFormPreviewModal({
                     placeholder="Ej. oliviamareque"
                     value={formData.fabricante}
                     onChange={(e) => handleInputChange('fabricante', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm"
+                    className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm"
                   />
                 </div>
 
                 {/* Tienda */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                     Tienda Oficial
                   </label>
                   <input
@@ -368,13 +368,13 @@ export default function ProductFormPreviewModal({
                     placeholder="Ej. Olivia Mareque"
                     value={formData.tienda}
                     onChange={(e) => handleInputChange('tienda', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm"
+                    className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm"
                   />
                 </div>
 
                 {/* Temporada */}
                 <div>
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                     Temporada / Colección
                   </label>
                   <input
@@ -382,7 +382,7 @@ export default function ProductFormPreviewModal({
                     placeholder="Ej. Colección 2026"
                     value={formData.temporada}
                     onChange={(e) => handleInputChange('temporada', e.target.value)}
-                    className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm"
+                    className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm"
                   />
                 </div>
 
@@ -390,7 +390,7 @@ export default function ProductFormPreviewModal({
 
               {/* Enlace al sitio oficial */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                   Enlace al Sitio Oficial (URL)
                 </label>
                 <input
@@ -398,13 +398,13 @@ export default function ProductFormPreviewModal({
                   placeholder="Ej. https://oliviamareque.com"
                   value={formData.enlaceSitio}
                   onChange={(e) => handleInputChange('enlaceSitio', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm"
+                  className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm"
                 />
               </div>
 
               {/* Descripción */}
               <div>
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 mb-2">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] mb-2">
                   Descripción Detallada
                 </label>
                 <textarea
@@ -412,13 +412,13 @@ export default function ProductFormPreviewModal({
                   placeholder="Descripción del producto que verán los usuarios en la web..."
                   value={formData.descripcion}
                   onChange={(e) => handleInputChange('descripcion', e.target.value)}
-                  className="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 text-sm resize-none"
+                  className="w-full bg-[#faf2ee] border border-[#eee7e3] rounded-xl px-4 py-3 text-[#1e1b19] placeholder:text-[#88726c] focus:outline-hidden focus:border-primary text-sm resize-none"
                 />
               </div>
 
               {/* Imagen / Subida */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-4">
-                <label className="block text-xs font-semibold uppercase tracking-wider text-slate-300 flex items-center gap-2">
+              <div className="p-4 rounded-xl bg-[#faf2ee] border border-[#eee7e3] space-y-4">
+                <label className="block text-xs font-semibold uppercase tracking-wider text-[#55433e] flex items-center gap-2">
                   <Image className="w-4 h-4 text-purple-400" /> Imagen del Producto
                 </label>
                 
@@ -522,23 +522,23 @@ export default function ProductFormPreviewModal({
         </div>
 
         {/* Modal Footer / Actions */}
-        <div className="bg-slate-950 px-6 py-4 border-t border-slate-800 flex items-center justify-between">
+        <div className="bg-[#faf2ee] px-6 py-4 border-t border-[#eee7e3] flex items-center justify-between">
           <div className="flex items-center gap-2">
             {activeTab === 'form' ? (
               <button
                 type="button"
                 onClick={() => setActiveTab('preview')}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-colors"
+                className="px-4 py-2.5 rounded-xl bg-white hover:bg-[#eee7e3] text-[#1e1b19] border border-[#eee7e3] text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <Eye className="w-4 h-4 text-purple-400" /> Ver Previsualización Web
+                <Eye className="w-4 h-4 text-primary" /> Ver Previsualización Web
               </button>
             ) : (
               <button
                 type="button"
                 onClick={() => setActiveTab('form')}
-                className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-semibold flex items-center gap-2 transition-colors"
+                className="px-4 py-2.5 rounded-xl bg-white hover:bg-[#eee7e3] text-[#1e1b19] border border-[#eee7e3] text-xs font-semibold flex items-center gap-2 transition-colors cursor-pointer"
               >
-                <ArrowLeft className="w-4 h-4" /> Volver al Formulario
+                <ArrowLeft className="w-4 h-4 text-primary" /> Volver al Formulario
               </button>
             )}
           </div>
@@ -547,7 +547,7 @@ export default function ProductFormPreviewModal({
             <button
               type="button"
               onClick={onClose}
-              className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 text-xs font-semibold transition-colors"
+              className="px-4 py-2.5 rounded-xl bg-white hover:bg-[#eee7e3] text-[#55433e] text-xs font-semibold transition-colors border border-[#eee7e3] cursor-pointer"
             >
               Cancelar
             </button>
@@ -558,7 +558,7 @@ export default function ProductFormPreviewModal({
                 handleSubmit(e);
               }}
               disabled={isSubmitting}
-              className="px-6 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold shadow-lg shadow-purple-600/30 flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
+              className="px-6 py-2.5 rounded-xl bg-primary hover:bg-[#793019] text-white text-xs font-bold shadow-xs flex items-center gap-2 transition-all disabled:opacity-50 cursor-pointer"
             >
               <Check className="w-4 h-4" />
               {isSubmitting
