@@ -18,7 +18,7 @@ export const PRENDAS_MOCK = [
       "https://lh3.googleusercontent.com/aida-public/AB6AXuDhW4zI6m5QFkiTf0r8MEyVoUMpykJtHX1U2ZSbSK0FWdCkHt9_gtDGtp2JNbW6-V5ItbHubqJi3QBbHfS0lGfzi9_EyazLsb3qBubGmJcUZX5rwsDzteJRImdaMHoR8mJk1FjpbP4qe6cZe6a6eZ8FBr3lWMOdWgRs0pqCFKtolCzLAOaGrOUeTuHEGhBZz7oQNYilh7iQIsIZ0Z23EcDHn0sHq80Nx-Ucvb_OMZs",
     badges: [
       { text: "Chaquetas", bg: "bg-surface-container-lowest/90 text-primary font-semibold" },
-      { text: "Cápsula Privé", bg: "bg-surface-container-lowest/80 text-secondary" },
+      { text: "Edición Privé", bg: "bg-surface-container-lowest/80 text-secondary" },
     ],
     composition: {
       exterior: "100% Lana Virgen",

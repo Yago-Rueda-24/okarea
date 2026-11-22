@@ -13,8 +13,8 @@ export default function Sidebar() {
     user?.role === 'admin'
       ? 'Archive Director'
       : user?.role === 'estilista'
-      ? 'Styling Atelier'
-      : 'Maison Privée';
+        ? 'Styling Atelier'
+        : 'Maison Privée';
 
   return (
     <aside className="fixed left-0 top-20 bottom-0 w-64 bg-surface-container-low z-40 flex flex-col justify-between py-space-lg shadow-[0_1px_8px_rgba(28,25,23,0.03)]">
@@ -41,46 +41,8 @@ export default function Sidebar() {
             </NavLink>
           </nav>
         </div>
-
-        {/* Section 2: Espacio Creativo */}
-        <div>
-          <div className="pt-space-md px-space-md pb-2">
-            <span className="font-label-sm text-label-sm uppercase tracking-wider text-outline font-semibold">
-              Espacio Creativo
-            </span>
-          </div>
-          <nav className="flex flex-col gap-space-xs">
-            <NavLink to="/moodboards" className={getNavClass}>
-              <span className="material-symbols-outlined text-[20px]">dashboard_customize</span>
-              <span>Moodboards</span>
-            </NavLink>
-            <NavLink to="/maleta-capsula" className={getNavClass}>
-              <span className="material-symbols-outlined text-[20px]">luggage</span>
-              <span>Cápsula &amp; Viaje</span>
-            </NavLink>
-          </nav>
-        </div>
       </div>
 
-      {/* Storage / Tier Capacity Widget */}
-      <div className="px-space-md pt-space-lg">
-        <div className="p-space-md rounded-xl bg-surface-container-high/60 flex flex-col gap-space-xs">
-          <div className="flex items-center justify-between">
-            <span className="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider font-semibold">
-              Armario Digital
-            </span>
-            <span className="font-label-sm text-label-sm text-primary font-semibold">
-              84 / 150
-            </span>
-          </div>
-          <div className="w-full h-1 bg-outline-variant/50 rounded-full overflow-hidden">
-            <div className="h-full bg-primary rounded-full w-[56%]"></div>
-          </div>
-          <span className="font-body-sm text-body-sm text-on-surface-variant pt-space-xs">
-            Tier: {tierName}
-          </span>
-        </div>
-      </div>
     </aside>
   );
 }

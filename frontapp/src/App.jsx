@@ -23,26 +23,6 @@ export default function App() {
           <Route path="/outfits" element={<OutfitsPage />} />
           <Route path="/asesoria-vip" element={<AsesoriaVipPage />} />
           <Route
-            path="/moodboards"
-            element={
-              <PlaceholderPage
-                title="Moodboards &amp; Colecciones"
-                description="Tableros de inspiración visual y paletas estacionales."
-                icon="dashboard_customize"
-              />
-            }
-          />
-          <Route
-            path="/maleta-capsula"
-            element={
-              <PlaceholderPage
-                title="Cápsula &amp; Viaje"
-                description="Planificación inteligente de maletas y selecciones esenciales para tus viajes."
-                icon="luggage"
-              />
-            }
-          />
-          <Route
             path="/perfil"
             element={
               <PlaceholderPage

@@ -27,8 +27,8 @@ export default function Header({ onOpenNewPrenda, searchTerm, setSearchTerm }) {
     user?.role === 'admin'
       ? 'Curador Principal'
       : user?.role === 'estilista'
-      ? 'Estilista Privé'
-      : 'Miembro Colección';
+        ? 'Estilista Privé'
+        : 'Miembro Colección';
 
   return (
     <header className="fixed top-0 left-0 right-0 h-20 bg-surface/90 backdrop-blur-xl z-50 shadow-[0_1px_8px_rgba(28,25,23,0.04)]">
@@ -45,31 +45,6 @@ export default function Header({ onOpenNewPrenda, searchTerm, setSearchTerm }) {
               Vestiaire <span className="italic font-normal text-primary">Studio</span>
             </span>
           </Link>
-        </div>
-
-        {/* Global Search Bar */}
-        <div className="flex-1 max-w-md hidden lg:block">
-          <div className="relative flex items-center">
-            <span className="material-symbols-outlined absolute left-space-md text-outline text-[20px] pointer-events-none">
-              search
-            </span>
-            <input
-              className="w-full pl-10 pr-space-md py-space-sm bg-surface-container-lowest text-on-surface placeholder:text-outline text-body-sm font-body-sm rounded-lg focus:outline-none focus:ring-1 focus:ring-primary shadow-[0_2px_6px_-1px_rgba(28,25,23,0.02)] transition-all"
-              placeholder="Buscar por prenda, tejido, diseñador o look..."
-              type="text"
-              value={searchTerm || ''}
-              onChange={(e) => setSearchTerm && setSearchTerm(e.target.value)}
-            />
-            {searchTerm && (
-              <button
-                type="button"
-                onClick={() => setSearchTerm && setSearchTerm('')}
-                className="absolute right-3 text-outline hover:text-on-surface text-xs"
-              >
-                ✕
-              </button>
-            )}
-          </div>
         </div>
 
         {/* Action Controls & Profile */}
